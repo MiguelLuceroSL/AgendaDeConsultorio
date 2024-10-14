@@ -1,15 +1,21 @@
 doctype html
 html
   head
-    title Página Pug
+    title Agenda de Consultorios
+    link(rel="stylesheet", href="home.css")
   body
     header
-        h1 ¡Hola, Mundo!
+        h1 ¡Bienvenid@!
     nav
         ul
-            li a(href="/medicos") Medicos
-            li a(href="/medicos") Sacar Turnos
-            li a(href="/medicos") Registrate
-
+            li: a(href="/medicos") Medicos
+            li: a(href="/medicos") Sacar Turnos
+            li: a(href="/medicos") Registrate
+    main
+        h2 Agenda de Consultorios 
+        p Saca tus turnos médicos de manera fácil y rápida.
+        p Utiliza el menú de navegación para acceder a las secciones de la aplicación.
+    footer
+      p &copy; 2024 Agenda de Consultorios
         
     
