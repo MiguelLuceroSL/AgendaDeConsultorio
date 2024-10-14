@@ -19,6 +19,9 @@ const medicoRoutes = require('./routes/medicoRoutes.js');
 app.use('/auth', authRoutes);
 app.use('/agenda', agendaRoutes);
 app.use('/medico', medicoRoutes);
+app.get('/',(req,res)=>{
+  res.render('./views/home')
+})
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
