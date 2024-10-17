@@ -21,15 +21,17 @@ exports.register = (req, res) => {
   db.query('INSERT INTO `usuario`(`email`, `password`, `rol`) VALUES (?,?,?)', [email, passwordHash, rol],(err, ress)=> {
     if(err) throw err;
     if(ress.affectedRows==1){
-      console.log("Se cargo el usuario!");
+      console.log("Se cargó el usuario!");
       console.log("PASS NORMAL: "+ password);
       console.log("PASS HASH: "+passwordHash);
-      return res.status(200).send("algo");
+      return res.send(200);
     }
   })
 }
 
-exports.pruebar = (req, res) => {
+
+
+exports.comparePass = (req, res) => {
   const {p1, p2} = req.body;
   if (bcrypt.compareSync(p1, p2)) {
     console.log("iguales");

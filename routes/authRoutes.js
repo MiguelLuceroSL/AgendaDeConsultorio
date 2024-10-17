@@ -6,6 +6,6 @@ router.post('/login', authController.login);
 
 router.post('/register',authController.register);
 
-router.post('/pruebar',authController.pruebar);
+router.post('/comparePass',authController.comparePass);
 
 module.exports = router;

@@ -14,12 +14,13 @@ app.set('views', path.join(__dirname, 'views'));
 //rutas
 const authRoutes = require('./routes/authRoutes');
 const agendaRoutes = require('./routes/agendaRoutes');
-const medicoRoutes = require('./routes/medicoRoutes.js');
+const profesionalRoutes = require('./routes/profesionalRoutes.js');
 
 app.use('/auth', authRoutes);
 app.use('/agenda', agendaRoutes);
-app.use('/medico', medicoRoutes);
+app.use('/profesional', profesionalRoutes);
 
+//ruta principal
 app.get('/',(req,res)=>{
   res.render('home');
 })
@@ -32,6 +33,7 @@ app.get('/auth/login', (req, res) => {
   res.render('login'); 
 });
 
+//iniciar sv
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
