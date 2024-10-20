@@ -10,6 +10,15 @@ const profesionalService = {
         resolve(result); //resolvemos la promesa
       });
     });
+  },
+
+  borrarProfesional: (id) => {
+    return new Promise((resolve, reject)=>{
+      Profesional.borrar(id,(err, result)=>{
+        if(err) reject(err);
+        resolve(result);
+      });
+    });
   }
 };
 
