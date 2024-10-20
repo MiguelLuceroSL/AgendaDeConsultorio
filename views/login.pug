@@ -2,28 +2,30 @@ doctype html
 html
   head
     title Registro/LogIn
+    link(rel="stylesheet", href="login.css")
   body
-    div
-      form(action="/auth/login", method="POST")
-        h2 Iniciar Sesión
-        div
-          label(for="email") Email:
-          input(type="email", id="email", name="email", required)
-        div
-          label(for="password") Contraseña:
-          input(type="password", id="password", name="password", required)
-        button(type="submit") Iniciar Sesión
-    div
-      form(action="/auth/register", method="POST")
-        h2 Registrarse
-        div
-          label(for="email") Correo electrónico:
-          input(type="email", id="email", name="email", required)
-        div
-          label(for="password") Contraseña:
-          input(type="password", id="password", name="password", required)
-        div
-          label(for="rol") Rol:
-          input(type="rol", id="rol", name="rol", required)
+    section(class="seccion")
+      article(class="articuloLogin")
+        form(action="/auth/login", method="POST")
+          h2 Iniciar Sesión
+          div
+            label(for="email") Email:
+            input(type="email", id="email", name="email", required)
+          div
+            label(for="password") Contraseña:
+            input(type="password", id="password", name="password", required)
+          button(type="submit") Iniciar Sesión
+      article(class="articuloRegister")
+        form(action="/auth/register", method="POST")
+          h2 Registrarse
+          div
+            label(for="email") Correo electrónico:
+            input(type="email", id="email", name="email", required)
+          div
+            label(for="password") Contraseña:
+            input(type="password", id="password", name="password", required)
+          div
+            label(for="rol") Rol:
+            input(type="rol", id="rol", name="rol", required)
 
-        button(type="submit") Registrarse
+          button(type="submit") Registrarse
