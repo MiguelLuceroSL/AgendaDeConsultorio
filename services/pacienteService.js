@@ -12,3 +12,5 @@ const pacienteService = {
     })
         }
 }
+
+module.exports = pacienteService;

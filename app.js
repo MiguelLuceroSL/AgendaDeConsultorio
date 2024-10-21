@@ -15,10 +15,12 @@ app.set('views', path.join(__dirname, 'views'));
 const authRoutes = require('./routes/authRoutes');
 const agendaRoutes = require('./routes/agendaRoutes');
 const profesionalRoutes = require('./routes/profesionalRoutes.js');
+const pacieneRoutes = require('./routes/pacientesRoutes.js')
 
 app.use('/auth', authRoutes);
 app.use('/agenda', agendaRoutes);
 app.use('/profesional', profesionalRoutes);
+app.use('/pacientes', pacieneRoutes)
 
 //ruta principal
 app.get('/',(req,res)=>{
@@ -31,6 +33,10 @@ app.get('/auth/register', (req, res) => {
 
 app.get('/auth/login', (req, res) => {
   res.render('login'); 
+});
+
+app.get('/pacientes', (req, res) => {
+  res.render('crearPaciente'); 
 });
 
 //iniciar sv
