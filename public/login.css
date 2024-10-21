@@ -1,5 +1,116 @@
-body{
+html{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.seccion{
+    width: 1200px;
+    height: 500px;
     display: flex;
     flex-direction: row;
-    background-color: red;
+    justify-content: space-between;
+    align-items: center;
+    -webkit-box-shadow: 0 10px 6px -6px #777;
+    -moz-box-shadow: 0 10px 6px -6px #777;
+    box-shadow: 0 10px 6px -6px #777;
+}
+
+.articuloLogin, .articuloRegistro{
+    height: 100%;
+    width: 600px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.articuloLogin{
+    border-top-left-radius: 80px;
+}
+
+.articuloRegistro{
+    border-top-right-radius: 60px;
+}
+
+.articuloLogin{
+    background-color: #88C273;
+}
+
+.articuloRegistro{
+    background-color: #536493;
+}
+
+.formLogin, .formRegistro{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.articuloLogin, .articuloRegistro{
+    border: 1px solid rgb(65, 65, 65);
+}
+
+.h2Login, .h2Registro{
+    font-size: 30px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+.h2Registro{
+    color: #FFF1DB;
+}
+
+.emailLogin, .pwLogin, .emailRegistro, .pwRegistro, .rolRegistro{
+    width: 20px;
+    border: none;
+}
+
+.lbEmailLogin, .lbPwLogin, .lbEmailRegistro, .lbPwRegistro, .lbRolRegistro, .selectRol, option{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.lbEmailRegistro, .lbPwRegistro, .lbRolRegistro{
+    color: #FFF1DB;
+}
+
+.inputEmailLogin, .inputPwLogin, .inputEmailRegistro, .inputPwRegistro, .inputRolRegistro{
+    border-top-left-radius: 2px;
+    border-top-right-radius: 6px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 4px;
+    margin-top: 5px;
+}
+
+.botonLogin, .botonRegistro{
+    background-color: #204ece;
+    border: none;
+    color: white; 
+    padding: 15px 32px; 
+    text-align: center; 
+    text-decoration: none; 
+    display: inline-block; 
+    font-size: 16px; 
+    margin: 4px 2px; 
+    cursor: pointer; 
+    border-radius: 5px;
+    -webkit-box-shadow: 0 10px 6px -6px #1b1a1a;
+    -moz-box-shadow: 0 10px 6px -6px #242222;
+    box-shadow: 0 10px 6px -6px #2b2a2a;
+}
+
+.botonRegistro{
+    background-color: #86e065;
+    color: #000000;
+}
+
+.selectRol{
+    width: 170px;
+    height: 25px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
 }

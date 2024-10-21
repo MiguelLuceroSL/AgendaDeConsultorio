@@ -1,31 +1,33 @@
 doctype html
 html
   head
-    title Registro/LogIn
-    link(rel="stylesheet", href="login.css")
+    title Registro Login
+    link(rel="stylesheet", href="/login.css")
   body
-    section(class="seccion")
-      article(class="articuloLogin")
-        form(action="/auth/login", method="POST")
-          h2 Iniciar Sesión
-          div
-            label(for="email") Email:
-            input(type="email", id="email", name="email", required)
-          div
-            label(for="password") Contraseña:
-            input(type="password", id="password", name="password", required)
-          button(type="submit") Iniciar Sesión
-      article(class="articuloRegister")
-        form(action="/auth/register", method="POST")
-          h2 Registrarse
-          div
-            label(for="email") Correo electrónico:
-            input(type="email", id="email", name="email", required)
-          div
-            label(for="password") Contraseña:
-            input(type="password", id="password", name="password", required)
-          div
-            label(for="rol") Rol:
-            input(type="rol", id="rol", name="rol", required)
-
-          button(type="submit") Registrarse
+    section.seccion
+      article.articuloLogin
+        form.formLogin(action="/auth/login", method="POST")
+          h2.h2Login INICIAR SESIÓN
+          fieldset.emailLogin
+            label.lbEmailLogin(for="email") Email:
+            input.inputEmailLogin(type="email", id="email", name="email", required)
+          fieldset.pwLogin
+            label.lbPwLogin(for="password") Contraseña:
+            input.inputPwLogin(type="password", id="password", name="password", required)
+          button.botonLogin(type="submit") Iniciar Sesión
+      article.articuloRegistro
+        form.formRegistro(action="/auth/register", method="POST")
+          h2.h2Registro REGISTRARSE
+          fieldset.emailRegistro
+            label.lbEmailRegistro(for="email") Correo electrónico:
+            input.inputEmailRegistro(type="email", id="email", name="email", required)
+          fieldset.pwRegistro
+            label.lbPwRegistro(for="password") Contraseña:
+            input.inputPwRegistro(type="password", id="password", name="password", required)
+          fieldset.rolRegistro
+            label.lbRolRegistro(for="rol") Rol:
+            select.selectRol
+              option(value="Paciente") Paciente
+              option(value="Secretaria") Secretaria
+              option(value="Administrador") Administrador
+          button.botonRegistro(type="submit") Registrarse
