@@ -26,8 +26,8 @@ html
             input.inputPwRegistro(type="password", id="password", name="password", required)
           fieldset.rolRegistro
             label.lbRolRegistro(for="rol") Rol:
-            select.selectRol
-              option(value="Paciente") Paciente
-              option(value="Secretaria") Secretaria
-              option(value="Administrador") Administrador
+            select.selectRol(name="rol")
+              option(value="paciente") Paciente
+              option(value="secretaria") Secretaria
+              option(value="administrador") Administrador
           button.botonRegistro(type="submit") Registrarse

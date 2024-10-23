@@ -17,6 +17,7 @@ exports.login = (req, res) => {
 
 exports.register = (req, res) => {
   const { email, password, rol } = req.body;
+  console.log("🚀 ~ req.body:", req.body)
   const passwordHash = bcrypt.hashSync(password,8);
   db.query('INSERT INTO `usuario`(`email`, `password`, `rol`) VALUES (?,?,?)', [email, passwordHash, rol],(err, ress)=> {
     if(err) throw err;
