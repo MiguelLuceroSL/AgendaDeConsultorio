@@ -1,32 +1,32 @@
 doctype html
 html
     head 
-        title Crear Paciente 
+        title Crear Paciente
     body 
         h1 Crear Paciente 
         form(action="/pacientes/crear",method="POST")
-            div 
+            fieldset 
                 label(for="nombre_completo") Nombre completo:
                 input(type="text", id=nombre_completo,name="nombre_completo", required)
-            div
+            fieldset
                 label(for="dni") DNI:
                 input(type="text",id="dni",name="dni",required)
-            div 
+            fieldset 
                 label(for="obra_social") Obra social: 
                 input(type="text", id="obra_social", name="obra_social")
-            div 
+            fieldset 
                 label(for="telefono") Telefono:
                 input(type="text", id="telefono",name="telefono")
-            div 
+            fieldset 
                 label(for="email") Email:
                 input(type="text", id="email",name="email")
-            div 
+            fieldset 
                 label(for="direccion") Direccion:
                 input(type="text", id="direccion",name="direccion")
-            div 
+            fieldset 
                 label(for="fecha_nacimiento") Fecha de Nacimiento :
                 input(type="date", id="fecha_nacimiento",name="fecha_nacimiento")
-            div 
+            fieldset 
                 label(for="fotocopia_documento") Fotocopia del documento:
                 input(type="file", id="fotocopia_documento",name="fotocopia_documento")
             button(type="sumbit") Crear Paciente
