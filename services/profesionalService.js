@@ -13,9 +13,9 @@ const profesionalService = {
   },
 
   borrarProfesional: (id) => {
-    return new Promise((resolve, reject)=>{
-      Profesional.borrar(id,(err, result)=>{
-        if(err) reject(err);
+    return new Promise((resolve, reject) => {
+      Profesional.borrar(id, (err, result) => {
+        if (err) reject(err);
         resolve(result);
       });
     });
