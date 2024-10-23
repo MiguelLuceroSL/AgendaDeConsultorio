@@ -15,12 +15,12 @@ app.set('views', path.join(__dirname, 'views'));
 const authRoutes = require('./routes/authRoutes');
 const agendaRoutes = require('./routes/agendaRoutes');
 const profesionalRoutes = require('./routes/profesionalRoutes.js');
-const pacieneRoutes = require('./routes/pacientesRoutes.js')
+const pacienteRoutes = require('./routes/pacientesRoutes.js')
 
 app.use('/auth', authRoutes);
 app.use('/agenda', agendaRoutes);
 app.use('/profesional', profesionalRoutes);
-app.use('/pacientes', pacieneRoutes)
+app.use('/pacientes', pacienteRoutes)
 
 //ruta principal
 app.get('/',(req,res)=>{
