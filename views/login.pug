@@ -3,10 +3,11 @@ html
   head
     title Registro Login
     link(rel="stylesheet", href="/login.css")
+    script(src="/login.js")  // Enlazamos el archivo JS para manejar el login
   body
     section.seccion
       article.articuloLogin
-        form.formLogin(action="/auth/login", method="POST")
+        form.formLogin(id="loginForm")
           h2.h2Login INICIAR SESIÓN
           fieldset.emailLogin
             label.lbEmailLogin(for="email") Email:

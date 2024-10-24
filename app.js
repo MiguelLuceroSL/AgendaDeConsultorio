@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const db = require('./config/db');
 const path = require('path');
+require('dotenv').config();
+const verifyToken = require('./middlewares/verifyToken');
 
 //middleware
 app.use(express.json());
@@ -37,6 +39,10 @@ app.get('/auth/login', (req, res) => {
 
 app.get('/pacientes', (req, res) => {
   res.render('crearPaciente'); 
+});
+
+app.get('/pacientes/paciente', verifyToken, (req, res) => {
+  res.render('vistaPaciente');
 });
 
 //iniciar sv
