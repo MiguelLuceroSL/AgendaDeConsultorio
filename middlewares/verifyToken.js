@@ -20,7 +20,7 @@ const verifyToken = async (req, res, next) => {
       next();
     });
   } catch (err) {
-    return res.status(500).json('Error verify token: ', err.message);
+    return res.status(500).send('Error verify token: ', err.message);
   }
 };
 

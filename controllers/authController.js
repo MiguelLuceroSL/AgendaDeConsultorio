@@ -16,7 +16,7 @@ exports.login = (req, res) => {
     const token = jwt.sign({ id: user.usuario_id, rol: user.rol }, process.env.JWT_SECRET, { expiresIn: '1h' });
     req.token = token;
     console.log("🚀 ~ db.query ~ token:", token)
-    res.status(200).json({ auth: true, token: token });
+    res.status(200).send({ auth: true, token: token });
   });
 
 };
