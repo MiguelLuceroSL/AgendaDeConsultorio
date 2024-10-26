@@ -1,56 +1,74 @@
-document.getElementById('loginForm').addEventListener('submit', async function (e) {
-    e.preventDefault();  // Evitar el envío del formulario por defecto
-    console.log("entramos al front")
-    // Obtener los datos del formulario
-    const email = document.querySelector('#email').value;
-    const password = document.querySelector('#password').value;
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        console.log("Entramos al front");
 
-    try {
-        // Enviar los datos al backend
-        const response = await fetch('/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-        });
+        const email = document.querySelector('#loginEmail').value;
+        const password = document.querySelector('#loginPassword').value;
+        
+        try {
+            const response = await fetch('/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
 
-        const data = await response.json();
+            const data = await response.json();
+            console.log("🚀 ~ data:", data);
+            
+            if (response.ok) {
+                // Guardar el token en localStorage
+                localStorage.setItem('token', data.token);
 
-        if (response.ok) {
-            // Guardar el token en localStorage
-            localStorage.setItem('token', data.token);
-
-            // Decodificar el token para extraer el rol
-            const tokenPayload = JSON.parse(atob(data.token.split('.')[1]));
-            const userRole = tokenPayload.rol;
-
-            // Redirigir al usuario según su rol
-            switch (userRole) {
-                case 'paciente':
-                    window.location.href = '/pacientes/paciente';
-                    break;
-                case 'secretaria':
-                    window.location.href = '/secretarias/secretaria';
-                    break;
-                case 'administrador':
-                    window.location.href = '/administradores/administrador';
-                    break;
-                default:
-                    window.location.href = '/login';
+                // Decodificar el token para obtener el rol del usuario
+                const tokenPayload = JSON.parse(atob(data.token.split('.')[1]));
+                console.log("🚀 ~ tokenPayload:", tokenPayload)
+                
+                const userRole = tokenPayload.rol;
+                console.log("🚀 ~ userRole:", userRole)
+                // Realizar una solicitud adicional si el rol es "paciente"
+                if (userRole === 'paciente') {
+                    console.log("ENTRAMOS AL USERROLE");
+                    try {
+                        window.location.href = '/pacientes/paciente';
+                    } catch (error) {
+                        console.error('Error al obtener datos del paciente:', error.message);
+                        alert('Error al obtener datos del paciente');
+                    }
+                } else {
+                    // Redirigir a las otras rutas según el rol
+                    switch (userRole) {
+                        case 'secretaria':
+                            window.location.href = '/secretarias/secretaria';
+                            break;
+                        case 'administrador':
+                            window.location.href = '/administradores/administrador';
+                            break;
+                        default:
+                            window.location.href = '/login';
+                    }
+                }
+            } else {
+                alert('Error al iniciar sesión. Verifica tus credenciales.');
             }
-        } else {
-            alert('Error al iniciar sesión. Verifica tus credenciales.');
+        } catch (error) {
+            console.error('Error al hacer login:', error.message);
         }
-    } catch (error) {
-        console.error('Error al hacer login:', error);
-    }
+    });
+                
 });
+
+async function fetchWithAuth(url, options = {}) {
+    const token = localStorage.getItem('token');
+    if (!options.headers) options.headers = {};
+    options.headers['Authorization'] = `Bearer ${token}`;
+    return await fetch(url, options);
+}
 
 // Función de logout
 function logout() {
-    // Eliminar el token del localStorage
     localStorage.removeItem('token');
-    // Redirigir al login
     window.location.href = '/login';
 }

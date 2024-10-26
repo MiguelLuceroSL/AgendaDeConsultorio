@@ -8,10 +8,10 @@ exports.crearPaciente = async (req, res) => {
     try {
         await pacienteService.crearPaciente(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento);
         console.log("Paciente creado exitosamente.");
-        res.status(200).send("Paciente creado exitosamente.");
+        res.json({ message: "Paciente creado exitosamente" });
     } catch (err) {
         console.error("Error al crear el Paciente:", err);
-        res.status(500).send("Hubo un error al crear el Paciente.");
+        res.json("Hubo un error al crear el Paciente.");
     }
 };
 
@@ -21,10 +21,10 @@ exports.borrarPaciente = async (req, res) => {
     try {
         await pacienteService.borrarPaciente(dni);
         console.log("Paciente borrado exitosamente.");
-        res.status(200).send("Paciente borrado exitosamente.")
+        res.json({ message: "Paciente borrado exitosamente" });
     } catch (err) {
         console.error("Error al borrar el paciente: ", err);
-        res.status(500).send("Hubo un error al borrar el paciente.")
+        res.json("Hubo un error al borrar el paciente.")
     }
 
 }

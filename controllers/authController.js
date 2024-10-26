@@ -1,11 +1,10 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
-const { CLIENT_RENEG_LIMIT } = require('tls');
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
-  db.query('SELECT * FROM `usuario` WHERE `email` = ?', [email], (err, result) => {
+  db.query('SELECT * FROM usuario WHERE email = ?', [email], (err, result) => {
     if (err) return res.status(500).send('Error en el servidor');
     if (result.length === 0) return res.status(404).send('Usuario no encontrado');
     
@@ -15,7 +14,9 @@ exports.login = (req, res) => {
     if (!passwordIsValid) return res.status(401).send('Contraseña incorrecta');
 
     const token = jwt.sign({ id: user.usuario_id, rol: user.rol }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).send({ auth: true, token: token });
+    req.token = token;
+    console.log("🚀 ~ db.query ~ token:", token)
+    res.status(200).json({ auth: true, token: token });
   });
 
 };
@@ -23,7 +24,7 @@ exports.login = (req, res) => {
 exports.register = (req, res) => {
   const { email, password, rol } = req.body;
   const passwordHash = bcrypt.hashSync(password, 8);
-  db.query('INSERT INTO `usuario`(`email`, `password`, `rol`) VALUES (?,?,?)', [email, passwordHash, rol], (err, result) => {
+  db.query('INSERT INTO usuario(email, password, rol) VALUES (?,?,?)', [email, passwordHash, rol], (err, result) => {
     if (err) return res.status(500).send('Error al registrar usuario.');
     return res.status(200).send('Usuario registrado');
   });

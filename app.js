@@ -37,12 +37,8 @@ app.get('/auth/login', (req, res) => {
   res.render('login'); 
 });
 
-app.get('/pacientes', (req, res) => {
-  res.render('crearPaciente'); 
-});
-
 app.get('/pacientes/paciente', verifyToken, (req, res) => {
-  res.render('vistaPaciente');
+  res.render('paciente');
 });
 
 //iniciar sv

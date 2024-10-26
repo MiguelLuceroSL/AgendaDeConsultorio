@@ -3,28 +3,27 @@ html
   head
     title Registro Login
     link(rel="stylesheet", href="/login.css")
-    script(src="/login.js")  // Enlazamos el archivo JS para manejar el login
   body
     section.seccion
       article.articuloLogin
         form.formLogin(id="loginForm")
           h2.h2Login INICIAR SESIÓN
           fieldset.emailLogin
-            label.lbEmailLogin(for="email") Email:
-            input.inputEmailLogin(type="email", id="email", name="email", required)
+            label.lbEmailLogin(for="loginEmail") Email:
+            input.inputEmailLogin(type="email", id="loginEmail", name="email", required)
           fieldset.pwLogin
-            label.lbPwLogin(for="password") Contraseña:
-            input.inputPwLogin(type="password", id="password", name="password", required)
+            label.lbPwLogin(for="loginPassword") Contraseña:
+            input.inputPwLogin(type="password", id="loginPassword", name="password", required)
           button.botonLogin(type="submit") Iniciar Sesión
       article.articuloRegistro
         form.formRegistro(action="/auth/register", method="POST")
           h2.h2Registro REGISTRARSE
           fieldset.emailRegistro
-            label.lbEmailRegistro(for="email") Correo electrónico:
-            input.inputEmailRegistro(type="email", id="email", name="email", required)
+            label.lbEmailRegistro(for="registerEmail") Correo electrónico:
+            input.inputEmailRegistro(type="email", id="registerEmail", name="email", required)
           fieldset.pwRegistro
-            label.lbPwRegistro(for="password") Contraseña:
-            input.inputPwRegistro(type="password", id="password", name="password", required)
+            label.lbPwRegistro(for="registerPassword") Contraseña:
+            input.inputPwRegistro(type="password", id="registerPassword", name="password", required)
           fieldset.rolRegistro
             label.lbRolRegistro(for="rol") Rol:
             select.selectRol(name="rol")
@@ -32,3 +31,4 @@ html
               option(value="secretaria") Secretaria
               option(value="administrador") Administrador
           button.botonRegistro(type="submit") Registrarse
+    script(type="module" src="/login.js")
