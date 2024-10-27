@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('loginForm').addEventListener('submit', async function (e) {
         e.preventDefault();
-        console.log("Entramos al front");
+        console.log("1F- Entramos al front");
 
         const email = document.querySelector('#loginEmail').value;
         const password = document.querySelector('#loginPassword').value;
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const data = await response.json();
-            console.log("🚀 ~ data:", data);
+            console.log("2F-🚀 ~ data:", data);
             
             if (response.ok) {
                 // Guardar el token en localStorage
@@ -24,30 +24,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Decodificar el token para obtener el rol del usuario
                 const tokenPayload = JSON.parse(atob(data.token.split('.')[1]));
-                console.log("🚀 ~ tokenPayload:", tokenPayload)
+                console.log("3F-🚀 ~ tokenPayload:", tokenPayload)
                 
                 const userRole = tokenPayload.rol;
-                console.log("🚀 ~ userRole:", userRole)
+                console.log("4F-🚀 ~ userRole:", userRole)
                 // Realizar una solicitud adicional si el rol es "paciente"
                 if (userRole === 'paciente') {
-                    console.log("ENTRAMOS AL USERROLE");
+                    console.log("5F-ENTRAMOS AL USERROLE");
+                
+                    // Hacer solicitud a la ruta protegida usando fetchWithAuth
                     try {
-                        window.location.href = '/pacientes/paciente';
+                        const response = await fetchWithAuth('/pacientes/paciente');
+                        console.log("🚀 ~ response:", response)
+                        if (response.ok) {
+                            // Redirige solo si la solicitud es exitosa
+                        } else {
+                            console.error('Error al acceder a la vista protegida:', await response.text());
+                            alert('No se pudo acceder a la vista del paciente.');
+                        }
                     } catch (error) {
-                        console.error('Error al obtener datos del paciente:', error.message);
-                        alert('Error al obtener datos del paciente');
-                    }
-                } else {
-                    // Redirigir a las otras rutas según el rol
-                    switch (userRole) {
-                        case 'secretaria':
-                            window.location.href = '/secretarias/secretaria';
-                            break;
-                        case 'administrador':
-                            window.location.href = '/administradores/administrador';
-                            break;
-                        default:
-                            window.location.href = '/login';
+                        console.error('Error en la solicitud de redirección:', error.message);
                     }
                 }
             } else {
@@ -62,9 +58,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchWithAuth(url, options = {}) {
     const token = localStorage.getItem('token');
-    if (!options.headers) options.headers = {};
-    options.headers['Authorization'] = `Bearer ${token}`;
-    return await fetch(url, options);
+    console.log("TOKEN DE LA FUNCION fetchWithAuth🚀:", token)
+    console.log("OPTIONS HEADERS: ",options.headers)
+    options.headers = {};
+    options.headers['authorization'] = `Bearer ${token}`;
+    console.log("OPTIONS HEADERS 2: ",options.headers)
+    console.log("URL DENTRO DE LA FUNCION: ",url)
+    const ress = await fetch(url, options);
+    return ress;
 }
 
 // Función de logout

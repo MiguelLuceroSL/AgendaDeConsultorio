@@ -26,5 +26,4 @@ exports.borrarProfesional = async (req, res) => {
     console.error("Error al borrar el profesional: ", err);
     res.status(500).send("Hubo un error al borrar el profesional.")
   }
-
 }

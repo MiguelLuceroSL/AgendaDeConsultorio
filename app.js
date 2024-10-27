@@ -38,6 +38,7 @@ app.get('/auth/login', (req, res) => {
 });
 
 app.get('/pacientes/paciente', verifyToken, (req, res) => {
+  console.log("1- app.js get pacientes/paciente")
   res.render('paciente');
 });
 

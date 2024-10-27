@@ -5,6 +5,8 @@ const verifyToken = require('../middlewares/verifyToken');
 const verifyRole = require('../middlewares/verifyRol');
 
 router.get('/paciente', verifyToken, verifyRole(['paciente']), (req, res) => {
+    console.log("1- get /paciente pacientesRoutes.js")
+    console.log("REQ DEL PACIENTES ROUTES: ",req)
     res.render('paciente'); // Renderiza la vista 'paciente.pug'
   });
 

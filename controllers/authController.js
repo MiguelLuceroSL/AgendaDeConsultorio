@@ -9,13 +9,13 @@ exports.login = (req, res) => {
     if (result.length === 0) return res.status(404).send('Usuario no encontrado');
     
     const user = result[0];
-    console.log("🚀 ~ db.query ~ result[0]:", result[0])
+    console.log("1authController-🚀 ~ db.query ~ result[0]:", result[0])
     const passwordIsValid = bcrypt.compareSync(password, user.password);
     if (!passwordIsValid) return res.status(401).send('Contraseña incorrecta');
 
     const token = jwt.sign({ id: user.usuario_id, rol: user.rol }, process.env.JWT_SECRET, { expiresIn: '1h' });
     req.token = token;
-    console.log("🚀 ~ db.query ~ token:", token)
+    console.log("2authController-🚀 ~ db.query ~ token:", token)
     res.status(200).send({ auth: true, token: token });
   });
 
