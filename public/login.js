@@ -38,6 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.log("🚀 ~ response:", response)
                         if (response.ok) {
                             // Redirige solo si la solicitud es exitosa
+                            setTimeout(()=>{
+                                window.location.href = '/pacientes/paciente'
+                            },2000)
                         } else {
                             console.error('Error al acceder a la vista protegida:', await response.text());
                             alert('No se pudo acceder a la vista del paciente.');
