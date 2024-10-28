@@ -37,7 +37,7 @@ app.get('/auth/login', (req, res) => {
   res.render('login'); 
 });
 
-app.get('/pacientes/paciente', verifyToken, (req, res) => {
+app.get('/pacientes/paciente', (req, res) => {
   console.log("1- app.js get pacientes/paciente")
   res.render('paciente');
 });
