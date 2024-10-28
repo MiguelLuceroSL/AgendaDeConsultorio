@@ -17,6 +17,7 @@ exports.login = (req, res) => {
     req.token = token;
     console.log("2authController-🚀 ~ db.query ~ token:", token)
     res.status(200).send({ auth: true, token: token });
+
   });
 
 };
