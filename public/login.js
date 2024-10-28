@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (response.ok) {
                             // Redirige solo si la solicitud es exitosa
                             setTimeout(()=>{
-                                window.location.href = '/pacientes/paciente'
+                                window.location.href = '/pacientes/paciente' 
                             },2000)
                         } else {
                             console.error('Error al acceder a la vista protegida:', await response.text());
@@ -67,8 +67,7 @@ async function fetchWithAuth(url, options = {}) {
     options.headers['authorization'] = `Bearer ${token}`;
     console.log("OPTIONS HEADERS 2: ",options.headers)
     console.log("URL DENTRO DE LA FUNCION: ",url)
-    const ress = await fetch(url, options);
-    return ress;
+    return await fetch(url, options);
 }
 
 // Función de logout
