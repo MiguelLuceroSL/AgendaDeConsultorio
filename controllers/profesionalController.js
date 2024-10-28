@@ -1,12 +1,12 @@
 const profesionalService = require('../services/profesionalService');
 
 exports.crearProfesional = async (req, res) => {
-  const { nombre_completo, matricula } = req.body;
+  const { nombre_completo, especialidad, matricula } = req.body;
 
-  console.log("Datos recibidos:", { nombre_completo, matricula });
+  console.log("Datos recibidos:", { nombre_completo, especialidad, matricula });
 
   try {
-    await profesionalService.crearProfesional(nombre_completo, matricula);
+    await profesionalService.crearProfesional(nombre_completo,especialidad,  matricula);
     console.log("Profesional creado exitosamente.");
     res.status(200).send("Profesional creado exitosamente.");
   } catch (err) {

@@ -42,6 +42,10 @@ app.get('/pacientes/paciente', verifyToken, (req, res) => {
   res.render('paciente');
 });
 
+app.get('/admin',(req,res)=>{
+  res.render('adminPanel')
+})
+
 //iniciar sv
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
