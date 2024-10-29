@@ -17,12 +17,12 @@ app.set('views', path.join(__dirname, 'views'));
 const authRoutes = require('./routes/authRoutes');
 const agendaRoutes = require('./routes/agendaRoutes');
 const profesionalRoutes = require('./routes/profesionalRoutes.js');
-const pacienteRoutes = require('./routes/pacientesRoutes.js')
+const pacienteRoutes = require('./routes/pacientesRoutes.js');
 
 app.use('/auth', authRoutes);
 app.use('/agenda', agendaRoutes);
 app.use('/profesional', profesionalRoutes);
-app.use('/pacientes', pacienteRoutes)
+app.use('/pacientes', pacienteRoutes);
 
 //ruta principal
 app.get('/',(req,res)=>{
@@ -43,7 +43,7 @@ app.get('/pacientes/paciente', verifyToken, (req, res) => {
 });
 
 app.get('/admin',(req,res)=>{
-  res.render('adminPanel')
+  res.render('adminPanel');
 })
 
 app.get('/crearpaciente',(req,res)=>{
