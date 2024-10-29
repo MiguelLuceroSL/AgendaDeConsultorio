@@ -46,6 +46,10 @@ app.get('/admin',(req,res)=>{
   res.render('adminPanel')
 })
 
+app.get('/crearpaciente',(req,res)=>{
+  res.render('crearPaciente')
+})
+
 //iniciar sv
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
