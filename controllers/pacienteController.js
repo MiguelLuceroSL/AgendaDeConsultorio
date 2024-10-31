@@ -1,12 +1,12 @@
-const pacienteService = require('../services/pacienteService');
+import {crearPacienteS, borrarPacienteS } from '../services/pacienteService.js';
 
-exports.crearPaciente = async (req, res) => {
+export const crearPaciente = async (req, res) => {
     const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento } = req.body;
 
     console.log("Datos recibidos:", { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento });
 
     try {
-        await pacienteService.crearPaciente(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento);
+        await crearPacienteS(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento);
         console.log("Paciente creado exitosamente.");
         res.json({ message: "Paciente creado exitosamente" });
     } catch (err) {
@@ -15,11 +15,11 @@ exports.crearPaciente = async (req, res) => {
     }
 };
 
-exports.borrarPaciente = async (req, res) => {
+export const borrarPaciente = async (req, res) => {
     const { dni } = req.body;
     console.log("DNI Recibido: " + dni);
     try {
-        await pacienteService.borrarPaciente(dni);
+        await borrarPacienteS(dni);
         console.log("Paciente borrado exitosamente.");
         res.json({ message: "Paciente borrado exitosamente" });
     } catch (err) {

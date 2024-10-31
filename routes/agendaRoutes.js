@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const agendaController = require('../controllers/agendaController');
+import {getAgendas, reservarTurno} from '../controllers/agendaController.js';
 
-router.get('/', agendaController.getAgendas);
-router.post('/reservar', agendaController.reservarTurno);
+router.get('/', getAgendas);
+router.post('/reservar', reservarTurno);
 
-module.exports = router;
+export default router;

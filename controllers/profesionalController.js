@@ -1,12 +1,12 @@
-const profesionalService = require("../services/profesionalService");
+import {profesionalCrearS, profesionalBorrarS, crearProfesionalEspecialidadS} from "../services/profesionalService.js";
 
-exports.crearProfesional = async (req, res) => {
+export const crearProfesionalC = async (req, res) => {
   const { nombre_completo } = req.body;
 
   console.log("Datos recibidos:", { nombre_completo });
 
   try {
-    await profesionalService.crearProfesional(nombre_completo);
+    await profesionalCrearS(nombre_completo);
     console.log("Profesional creado exitosamente.");
     res.status(200).send("Profesional creado exitosamente.");
   } catch (err) {
@@ -15,11 +15,11 @@ exports.crearProfesional = async (req, res) => {
   }
 };
 
-exports.borrarProfesional = async (req, res) => {
+export const borrarProfesionalC = async (req, res) => {
   const { id } = req.body;
   console.log("ID Recibida: " + id);
   try {
-    await profesionalService.borrarProfesional(id);
+    await profesionalBorrarS(id);
     console.log("Profesional borrado exitosamente.");
     res.status(200).send("Profesional borrado exitosamente.");
   } catch (err) {
@@ -28,11 +28,11 @@ exports.borrarProfesional = async (req, res) => {
   }
 };
 
-exports.crearProfesionalEspecialidad = async (req, res) => {
+export const crearProfesionalEspecialidadC = async (req, res) => {
   const { nombre_completo, matricula } = req.body;
   const {especialidad_id} = req.params;
   try {
-    await profesionalService.crearProfesionalEspecialidad(
+    await crearProfesionalEspecialidadS(
       nombre_completo,
       especialidad_id,
       matricula

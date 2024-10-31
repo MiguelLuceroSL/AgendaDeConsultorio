@@ -28,16 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const userRole = tokenPayload.rol;
                 console.log("4F-🚀 ~ userRole:", userRole)
-                // Realizar una solicitud adicional si el rol es "paciente"
                 if (userRole === 'paciente') {
                     console.log("5F-ENTRAMOS AL USERROLE");
-                
-                    // Hacer solicitud a la ruta protegida usando fetchWithAuth
                     try {
                         const response = await fetchWithAuth('/pacientes/paciente');
                         console.log("🚀 ~ response:", response)
                         if (response.ok) {
-                            // Redirige solo si la solicitud es exitosa
                             setTimeout(()=>{
                                 window.location.href = '/pacientes/paciente' 
                             },2000)

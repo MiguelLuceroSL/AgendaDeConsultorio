@@ -7,4 +7,4 @@ const verifyRol = (roles) => {
     };
   };
   
-  module.exports = verifyRol;
+export default verifyRol;

@@ -1,16 +1,16 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const pacienteController = require('../controllers/pacienteController');
-const verifyToken = require('../middlewares/verifyToken');
-const verifyRole = require('../middlewares/verifyRol');
+import {crearPaciente, borrarPaciente } from '../controllers/pacienteController.js';
+import validateToken from '../middlewares/validateToken.js';
+import verifyRol from '../middlewares/verifyRol.js';
 
-router.get('/paciente', [verifyToken, verifyRole(['paciente'])], (req, res) => {
+router.get('/paciente', validateToken, verifyRol(['paciente']), (req, res) => {
     console.log("1- get /paciente pacientesRoutes.js")
     console.log("REQ DEL PACIENTES ROUTES: ",req.headers.authorization)
     res.render('paciente'); // Renderiza la vista 'paciente.pug'
   });
 
-router.post('/crear', pacienteController.crearPaciente);
-router.delete('/borrar', pacienteController.borrarPaciente);
+router.post('/crear', crearPaciente);
+router.delete('/borrar', borrarPaciente);
 
-module.exports = router;
+export default router;

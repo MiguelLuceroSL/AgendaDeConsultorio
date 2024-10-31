@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 const verifyToken = async (req, res, next) => {
     console.log("1B-ENTRANDO A VERIFY TOKEN");

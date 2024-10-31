@@ -1,6 +1,6 @@
-const db = require('../config/db');
+import db from '../config/db.js';
 
-exports.getAgendas = (req, res) => {
+export const getAgendas = (req, res) => {
   const { especialidad, sucursal } = req.query;
   let sql = 'SELECT * FROM Agendas INNER JOIN Medicos ON Agendas.medico_id = Medicos.id WHERE 1 = 1';
   if (especialidad) sql += ' AND Medicos.especialidad = ?';
@@ -12,7 +12,7 @@ exports.getAgendas = (req, res) => {
   });
 };
 
-exports.reservarTurno = (req, res) => {
+export const reservarTurno = (req, res) => {
   const { agenda_id, paciente_id } = req.body;
   db.query('INSERT INTO Turnos (agenda_id, paciente_id, estado) VALUES (?, ?, ?)', [agenda_id, paciente_id, 'Reservado'], (err) => {
     if (err) throw err;

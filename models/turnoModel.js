@@ -1,4 +1,4 @@
-const db = require('../config/db');
+import db from '../config/db.js';
 
 const Turno = {
   crear: (paciente_id,agenda_id,fecha,hora,estado,callback) => {
@@ -11,4 +11,4 @@ const Turno = {
   },
 };
 
-module.exports = Turno;
+export default Turno;
