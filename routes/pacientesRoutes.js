@@ -6,7 +6,6 @@ import verifyRol from '../middlewares/verifyRol.js';
 
 router.get('/paciente', validateToken, verifyRol(['paciente']), (req, res) => {
     console.log("1- get /paciente pacientesRoutes.js")
-    console.log("REQ DEL PACIENTES ROUTES: ",req.headers.authorization)
     res.render('paciente'); // Renderiza la vista 'paciente.pug'
   });
 

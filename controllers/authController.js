@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import db from '../config/db.js';
 import { createAccessToken } from '../libs/jwt.js';
+import jwt from 'jsonwebtoken';
 
 export const login = (req, res) => {
   const { email, password } = req.body;
@@ -37,4 +38,20 @@ export const register = (req, res) => {
     if (err) return res.status(500).send('Error al registrar usuario.');
     return res.status(200).send('Usuario registrado');
   });
+};
+
+export const getRole = (req, res) => {
+  const token = req.cookies.token;
+  if (!token) return res.status(403).json({ message: 'No token provided' });
+
+  jwt.verify(token, 'secret_key', (err, decoded) => {
+    if (err) return res.status(403).json({ message: 'Failed to authenticate token' });
+    res.json({ rol: decoded.rol });
+  });
+};
+
+// Nueva función para hacer logout
+export const logout = (req, res) => {
+  res.clearCookie('token');
+  res.status(200).json({ message: 'Logout successful' });
 };

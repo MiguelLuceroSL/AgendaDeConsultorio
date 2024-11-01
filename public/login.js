@@ -13,23 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email, password }),
-                credentials: 'include' // Permite que las cookies se envíen automáticamente
+                credentials: 'include'
             });
 
             const data = await response.json();
             console.log("2F-🚀 ~ data:", data);
-
             if (response.ok) {
-                // Realizar la solicitud para obtener el rol del usuario
-                const responseRole = await fetch('/auth/role', { credentials: 'include' });
-                console.log('!!!!RESPONSE ROLE: ', responseRole);
-                const roleData = await responseRole.json();
-                console.log("3F-🚀 ~ roleData:", roleData);
-
-                const userRole = roleData.rol;
-                console.log("4F-🚀 ~ userRole:", userRole);
-                
-                if (userRole === 'paciente') {
+                if (data.rol === 'paciente') {
                     console.log("5F-ENTRAMOS AL USERROLE");
                     try {
                         const responsePaciente = await fetchWithAuth('/pacientes/paciente');
@@ -56,13 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function fetchWithAuth(url, options = {}) {
-    options.credentials = 'include'; // Habilitar cookies en la solicitud
+    options.credentials = 'include';
+    console.log("OPTIONS!!! ",options);
     return await fetch(url, options);
-}
-
-
-// Función de logout
-function logout() {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
-}
+};

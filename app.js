@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -13,7 +14,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config();
 
 // Importar middlewares y rutas
-import db from './config/db.js';
+app.use(cookieParser());
 import validateToken from './middlewares/validateToken.js';
 import authRoutes from './routes/authRoutes.js';
 import agendaRoutes from './routes/agendaRoutes.js';
@@ -57,26 +58,6 @@ app.get('/admin', (req, res) => {
 
 app.get('/crearpaciente', (req, res) => {
   res.render('crearPaciente');
-});
-
-app.get('/auth/role', (req, res) => {
-  try {
-    const token = req.cookies.token;
-    if (!token) return res.status(403).json({ message: 'No token provided' });
-
-    jwt.verify(token, 'secret_key', (err, decoded) => {
-      if (err) return res.status(403).json({ message: 'Failed to authenticate token' });
-      res.json({ rol: decoded.rol });
-    });
-  } catch (error) {
-    res.status(500).json({message: error});
-  }
-});
-
-// Endpoint de logout
-app.post('/auth/logout', (req, res) => {
-  res.clearCookie('token');
-  res.status(200).json({ message: 'Logout successful' });
 });
 
 // Iniciar servidor
