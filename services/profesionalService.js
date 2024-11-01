@@ -1,9 +1,8 @@
 import { profesionalCrearM, profesionalBorrarM } from '../models/profesionalModel.js';
-import { crearProfesionalEspecialidadM, borrarProfesionalEspecialidadM } from '../models/profesionalEspecialidadModel.js';
 
-export const profesionalCrearS = (nombre_completo) => {
+export const crearProfesionalS = (nombre_completo, especialidad, matricula) => {
   return new Promise((resolve, reject) => {
-    profesionalCrearM(nombre_completo, (err, result) => {
+    profesionalCrearM(nombre_completo, especialidad, matricula, (err, result) => {
       if (err) {
         return reject(err); //rechazamos la promesa
       }
@@ -21,7 +20,7 @@ export const profesionalBorrarS = (id) => {
   });
 };
 
-export const crearProfesionalEspecialidadS = async (nombre_completo, especialidad_id, matricula) => {
+/*export const crearProfesionalEspecialidadS = async (nombre_completo, especialidad_id, matricula) => {
   try {
     console.log("🚀 ~ Crear Profesional ~ nombre_completo, especialidad_id, matricula:", nombre_completo, especialidad_id, matricula);
 
@@ -48,4 +47,4 @@ export const crearProfesionalEspecialidadS = async (nombre_completo, especialida
     console.error("Error en crearProfesionalEspecialidad:", error);
     throw error;
   }
-};
+};*/

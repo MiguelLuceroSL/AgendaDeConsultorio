@@ -1,12 +1,12 @@
-import {profesionalCrearS, profesionalBorrarS, crearProfesionalEspecialidadS} from "../services/profesionalService.js";
+import {crearProfesionalS, profesionalBorrarS} from "../services/profesionalService.js";
 
 export const crearProfesionalC = async (req, res) => {
-  const { nombre_completo } = req.body;
+  const { nombre_completo, especialidad, matricula } = req.body;
 
-  console.log("Datos recibidos:", { nombre_completo });
+  console.log("Datos recibidos:", { nombre_completo, especialidad, matricula });
 
   try {
-    await profesionalCrearS(nombre_completo);
+    await crearProfesionalS(nombre_completo, especialidad, matricula);
     console.log("Profesional creado exitosamente.");
     res.status(200).send("Profesional creado exitosamente.");
   } catch (err) {
@@ -28,7 +28,7 @@ export const borrarProfesionalC = async (req, res) => {
   }
 };
 
-export const crearProfesionalEspecialidadC = async (req, res) => {
+/*export const crearProfesionalEspecialidadC = async (req, res) => {
   const { nombre_completo, matricula } = req.body;
   const {especialidad_id} = req.params;
   try {
@@ -43,4 +43,4 @@ export const crearProfesionalEspecialidadC = async (req, res) => {
     console.error("Error al crear el profesional con especialidad:", err);
     res.status(500).send("Hubo un error al crear el profesional con especialidad.");
   }
-};
+};*/

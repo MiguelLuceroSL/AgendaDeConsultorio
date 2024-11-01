@@ -60,6 +60,13 @@ app.get('/crearpaciente', (req, res) => {
   res.render('crearPaciente');
 });
 
+app.get('/crearmedico', (req, res) => {
+  res.render('adminCargarProfesional');
+});
+
+//adminCargarProfesional
+
+
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
