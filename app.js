@@ -39,11 +39,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/auth/register', (req, res) => {
-  res.render('login'); 
+  res.render('login');
 });
 
 app.get('/auth/login', (req, res) => {
-  res.render('login'); 
+  res.render('login');
 });
 
 app.get('/pacientes/paciente', validateToken, (req, res) => {
@@ -57,6 +57,26 @@ app.get('/admin', (req, res) => {
 
 app.get('/crearpaciente', (req, res) => {
   res.render('crearPaciente');
+});
+
+app.get('/auth/role', (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) return res.status(403).json({ message: 'No token provided' });
+
+    jwt.verify(token, 'secret_key', (err, decoded) => {
+      if (err) return res.status(403).json({ message: 'Failed to authenticate token' });
+      res.json({ rol: decoded.rol });
+    });
+  } catch (error) {
+    res.status(500).json({message: error});
+  }
+});
+
+// Endpoint de logout
+app.post('/auth/logout', (req, res) => {
+  res.clearCookie('token');
+  res.status(200).json({ message: 'Logout successful' });
 });
 
 // Iniciar servidor
