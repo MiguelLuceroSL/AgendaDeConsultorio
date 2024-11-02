@@ -17,8 +17,9 @@ export const login = (req, res) => {
       if (!passwordIsValid) return res.status(401).send('Contraseña incorrecta');
 
       const token = await createAccessToken({ id: user.usuario_id });
+      console.log("🚀authController token:", token)
       
-      res.cookie('token', token);
+      res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'Lax' });
       res.json({
         id: user.usuario_id,
         username: user.username,

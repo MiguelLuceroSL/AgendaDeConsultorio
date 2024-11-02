@@ -3,6 +3,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
+import { funcion1 } from './middlewares/middle1.js';
 
 const app = express();
 
@@ -15,7 +16,7 @@ dotenv.config();
 
 // Importar middlewares y rutas
 app.use(cookieParser());
-import validateToken from './middlewares/validateToken.js';
+import { authRequired } from './middlewares/validateToken.js';
 import authRoutes from './routes/authRoutes.js';
 import agendaRoutes from './routes/agendaRoutes.js';
 import profesionalRoutes from './routes/profesionalRoutes.js';
@@ -47,7 +48,7 @@ app.get('/auth/login', (req, res) => {
   res.render('login');
 });
 
-app.get('/pacientes/paciente', validateToken, (req, res) => {
+app.get('/pacientes/paciente', funcion1, authRequired, (req, res) => {
   console.log("1- app.js get pacientes/paciente");
   res.render('paciente');
 });

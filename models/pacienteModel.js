@@ -3,7 +3,7 @@ import db from '../config/db.js';
 export const crearPacienteM = (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, callback) => {
   // Primero buscamos el usuario_id basado en el email en la tabla usuario
   const sqlUsuario = 'SELECT usuario_id FROM usuario WHERE email = ? AND rol = "paciente"';
-  
+
   db.query(sqlUsuario, [email], (err, result) => {
     if (err) {
       return callback(err); // Si hay un error, devolverlo
@@ -22,10 +22,22 @@ export const crearPacienteM = (nombre_completo, dni, obra_social, telefono, emai
 
     db.query(sqlPaciente, [nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, usuario_id], callback);
   });
-    
+
 };
 
-export const borrarPacienteM = (dni,callback)=>{
+export const borrarPacienteM = (dni, callback) => {
   const sql = 'DELETE FROM paciente WHERE dni = ?'
-  db.query(sql, [ dni ], callback);
+  db.query(sql, [dni], callback);
+};
+
+export const rolById = (id, callback) => {
+  const sqlRol = 'SELECT rol FROM usuario WHERE usuario_id = ?';
+  db.query(sqlRol, [id], (err, result) => {
+    if (err) {
+      return callback(err);
+    }
+    console.log('result[0]:',result[0])
+    console.log('result[0].rol:',result[0].rol)
+    return result[0].rol;
+  });
 };
