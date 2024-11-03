@@ -1,47 +1,55 @@
 html{
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ffffff;
+    background-color: #FBFBFB;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+header{
+    position: absolute;
+    top: 0;
+}
+
+.logoFooter{
+    width: 160px;
+    height: 160px;
 }
 
 .seccion{
-    width: 1200px;
+    width: 60vw;
     height: 500px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    -webkit-box-shadow: 0 10px 6px -6px #777;
-    -moz-box-shadow: 0 10px 6px -6px #777;
-    box-shadow: 0 10px 6px -6px #777;
-}
-
-.articuloLogin, .articuloRegistro{
-    height: 100%;
-    width: 600px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    gap: 60px;
+}
+
+.articuloLogin, .articuloRegistro{
+    height: 100%;
+    width: 400px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    -webkit-box-shadow: 0 10px 6px -6px #777;
+    -moz-box-shadow: 0 10px 6px -6px #777;
+    box-shadow: 0 10px 6px -6px #777;
+    border-radius: 20px;
 }
 
 .articuloLogin{
-    border-top-left-radius: 80px;
+    background-color: #D4F6FF;
 }
 
 .articuloRegistro{
-    border-top-right-radius: 60px;
-}
-
-.articuloLogin{
-    background-color: #88C273;
-}
-
-.articuloRegistro{
-    background-color: #536493;
+    background-color: #C6E7FF;
 }
 
 .formLogin, .formRegistro{
@@ -51,17 +59,18 @@ html{
     gap: 15px;
 }
 
+.formRegistro{
+    gap: 5px;
+}
+
 .articuloLogin, .articuloRegistro{
     border: 1px solid rgb(65, 65, 65);
 }
 
-.h2Login, .h2Registro{
+.spanLogin, .spanRegistro{
     font-size: 30px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
-}
-
-.h2Registro{
-    color: #FFF1DB;
+    padding: 20px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .emailLogin, .pwLogin, .emailRegistro, .pwRegistro, .rolRegistro{
@@ -69,26 +78,25 @@ html{
     border: none;
 }
 
-.lbEmailLogin, .lbPwLogin, .lbEmailRegistro, .lbPwRegistro, .lbRolRegistro, .selectRol, option{
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
-}
-
-.lbEmailRegistro, .lbPwRegistro, .lbRolRegistro{
-    color: #FFF1DB;
+.lbEmailLogin, .lbPwLogin, .lbEmailRegistro, .lbPwRegistro, .lbRolRegistro{
+    font-size: 18px;
 }
 
 .inputEmailLogin, .inputPwLogin, .inputEmailRegistro, .inputPwRegistro, .inputRolRegistro{
-    border-top-left-radius: 2px;
-    border-top-right-radius: 6px;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 4px;
-    margin-top: 5px;
+    border: 1px solid black;
+    margin-top: 10px;
+    height: 35px;
+    width: 250px;
+    font-size: 14px;
+}
+
+.pwOlvidada{
+    color: black;
 }
 
 .botonLogin, .botonRegistro{
-    background-color: #204ece;
+    background-color: #FFDDAE;
     border: none;
-    color: white; 
     padding: 15px 32px; 
     text-align: center; 
     text-decoration: none; 
@@ -102,10 +110,10 @@ html{
     box-shadow: 0 10px 6px -6px #2b2a2a;
 }
 
-.botonRegistro{
-    background-color: #86e065;
-    color: #000000;
+.botonLogin:hover, .botonRegistro:hover{
+    background-color: #f3c88d;
 }
+
 
 .selectRol{
     width: 170px;
@@ -113,4 +121,61 @@ html{
     margin-top: 5px;
     border-radius: 5px;
     border: 1px solid black;
+}
+
+.selectRol:hover{
+    cursor: pointer;
+}
+
+.footer{
+    border-top: 1px solid rgb(129, 129, 129);
+    width: 60vw; 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 10px;
+}
+
+.sectionFooter{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+ul{
+    font-size: larger;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    font-weight:600;
+}
+
+li{
+    list-style-type: none;
+    font-size: medium;
+    margin-top: 5px;
+    text-decoration: none;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+    font-weight:400;
+}
+
+a:hover{
+    text-decoration:dotted;
+    color: #daa761;
+}
+
+.logoFooter{
+    width: 100px;
+    height: 100px;
 }
