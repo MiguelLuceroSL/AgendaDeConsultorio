@@ -5,14 +5,18 @@ html
     link(rel="stylesheet", href="home.css")
   body
     header
-      img(src="/agenda.png", alt="" class="logoHeader")
+      img(src="/agenda.png", alt="logo" class="logoHeader")
       nav
           ul
               li: a(href="/auth/login") Registrate / Iniciar Sesion
     main
-        h2 Agenda de Consultorios 
-        p Saca tus turnos médicos de manera fácil y rápida.
-        p Utiliza el menú de navegación para acceder a las secciones de la aplicación.
+        h1 Agenda de Consultorios 
+        section(class="sectionCarrousel")
+          button(type="button" class="btnIzq" id="btnIzq"): img(src="/btn2.png", alt="btn2" class="btn2")
+          article(class="carrousel")
+            img(src="/1.jpg", alt="carrousel1" class="carrouselImg" id="imgCarrousel")
+            p(id="pCarrousel") Saca tus turnos médicos de manera fácil y rápida.
+          button(type="button" class="btnDer" id="btnDer"): img(src="/btn1.png", alt="btn1" class="btn1")
     footer(class="footer")
       section(class="sectionFooter")
         ul Nuestros GitHub
@@ -22,3 +26,4 @@ html
         ul Nuestros LinkedIn
           li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
           li: a(href="https://www.linkedin.com/in/lucero-roque-roberto-miguel-2122bb251/") Lucero Miguel
+    script(type="module" src="/home.js")

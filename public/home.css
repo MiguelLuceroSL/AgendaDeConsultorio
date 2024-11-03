@@ -36,6 +36,43 @@ nav ul li {
   margin: 0 1rem;
 }
 
+main{
+  width: 80vw;
+}
+
+.sectionCarrousel{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.carrousel{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carrouselImg{
+  width: 768px;
+  height: 432px;
+  box-shadow: inset 0px 0px 15px #777,
+                    0px 0px 15px #777;
+  border-radius: 10px;
+}
+
+.btnIzq, .btnDer{
+  cursor: pointer;
+  border: 0;
+  background-color: #FBFBFB;
+}
+
+.btn1, .btn2{
+  width: 48px;
+  height: 45px;
+}
+
 .footer {
   border-top: 1px solid rgb(129, 129, 129);
   width: 80vw;

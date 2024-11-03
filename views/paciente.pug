@@ -2,13 +2,23 @@ doctype html
 html
   head
     title Vista Paciente
-    script(src="/logout.js") // Importa el archivo de logout
+    link(rel="stylesheet", href="/paciente.css")
   body
     header
-      h4 Agencia de Consultorios
+      img(src="/agenda.png", alt="" class="logoHeader")
       nav 
-        ul
+        ul(class="ulHeader")
           li: a(href="/medicos") Sacar Turnos
           li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
     h1 Bienvenido, paciente!
     p Aquí puedes gestionar tus consultas médicas.
+    footer(class="footer")
+      section(class="sectionFooter")
+        ul(class="ulFooter") Nuestros GitHub
+          li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
+          li: a(href="https://github.com/JuanCarrillo2435") Lucero Miguel
+        img(src="/agenda.png", alt="" class="logoFooter")
+        ul(class="ulFooter") Nuestros LinkedIn
+          li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
+          li: a(href="https://www.linkedin.com/in/lucero-roque-roberto-miguel-2122bb251/") Lucero Miguel
+    script(src="/logout.js")
