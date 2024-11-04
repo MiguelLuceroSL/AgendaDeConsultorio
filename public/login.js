@@ -51,8 +51,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     } catch (error) {
                         console.error('Error en la solicitud de redirección:', error.message);
                     }
-                } else {
-                    
+                } else if (data.rol === 'secretaria') {
+                    console.log("7F-ENTRAMOS AL USERROLE de la secretaria");
+                    try {
+                        const responseSecre = await fetchWithAuth('/secretaria/home');
+                        console.log("🚀 ~ responseAdmin:", responseSecre);
+                        if (responseSecre.ok) {
+                            setTimeout(() => {
+                                window.location.href = '/secretaria/home';
+                            }, 1000);
+                        } else {
+                            console.error('Error al acceder a la vista protegida:', await responseSecre.text());
+                            alert('No se pudo acceder a la vista de la secretaria.');
+                        }
+                    } catch (error) {
+                        console.error('Error en la solicitud de redirección:', error.message);
+                    }
                 }
             } else {
                 alert('Error al iniciar sesión. Verifica tus credenciales.');

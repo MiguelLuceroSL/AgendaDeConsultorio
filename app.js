@@ -21,6 +21,7 @@ import agendaRoutes from './routes/agendaRoutes.js';
 import profesionalRoutes from './routes/profesionalRoutes.js';
 import pacienteRoutes from './routes/pacientesRoutes.js';
 import adminRoutes from './routes/admin.routes.js';
+import secretariaRoutes from './routes/secretaria.routes.js';
 
 // Middleware
 app.use(express.json());
@@ -35,6 +36,7 @@ app.use('/agenda', agendaRoutes);
 app.use('/profesional', profesionalRoutes);
 app.use('/pacientes', pacienteRoutes);
 app.use('/admin', adminRoutes);
+app.use('/secretaria', secretariaRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {
@@ -55,10 +57,6 @@ app.get('/admin', (req, res) => {
 
 app.get('/crearpaciente', (req, res) => {
   res.render('crearPaciente');
-});
-
-app.get('/crearmedico', (req, res) => {
-  res.render('adminCargarProfesional');
 });
 
 //adminCargarProfesional
