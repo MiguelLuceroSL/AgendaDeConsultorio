@@ -16,11 +16,11 @@ dotenv.config();
 
 // Importar middlewares y rutas
 app.use(cookieParser());
-import { authRequired } from './middlewares/validateToken.js';
 import authRoutes from './routes/authRoutes.js';
 import agendaRoutes from './routes/agendaRoutes.js';
 import profesionalRoutes from './routes/profesionalRoutes.js';
 import pacienteRoutes from './routes/pacientesRoutes.js';
+import adminRoutes from './routes/admin.routes.js';
 
 // Middleware
 app.use(express.json());
@@ -34,6 +34,7 @@ app.use('/auth', authRoutes);
 app.use('/agenda', agendaRoutes);
 app.use('/profesional', profesionalRoutes);
 app.use('/pacientes', pacienteRoutes);
+app.use('/admin', adminRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {
@@ -46,11 +47,6 @@ app.get('/auth/register', (req, res) => {
 
 app.get('/auth/login', (req, res) => {
   res.render('login');
-});
-
-app.get('/pacientes/paciente', funcion1, authRequired, (req, res) => {
-  console.log("1- app.js get pacientes/paciente");
-  res.render('paciente');
 });
 
 app.get('/admin', (req, res) => {

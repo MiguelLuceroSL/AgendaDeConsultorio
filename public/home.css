@@ -40,6 +40,10 @@ main{
   width: 80vw;
 }
 
+h1{
+  padding: 20px;
+}
+
 .sectionCarrousel{
   display: flex;
   flex-direction: row;

@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (responsePaciente.ok) {
                             setTimeout(() => {
                                 window.location.href = '/pacientes/paciente';
-                            }, 2000);
+                            }, 1000);
                         } else {
                             console.error('Error al acceder a la vista protegida:', await responsePaciente.text());
                             alert('No se pudo acceder a la vista del paciente.');
@@ -35,6 +35,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     } catch (error) {
                         console.error('Error en la solicitud de redirección:', error.message);
                     }
+                } else if (data.rol === 'admin') {
+                    console.log("6F-ENTRAMOS AL USERROLE del admin");
+                    try {
+                        const responseAdmin = await fetchWithAuth('/admin/home');
+                        console.log("🚀 ~ responseAdmin:", responseAdmin);
+                        if (responseAdmin.ok) {
+                            setTimeout(() => {
+                                window.location.href = '/admin/home';
+                            }, 1000);
+                        } else {
+                            console.error('Error al acceder a la vista protegida:', await responseAdmin.text());
+                            alert('No se pudo acceder a la vista del admin.');
+                        }
+                    } catch (error) {
+                        console.error('Error en la solicitud de redirección:', error.message);
+                    }
+                } else {
+                    
                 }
             } else {
                 alert('Error al iniciar sesión. Verifica tus credenciales.');

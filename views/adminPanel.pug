@@ -1,10 +1,26 @@
 doctype html
 html
     head
-        h4 Agencia de Consultorios
-        nav 
-            ul
-                li: a(href="/") Inicio
-                li: a(href="/profesional/crear") Medicos
-                li: a(href="/profesional/agendas") Agendas
-                li: button(onclick="logout()") Cerrar sesión
+        title Agenda de Consultorios
+        link(rel="stylesheet", href="/admin.css")
+    body
+        header
+            img(src="/agenda.png", alt="logo" class="logoHeader")
+            nav 
+                ul(class="ulHeader")
+                    li: a(href="/") Inicio
+                    li: a(href="/profesional/crear") Medicos
+                    li: a(href="/profesional/agendas") Agendas
+                    li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
+        main 
+            h1 Administrador 
+        footer(class="footer")
+            section(class="sectionFooter")
+                ul Nuestros GitHub
+                    li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
+                    li: a(href="https://github.com/JuanCarrillo2435") Lucero Miguel
+                img(src="/agenda.png", alt="" class="logoFooter")
+                ul Nuestros LinkedIn
+                    li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
+                    li: a(href="https://www.linkedin.com/in/lucero-roque-roberto-miguel-2122bb251/") Lucero Miguel 
+        script(src="/logout.js")
