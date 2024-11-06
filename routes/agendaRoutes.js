@@ -1,8 +1,10 @@
 import express from 'express';
 const router = express.Router();
-import {getAgendas, reservarTurno} from '../controllers/agendaController.js';
+import {crearAgendaC, actulizarAgendaC, borrarAgendaC} from '../controllers/agendaController.js';
 
-router.get('/', getAgendas);
-router.post('/reservar', reservarTurno);
+router.post('/crearagendas', crearAgendaC);
+router.get('getagendas', obtenerAgendasC);
+router.put('/actagendas', actulizarAgendaC);
+router.delete('/delagendas', borrarAgendaC);
 
 export default router;
