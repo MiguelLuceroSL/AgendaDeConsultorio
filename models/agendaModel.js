@@ -1,7 +1,7 @@
-import db from '../config/db.js';
+/*import db from '../config/db.js';
 
 export const crearAgendaM = (profesional_especialidad_id, sucursal_id, dia_inicio, dia_fin, horario_inicio, horario_fin, estado, callback) => {
-    const sql = 'INSERT INTO `agenda`(profesional_especialidad_id, sucursal_id, dia_inicio, dia_fin, horario_inicio, horario_fin, estado) VALUES (?,?,?,?,?,?,?)'
+    const sql = 'INSERT INTO agenda (profesional_especialidad_id, sucursal_id, dia_inicio, dia_fin, horario_inicio, horario_fin, estado) VALUES (?,?,?,?,?,?,?)'
     db.query(sql , [profesional_especialidad_id, sucursal_id, dia_inicio, dia_fin, horario_inicio, horario_fin, estado], callback)
 }
 
@@ -19,4 +19,4 @@ export const actulizarAgendaM = (id, horario_inicio, horario_fin, estado, callba
 export const borrarAgenda = (id,callback) => {
     const sql = 'DELETE FROM agenda WHERE id = ?'
     db.query(sql, [id], callback)
-}
+}*/
