@@ -1,4 +1,4 @@
-/*import {crearAgendaM, obtenerAgendasM, actulizarAgendaM, borrarAgenda } from "../models/agendaModel"
+import {crearAgendaM, obtenerAgendasM, actulizarAgendaM, borrarAgenda } from "../models/agendaModel.js"
 
 export const crearAgendaS = (profesional_especialidad_id, sucursal_id,dia_inicio, dia_fin, horario_inicio, horario_fin, estado) => {
     return new Promise((resolve, reject) => {
@@ -23,9 +23,9 @@ export const crearAgendaS = (profesional_especialidad_id, sucursal_id,dia_inicio
     })
   }
 
-export const actulizarAgendaS = (id, horario_inicio, horario_fin, estado) =>{
+export const actulizarAgendaS = (horario_inicio, horario_fin, estado, id) =>{
     return new Promise((resolve, reject) =>{
-        actulizarAgendaM(id, horario_inicio, horario_fin, estado, (err, result) => {
+        actulizarAgendaM(horario_inicio, horario_fin, estado, id, (err, result) => {
             if (err) {
                 return reject(err)
             }
@@ -43,4 +43,4 @@ export const borrarAgendaS = (id) => {
             resolve(result)
         })
     })
-}*/
+}
