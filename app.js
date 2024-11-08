@@ -52,17 +52,13 @@ app.get('/auth/login', (req, res) => {
 });
 
 app.get('/admin', (req, res) => {
-  res.render('adminPanel');
+  res.render('admin/adminPanel');
 });
 
 app.get('/crearpaciente', (req, res) => {
   res.render('crearPaciente');
 });
 
-//adminCargarProfesional
-
-
-// Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

@@ -6,11 +6,11 @@ import verifyRol from '../middlewares/verifyRol.js';
 import { funcion2 } from '../middlewares/middle2.js';
 
 router.get('/paciente', funcion2, authRequired, verifyRol('paciente'), (req, res) => {
-  res.render('paciente');
+  res.render('paciente/paciente');
 });
 
 router.get('/turno', funcion2, authRequired, verifyRol('paciente'), (req, res) => {
-  res.render('pacienteTurno');
+  res.render('paciente/pacienteTurno');
 });
 
 router.post('/crear', crearPaciente);

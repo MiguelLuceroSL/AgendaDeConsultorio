@@ -4,11 +4,11 @@ import verifyRol from '../middlewares/verifyRol.js';
 const router = express.Router();
 
 router.get('/home', authRequired, verifyRol('admin'), (req, res) => {
-  res.render('secretariaPanel');
+  res.render('secretaria/secretariaPanel');
 });
 
 router.get('/gestionTurno', authRequired, verifyRol('admin'), (req, res) => {
-    res.render('secretariaGestionTurno');
+    res.render('secretaria/secretariaGestionTurno');
   });
 
 export default router;
