@@ -15,4 +15,12 @@ router.get('/cargarAgenda', authRequired, verifyRol('admin'), (req, res) => {
   res.render('adminCargarAgenda');
 });
 
+router.get('/createProfesional', authRequired, verifyRol('admin'), (req, res) => {
+  res.render('adminCreateProfesional');
+});
+
+router.get('/readProfesional', authRequired, verifyRol('admin'), (req, res) => {
+  res.render('adminReadProfesional');
+});
+
 export default router;
