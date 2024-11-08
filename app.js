@@ -16,10 +16,10 @@ dotenv.config();
 
 // Importar middlewares y rutas
 app.use(cookieParser());
-import authRoutes from './routes/authRoutes.js';
-import agendaRoutes from './routes/agendaRoutes.js';
-import profesionalRoutes from './routes/profesionalRoutes.js';
-import pacienteRoutes from './routes/pacientesRoutes.js';
+import authRoutes from './routes/auth.routes.js';
+import agendaRoutes from './routes/agenda.routes.js';
+import profesionalRoutes from './routes/profesional.routes.js';
+import pacienteRoutes from './routes/pacientes.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import secretariaRoutes from './routes/secretaria.routes.js';
 
