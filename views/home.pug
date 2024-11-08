@@ -2,28 +2,28 @@ doctype html
 html
   head
     title Agenda de Consultorios
-    link(rel="stylesheet", href="home.css")
+    link(rel="stylesheet", href="/css/home.css")
   body
     header
-      a(href="http://localhost:3000/", rel="noopener noreferrer"): img(src="/agenda.png", alt="" class="logoHeader")
+      a(href="http://localhost:3000/", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
       nav
           ul
               li: a(href="/auth/login") Registrate / Iniciar Sesion
     main
         h1 Agenda de Consultorios 
         section(class="sectionCarrousel")
-          button(type="button" class="btnIzq" id="btnIzq"): img(src="/btn2.png", alt="btn2" class="btn2")
+          button(type="button" class="btnIzq" id="btnIzq"): img(src="/img/btn2.png", alt="btn2" class="btn2")
           article(class="carrousel")
-            img(src="/1.jpg", alt="carrousel1" class="carrouselImg" id="imgCarrousel")
+            img(src="/img/1.jpg", alt="carrousel1" class="carrouselImg" id="imgCarrousel")
             p(id="pCarrousel") Saca tus turnos médicos de manera fácil y rápida.
-          button(type="button" class="btnDer" id="btnDer"): img(src="/btn1.png", alt="btn1" class="btn1")
+          button(type="button" class="btnDer" id="btnDer"): img(src="/img/btn1.png", alt="btn1" class="btn1")
     footer(class="footer")
       section(class="sectionFooter")
         ul Nuestros GitHub
           li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
           li: a(href="https://github.com/JuanCarrillo2435") Lucero Miguel
-        img(src="/agenda.png", alt="" class="logoFooter")
+        img(src="/img/agenda.png", alt="" class="logoFooter")
         ul Nuestros LinkedIn
           li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
           li: a(href="https://www.linkedin.com/in/lucero-roque-roberto-miguel-2122bb251/") Lucero Miguel
-    script(type="module" src="/home.js")
+    script(type="module" src="/js/home.js")

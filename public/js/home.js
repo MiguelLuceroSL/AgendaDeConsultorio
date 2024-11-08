@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIndex = 0;
 
     function updateCarrousel(index) {
-        img.src = `http://localhost:3000/${index + 1}.jpg`;
+        img.src = `http://localhost:3000/img/${index + 1}.jpg`;
         p.innerHTML = frases[index];
     }
 
