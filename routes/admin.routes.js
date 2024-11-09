@@ -23,4 +23,12 @@ router.get('/readProfesional', authRequired, verifyRol('admin'), (req, res) => {
   res.render('admin/adminReadProfesional');
 });
 
+router.get('/updateProfesional', authRequired, verifyRol('admin'), (req, res) => {
+  res.render('admin/adminUpdateProfesional');
+});
+
+router.get('/deleteProfesional', authRequired, verifyRol('admin'), (req, res) => {
+  res.render('admin/adminDeleteProfesional');
+});
+
 export default router;
