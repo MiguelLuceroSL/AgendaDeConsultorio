@@ -22,6 +22,8 @@ import profesionalRoutes from './routes/profesional.routes.js';
 import pacienteRoutes from './routes/pacientes.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import secretariaRoutes from './routes/secretaria.routes.js';
+import turnoRoutes from './routes/turno.routes.js';
+
 
 // Middleware
 app.use(express.json());
@@ -37,6 +39,7 @@ app.use('/profesional', profesionalRoutes);
 app.use('/pacientes', pacienteRoutes);
 app.use('/admin', adminRoutes);
 app.use('/secretaria', secretariaRoutes);
+app.use('/turnos', turnoRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {

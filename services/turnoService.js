@@ -33,9 +33,9 @@ export const borrarTurnoS =(id) =>{
     })
 }
 
-export const actualizarTurnoS =(id,fecha,hora,estado) =>{
+export const actualizarTurnoS =(fecha,hora,estado, id) =>{
     return new Promise((resolve,reject)=>{
-        actuTurnoM(id,fecha,hora,estado, (err,result)=>{
+        actuTurnoM(fecha,hora,estado,id, (err,result)=>{
             if(err){
                 return reject(err)
             }
@@ -44,9 +44,9 @@ export const actualizarTurnoS =(id,fecha,hora,estado) =>{
     })
 }
 
-export const confTurnoS = (id,confirmado)=>{
+export const confTurnoS = (confirmado, id)=>{
     return new Promise((resolve,reject)=>{
-        confTurnoM(id,confirmado,(err,result)=>{
+        confTurnoM(confirmado,id,(err,result)=>{
             if(err){
                 return reject(err)
             }

@@ -35,26 +35,26 @@ export const borrarTurnoM = (id, callback) => {
     });
 }
 
-export const actuTurnoM =(id, fecha, hora, estado, callback) =>{
+export const actuTurnoM =(fecha, hora, estado,id, callback) =>{
     const sql ='UPDATE turnos SET fecha = ?, hora = ?, estado = ? WHERE id = ?'
 
-    db.query [sql, fecha, hora, estado, id], (err,res) => {
+    db.query (sql,[ fecha, hora, estado, id], (err,res) => {
         if(err){
             callback(err,null)
             return;
         }
         callback(null,res)
-    }
+    })
 }
 
-export const confTurnoM =(id, fecha, hora, estado, callback) =>{
+export const confTurnoM =(confirmado, id, callback) =>{
     const sql ='UPDATE turnos SET confirmado = ? WHERE id = ?'
 
-    db.query [confirmado, id], (err,res) => {
+    db.query (sql,[confirmado, id], (err,res) => {
         if(err){
             callback(err,null)
             return;
         }
         callback(null,res)
-    }
+    })
 }
