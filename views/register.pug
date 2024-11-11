@@ -1,0 +1,29 @@
+doctype html
+html
+  head
+    title Registro Login
+    link(rel="stylesheet", href="/css/login.css")
+  body
+    header 
+      a(href="http://localhost:3000/", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
+    section.seccion
+      article.articuloRegistro
+        form.formRegistro(action="/auth/register", method="POST")
+          span.spanRegistro REGISTRARSE
+          fieldset.emailRegistro
+            label.lbEmailRegistro(for="registerEmail") Correo electrónico:
+            input.inputEmailRegistro(type="email", id="registerEmail", name="email", required, placeholder="Correo electrónico")
+          fieldset.pwRegistro
+            label.lbPwRegistro(for="registerPassword") Contraseña:
+            input.inputPwRegistro(type="password", id="registerPassword", name="password", required, placeholder="Contraseña")
+          button.botonRegistro(type="submit") Registrarse
+    footer(class="footer")
+      section(class="sectionFooter")
+        ul Nuestros GitHub
+          li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
+          li: a(href="https://github.com/JuanCarrillo2435") Lucero Miguel
+        img(src="/img/agenda.png", alt="" class="logoFooter")
+        ul Nuestros LinkedIn
+          li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
+          li: a(href="https://www.linkedin.com/in/lucero-roque-roberto-miguel-2122bb251/") Lucero Miguel 
+    script(type="module" src="/js/login.js")
