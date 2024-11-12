@@ -3,7 +3,6 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
-import { funcion1 } from './middlewares/middle1.js';
 
 const app = express();
 
