@@ -17,10 +17,13 @@ router.get('/cargarAgenda', authRequired, verifyRol('admin'), (req, res) => {
 });
 
 router.get('/createProfesional', authRequired, verifyRol('admin'), (req, res) => {
-  console.log("🚀 ~ router.get ~ req:", req.url)
-  
-  res.render(`admin/adminCreateProfesional${req.url}`);
+  res.render('admin/adminCreateProfesional');
 });
+
+router.get('/registerSecretaria', authRequired, verifyRol('admin'), (req, res) => {
+  res.render('admin/adminRegisterSecretaria');
+});
+
 
 /*router.get('/readProfesional', authRequired, verifyRol('admin'), (req, res) => {
   res.render('admin/adminReadProfesional');

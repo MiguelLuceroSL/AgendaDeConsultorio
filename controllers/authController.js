@@ -33,11 +33,22 @@ export const login = (req, res) => {
 };
 
 export const register = (req, res) => {
-  const { email, password, rol } = req.body;
+  const { email, password } = req.body;
   const passwordHash = bcrypt.hashSync(password, 8);
+  const rol = "paciente";
   db.query('INSERT INTO usuario(email, password, rol) VALUES (?,?,?)', [email, passwordHash, rol], (err, result) => {
     if (err) return res.status(500).send('Error al registrar usuario.');
-    return res.status(200).send('Usuario registrado');
+    return res.render('registerSuccess', {message: '¡Usuario creado con éxito!'});
+  });
+};
+
+export const registerSecretaria = (req, res) => {
+  const { email, password } = req.body;
+  const passwordHash = bcrypt.hashSync(password, 8);
+  const rol = "secretaria";
+  db.query('INSERT INTO usuario(email, password, rol) VALUES (?,?,?)', [email, passwordHash, rol], (err, result) => {
+    if (err) return res.status(500).send('Error al registrar la secretaria.');
+    return res.render('admin/adminSecretariaSuccess', {message: '¡Secretaria creada con éxito!'});
   });
 };
 

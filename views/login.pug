@@ -18,22 +18,6 @@ html
             input.inputPwLogin(type="password", id="loginPassword", name="password", required, placeholder="Contraseña")
           a(href="/pwOlvidada" class="pwOlvidada") ¿Olvidaste tu contraseña? 
           button.botonLogin(type="submit") Iniciar Sesión
-      article.articuloRegistro
-        form.formRegistro(action="/auth/register", method="POST")
-          span.spanRegistro REGISTRARSE
-          fieldset.emailRegistro
-            label.lbEmailRegistro(for="registerEmail") Correo electrónico:
-            input.inputEmailRegistro(type="email", id="registerEmail", name="email", required, placeholder="Correo electrónico")
-          fieldset.pwRegistro
-            label.lbPwRegistro(for="registerPassword") Contraseña:
-            input.inputPwRegistro(type="password", id="registerPassword", name="password", required, placeholder="Contraseña")
-          fieldset.rolRegistro
-            label.lbRolRegistro(for="rol") Rol:
-            select.selectRol(name="rol")
-              option(value="paciente") Paciente
-              option(value="secretaria") Secretaria
-              option(value="administrador") Administrador
-          button.botonRegistro(type="submit") Registrarse
     footer(class="footer")
       section(class="sectionFooter")
         ul Nuestros GitHub

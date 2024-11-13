@@ -46,7 +46,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/auth/register', (req, res) => {
-  res.render('login');
+  res.render('register');
 });
 
 app.get('/auth/login', (req, res) => {

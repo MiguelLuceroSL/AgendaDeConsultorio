@@ -26,6 +26,16 @@ header{
     gap: 60px;
 }
 
+.seccionSecre{
+    width: 60vw;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
 .articuloLogin, .articuloRegistro{
     height: 100%;
     width: 400px;

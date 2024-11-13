@@ -15,23 +15,7 @@ html
                     li: a(href="/admin/cargarAgenda") Agendas
                     li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
         main
-            form.formCreate(action="/profesional/crear", method="POST")
-                span.spanCreate Cargar un medico
-                fieldset.nombreCompleto 
-                    label.lbNombreCompleto(for="nombre_completo") Nombre completo: 
-                    input.inputNombreCompleto(type="text", id="nombre_completo", name="nombre_completo", required, placeholder="Nombre completo")
-                fieldset.matricula
-                    label.lbMatricula(for="matricula") Matricula: 
-                    input.inputMatricula(type="text", id="matricula", name="matricula", required, placeholder="Matricula")
-                fieldset.especialidad 
-                    label.lbEspecialidad(for="especialidad") Especialidad: 
-                    select.selectEspecialidad(name="especialidad")
-                        option(value="cardiologia") Cardiologia
-                        option(value="pediatria") Pediatria
-                        option(value="kinesiologia") Kinesiologia
-                        option(value="psicologia") Psicologia
-                        option(value="odontologia") Odontologia
-                button.botonCreate(type="submit") Cargar medico
+            h1 ¡Medico cargado exitosamente!
         footer(class="footer")
             section(class="sectionFooter")
                 ul Nuestros GitHub
