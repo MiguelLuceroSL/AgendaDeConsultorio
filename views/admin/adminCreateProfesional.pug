@@ -6,7 +6,7 @@ html
         link(rel="stylesheet", href="/css/adminCreateProfesional.css")
     body
         header
-            a(href="https://agendadeconsultorio.onrender.com/admin/home", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
+            a(href="http://localhost:3000/admin/home", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
             nav 
                 ul(class="ulHeader")
                     li: a(href="/admin/home") Inicio
@@ -14,7 +14,7 @@ html
                     li: a(href="/admin/cargarAgenda") Agendas
                     li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
         main
-            if(success)
+            if !success
             script.
                 alert('Profesional creado exitosamente');
             form.formCreate(action="/profesional/crear", method="POST")

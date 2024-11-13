@@ -8,7 +8,7 @@ export const crearProfesionalC = async (req, res) => {
   try {
     await crearProfesionalS(nombre_completo, especialidad, matricula);
     console.log("Profesional creado exitosamente.");
-    res.redirect('/admin/createProfesional?success=true');
+    res.redirect('/admin/createProfesional?success=false');
   } catch (err) {
     console.error("Error al crear el profesional:", err);
     res.status(500).send("Hubo un error al crear el profesional.");
