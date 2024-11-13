@@ -9,7 +9,7 @@ export const crearProfesionalC = async (req, res) => {
   try {
     await crearProfesionalS(nombre_completo, especialidad, matricula);
     console.log("Profesional creado exitosamente.");
-    res.redirect('/admin/createProfesional?success=false');
+    res.redirect('/admin/createProfesional?success=true');
   } catch (err) {
     console.error("Error al crear el profesional:", err);
     res.status(500).send("Hubo un error al crear el profesional.");
@@ -44,7 +44,7 @@ export const actualizarEspecialidadC = async (req, res) => {
   try {
     await actualizarEspecialidadS(profesional_id, nueva_especialidad, matricula);
     console.log("Especialidad actualizada exitosamente.");
-    res.redirect('/admin/cargarProfesional?success=true');
+    res.status(200).json({message: 'Se actualizo correctamente'})
   } catch (err) {
     console.error("Error al actualizar la especialidad:", err);
     res.status(500).send("Hubo un error al actualizar la especialidad.");

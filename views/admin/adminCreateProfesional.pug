@@ -14,9 +14,7 @@ html
                     li: a(href="/admin/cargarAgenda") Agendas
                     li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
         main
-            if !success
-            script.
-                alert('Profesional creado exitosamente');
+            
             form.formCreate(action="/profesional/crear", method="POST")
                 span.spanCreate Cargar un medico
                 fieldset.nombreCompleto 

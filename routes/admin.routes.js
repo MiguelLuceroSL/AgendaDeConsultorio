@@ -9,14 +9,7 @@ router.get('/home', authRequired, verifyRol('admin'), (req, res) => {
 });
 
 router.get('/cargarProfesional', authRequired, verifyRol('admin'), async (req, res) => {
-  try {
-    // Obtener los profesionales (médicos)
-    const profesionales = await obtenerProfesionalesC(); // Asegúrate de que esta función devuelva los datos correctos
-    res.render('admin/adminReadProfesional', { profesionales });
-  } catch (error) {
-    console.error('Error al cargar los profesionales:', error);
-    res.status(500).send('Error al cargar los profesionales');
-  }
+    res.render('admin/adminCargarProfesional');
 });
 
 router.get('/cargarAgenda', authRequired, verifyRol('admin'), (req, res) => {
@@ -24,7 +17,9 @@ router.get('/cargarAgenda', authRequired, verifyRol('admin'), (req, res) => {
 });
 
 router.get('/createProfesional', authRequired, verifyRol('admin'), (req, res) => {
-  res.render('admin/adminCreateProfesional');
+  console.log("🚀 ~ router.get ~ req:", req.url)
+  
+  res.render(`admin/adminCreateProfesional${req.url}`);
 });
 
 /*router.get('/readProfesional', authRequired, verifyRol('admin'), (req, res) => {
