@@ -1,26 +1,50 @@
 doctype html
 html
     head
-        title Cargar Medico
-        link(rel="stylesheet", href="/css/adminCargarProfesional.css")
+        title Actualizar Médico
+        link(rel="stylesheet" href="/css/adminCargarProfesional.css")
     body
         header
-            a(href="http://localhost:3000/admin/home", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
+            a(href="/admin/home" rel="noopener noreferrer"): img(src="/img/agenda.png" alt="" class="logoHeader")
             nav 
                 ul(class="ulHeader")
                     li: a(href="/admin/home") Inicio
-                    li: a(href="/admin/cargarProfesional") Medicos
+                    li: a(href="/admin/cargarProfesional") Médicos
                     li: a(href="/admin/cargarAgenda") Agendas
                     li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
         main 
-            h1 Editar datos de un Medico
+            h1 Actualizar Médico
+
+            input(type="text" id="searchInput" placeholder="Buscar por nombre...")
+
+            table#profesionalesTable
+                thead
+                    tr
+                        th Nombre Completo
+                        th Especialidad
+                        th Matrícula
+                        th Acciones
+                tbody
+                    each profesional in profesionales
+                        tr
+                            td= profesional.nombre_completo
+                            td= profesional.especialidad
+                            td= profesional.matricula
+                            td
+                                form(action="/admin/actualizarEspecialidad" method="POST")
+                                    input(type="hidden" name="profesional_id" value=profesional.profesional_id)
+                                    input(type="text" name="nueva_especialidad" placeholder="Nueva especialidad" required)
+                                    input(type="text" name="matricula" placeholder="Nueva matrícula" value=profesional.matricula required)
+                                    button(type="submit") Actualizar
+
         footer(class="footer")
             section(class="sectionFooter")
                 ul Nuestros GitHub
                     li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
                     li: a(href="https://github.com/MiguelLuceroSL") Lucero Miguel
-                img(src="/img/agenda.png", alt="" class="logoFooter")
+                img(src="/img/agenda.png" alt="" class="logoFooter")
                 ul Nuestros LinkedIn
                     li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
-                    li: a(href="https://www.linkedin.com/in/lucero-roque-roberto-miguel-2122bb251/") Lucero Miguel 
+                    li: a(href="https://www.linkedin.com/in/lucero-roque-roberto-miguel-2122bb251/") Lucero Miguel
         script(src="/js/logout.js")
+        script(src="/js/profesionales.js")

@@ -38,3 +38,26 @@ export const borrarProfesionalEspecialidadM = (id, callback) => {
   const sql = "DELETE FROM profesional_especialidad WHERE id = ?";
   db.query(sql, [id], callback);
 };
+
+export const obtenerProfesionalesM = (callback) => {
+  const sql = `
+    SELECT p.nombre_completo, e.nombre AS especialidad, pe.matricula 
+    FROM profesional_especialidad pe 
+    JOIN profesional p ON pe.profesional_id = p.id 
+    JOIN especialidad e ON pe.especialidad_id = e.id;
+  `;
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error('Error en la consulta:', err);
+      return callback(err);
+    }
+    console.log('Profesionales obtenidos:', result);  // Verifica que los datos sean correctos
+    callback(null, result);
+  });
+};
+
+
+export const actualizarEspecialidadM = (profesional_id, nueva_especialidad, matricula, callback) => {
+  const sql = `UPDATE profesional_especialidad SET especialidad_id = (SELECT id FROM especialidad WHERE nombre = ?), matricula = ? WHERE profesional_id = ?;`;
+  db.query(sql, [nueva_especialidad, matricula, profesional_id], callback);
+};

@@ -1,4 +1,5 @@
-import {crearProfesionalS, profesionalBorrarS} from "../services/profesionalService.js";
+import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS} from "../services/profesionalService.js";
+
 
 export const crearProfesionalC = async (req, res) => {
   const { nombre_completo, especialidad, matricula } = req.body;
@@ -28,19 +29,24 @@ export const borrarProfesionalC = async (req, res) => {
   }
 };
 
-/*export const crearProfesionalEspecialidadC = async (req, res) => {
-  const { nombre_completo, matricula } = req.body;
-  const {especialidad_id} = req.params;
+export const obtenerProfesionalesC = async (req, res) => {
   try {
-    await crearProfesionalEspecialidadS(
-      nombre_completo,
-      especialidad_id,
-      matricula
-    );
-    console.log("Profesional creado exitosamente.");
-    res.status(200).send("Profesional con especialidad creado exitosamente.");
+    const profesionales = await obtenerProfesionalesS();
+    res.render('admin/adminReadProfesional', { profesionales });
   } catch (err) {
-    console.error("Error al crear el profesional con especialidad:", err);
-    res.status(500).send("Hubo un error al crear el profesional con especialidad.");
+    console.error('Error al obtener los profesionales:', err);
+    res.status(500).json({ message: 'Hubo un error al obtener los profesionales.' });
   }
-};*/
+};
+
+export const actualizarEspecialidadC = async (req, res) => {
+  const { profesional_id, nueva_especialidad, matricula } = req.body;
+  try {
+    await actualizarEspecialidadS(profesional_id, nueva_especialidad, matricula);
+    console.log("Especialidad actualizada exitosamente.");
+    res.redirect('/admin/cargarProfesional?success=true');
+  } catch (err) {
+    console.error("Error al actualizar la especialidad:", err);
+    res.status(500).send("Hubo un error al actualizar la especialidad.");
+  }
+};
