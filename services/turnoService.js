@@ -1,8 +1,8 @@
 import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM } from '../models/turnoModel.js';
 
-export const crearTurnoS = (paciente_id, agenda_id, detalle_turno, fecha, hora, estado, confirmado) =>{
+export const crearTurnoS = (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) =>{
     return new Promise((resolve, reject)=>{
-        crearTurnoM(paciente_id, agenda_id, detalle_turno, fecha, hora, estado, confirmado, (err, result) =>{
+        crearTurnoM(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, (err, result) =>{
             if (err){
                 return reject(err)
             }

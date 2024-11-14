@@ -5,7 +5,7 @@ export const authRequired = (req, res, next) => {
     if (!req.cookies.token) res.status(403).json({ message: 'Debes loguearte.' })
 
     const token = req.cookies.token.trimStart();
-    console.log("🚀 ~ authRequired ~ token:", token);
+    
 
     if (!token) res.status(401).json({ message: 'No token, authorization denied' });
 

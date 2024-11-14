@@ -4,9 +4,7 @@ const verifyToken = async (req, res, next) => {
     console.log("1B-ENTRANDO A VERIFY TOKEN");
     
     try {
-        console.log("2B-ENTRANDO AL TRY DE VERIFY TOKEN");
         const authHeader = req.headers['authorization'];
-        console.log("PEDREGA🚀 ~ verifyToken ~ authHeader:", authHeader)
 
         // Si el token no está en el header `Authorization`, devuelve un error
         if (!authHeader) {
@@ -15,11 +13,9 @@ const verifyToken = async (req, res, next) => {
         }
 
         const tokenSinBearer = authHeader.replace('Bearer ', '');
-        console.log("4B-🚀 ~ verifyToken ~ tokenSinBearer:", tokenSinBearer);
 
         await jwt.verify(tokenSinBearer, process.env.JWT_SECRET, (err, decoded) => {
             if (err) return res.status(500).send('Token inválido');
-            console.log("7B-REQ.USER: ", decoded);
             req.user = decoded;
             next();
         });

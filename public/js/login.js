@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const data = await response.json();
-            console.log("2F-🚀 ~ data:", data);
             if (response.ok) {
                 if (data.rol === 'paciente') {
                     console.log("5F-ENTRAMOS AL USERROLE");

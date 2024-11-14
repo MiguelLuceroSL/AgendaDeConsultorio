@@ -31,6 +31,18 @@ export const obtenerProfesionalesS = (especialidad) => {
   });
 };
 
+export const obtenerProfesionalesVistaS = () => {
+  return new Promise((resolve, reject) => {
+    obtenerProfesionalesM((err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+
 export const actualizarEspecialidadS = (profesional_id, nueva_especialidad, matricula) => {
   return new Promise((resolve, reject) => {
       actualizarEspecialidadM(profesional_id, nueva_especialidad, matricula, (err, result) => {
