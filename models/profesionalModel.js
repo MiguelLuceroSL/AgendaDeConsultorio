@@ -92,7 +92,7 @@ export const actualizarMatriculaM = (matricula, nueva_matricula, callback) => {
   db.query(sql, [nueva_matricula, matricula], callback);
 };
 
-export const actualizarNombreCompletoM = (profesional_id, nuevo_nombre_completo, callback) => {
+export const actualizarNombreCompletoM = (nuevo_nombre_completo, profesional_id, callback) => {
   const sql = `UPDATE profesional SET nombre_completo=? WHERE id=?;`;
   db.query(sql, [nuevo_nombre_completo, profesional_id], callback);
 };

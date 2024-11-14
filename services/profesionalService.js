@@ -67,9 +67,9 @@ export const actualizarMatriculaS = (profesional_id, nueva_especialidad, matricu
   });
 };
 
-export const actualizarNombreCompletoS = (profesional_id, nuevo_nombre_completo) => {
+export const actualizarNombreCompletoS = (nuevo_nombre_completo, profesional_id) => {
   return new Promise((resolve, reject) => {
-      actualizarNombreCompletoM(profesional_id, nuevo_nombre_completo, (err, result) => {
+      actualizarNombreCompletoM(nuevo_nombre_completo, profesional_id, (err, result) => {
           if (err) {
               return reject(err);
           }

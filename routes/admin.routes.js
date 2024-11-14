@@ -37,7 +37,9 @@ router.get('/updateProfesional', authRequired, verifyRol('admin'), async (req, r
 router.post('/actualizarEspecialidad', authRequired, verifyRol('admin'), actualizarEspecialidadC);
 router.post('/actualizarMatricula', authRequired, verifyRol('admin'), actualizarMatriculaC);
 router.post('/actualizarNombreCompleto', authRequired, verifyRol('admin'), actualizarNombreCompletoC);
-
+router.get('/adminUpdateNameSuccess', authRequired, verifyRol('admin'), (req, res) => {
+  res.render('admin/adminUpdateNameSuccess')
+})
 router.get('/deleteProfesional', authRequired, verifyRol('admin'), (req, res) => {
   res.render('admin/adminDeleteProfesional');
 });

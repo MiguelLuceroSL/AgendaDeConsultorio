@@ -12,7 +12,7 @@ export const crearProfesionalC = async (req, res) => {
     res.render('admin/adminCreateSuccess', {message: 'Médico creado con éxito'});
   } catch (err) {
     console.error("Error al crear el profesional:", err);
-    res.status(500).send("Hubo un error al crear el profesional.");
+    return res.status(500).send("Hubo un error al crear el profesional.");
   }
 };
 
@@ -66,11 +66,12 @@ export const actualizarMatriculaC = async (req, res) => {
 };
 
 export const actualizarNombreCompletoC = async (req, res) => {
-  const { profesional_id, nuevo_nombre_completo } = req.body;
+  const { nuevo_nombre_completo, profesional_id } = req.body;
+  console.log('nuevo_nombre_completo: ',nuevo_nombre_completo)
   try {
-    await actualizarNombreCompletoS(profesional_id, nuevo_nombre_completo);
+    await actualizarNombreCompletoS(nuevo_nombre_completo, profesional_id);
     console.log("Nombre completo actualizado exitosamente.");
-    res.status(200).json({message: 'Se actualizo el nombre completo correctamente'})
+    res.redirect('adminUpdateNameSuccess');
   } catch (err) {
     console.error("Error al actualizar el nombre completo:", err);
     res.status(500).send("Hubo un error al actualizar el nombre completo.");
