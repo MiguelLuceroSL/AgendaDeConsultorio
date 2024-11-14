@@ -14,26 +14,35 @@ html
                     li: a(href="/admin/cargarAgenda") Agendas
                     li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
         main 
-            h1 Lista de Médicos
+            h1 Listado de Profesionales
+            form(action="/profesional/listar" method="get")
+                label(for="especialidad") Filtrar por Especialidad:
+                select(name="especialidad")
+                    option(value="") Todas
+                    option(value="Cardiologia" selected=(especialidad === 'Cardiologia')) Cardiología
+                    option(value="Pediatria" selected=(especialidad === 'Pediatria')) Pediatría
+                    option(value="Kinesiologia" selected=(especialidad === 'Kinesiologia')) Kinesiología
+                    option(value="Psicologia" selected=(especialidad === 'Psicologia')) Psicología
+                    option(value="Odontologia" selected=(especialidad === 'Odontologia')) Odontología
+                button(type="submit") Filtrar
 
-            
-            input(type="text" id="searchInput" placeholder="Buscar por nombre...")
-
-            
-            table#profesionalesTable
-                thead
-                    tr
-                        th Nombre Completo
-                        th Especialidad
-                        th Matrícula
-                        th Acciones
-                tbody
-                    each profesional in profesionales
+            if profesionales && profesionales.length
+                table
+                    thead
                         tr
-                            td= profesional.nombre_completo
-                            td= profesional.especialidad 
-                            td= profesional.matricula
-
+                            th Nombre Completo
+                            th Especialidad
+                            th Matrícula
+                            th Estado
+                    tbody
+                        each profesional in profesionales
+                            tr
+                                td= profesional.nombre_completo
+                                td= profesional.especialidad
+                                td= profesional.matricula
+                                td= profesional.estado === "1" ? 'Activo' : 'Inactivo'
+            else
+                p No se encontraron profesionales para la especialidad seleccionada.
         footer(class="footer")
             section(class="sectionFooter")
                 ul Nuestros GitHub

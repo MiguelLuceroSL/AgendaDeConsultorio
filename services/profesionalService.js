@@ -20,16 +20,16 @@ export const profesionalBorrarS = (id) => {
   });
 };
 
-export const obtenerProfesionalesS = () => {
-  return new Promise ((resolve,reject) => {
-    obtenerProfesionalesM((err, result)=>{
-          if(err){
-              return reject(err)
-          }
-          resolve(result)
-      })
-  })
-}
+export const obtenerProfesionalesS = (especialidad) => {
+  return new Promise((resolve, reject) => {
+    obtenerProfesionalesM(especialidad, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
 
 export const actualizarEspecialidadS = (profesional_id, nueva_especialidad, matricula) => {
   return new Promise((resolve, reject) => {

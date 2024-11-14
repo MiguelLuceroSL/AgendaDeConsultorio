@@ -25,9 +25,9 @@ router.get('/registerSecretaria', authRequired, verifyRol('admin'), (req, res) =
 });
 
 
-/*router.get('/readProfesional', authRequired, verifyRol('admin'), (req, res) => {
+router.get('/readProfesional', authRequired, verifyRol('admin'), (req, res) => {
   res.render('admin/adminReadProfesional');
-});*/
+});
 
 
 router.get('/updateProfesional', authRequired, verifyRol('admin'), async (req, res) => {

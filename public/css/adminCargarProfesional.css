@@ -42,6 +42,11 @@ nav{
     flex-direction: row;
 }
 
+.logoDelete{
+    width: 225px;
+    height: 225px;
+}
+
 .articleCrud{
     display: flex;
     flex-direction: column;
