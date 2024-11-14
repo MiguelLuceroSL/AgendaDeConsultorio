@@ -1,5 +1,5 @@
 import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS } from '../services/turnoService.js';
-import {obtenerProfesionalesS} from "../services/profesionalService.js";
+import {obtenerProfesionalesS, obtenerProfesionalesVistaS} from "../services/profesionalService.js";
 
 
 export const crearTurnoC = async (req, res) =>{
@@ -67,7 +67,7 @@ export const confTurnoC = async (req, res) =>{
 
 export const obtenerProfesionalesVistaC = async (req, res) => {
     try {
-      const profesionales = await obtenerProfesionalesS();
+      const profesionales = await obtenerProfesionalesVistaS();
       console.log("🚀 ~ obtenerProfesionalesC ~ profesionales:", profesionales)
       res.render('secretaria/secretariaGestionTurno', {profesionales});
     } catch (err) {

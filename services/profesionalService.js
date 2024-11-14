@@ -1,4 +1,4 @@
-import { profesionalCrearM, profesionalBorrarM, obtenerProfesionalesM, actualizarEspecialidadM } from '../models/profesionalModel.js';
+import { profesionalCrearM, profesionalBorrarM, obtenerProfesionalesM, actualizarEspecialidadM, obtenerProfesionalesVistaM } from '../models/profesionalModel.js';
 
 export const crearProfesionalS = (nombre_completo, especialidad, matricula) => {
   return new Promise((resolve, reject) => {
@@ -32,15 +32,15 @@ export const obtenerProfesionalesS = (especialidad) => {
 };
 
 export const obtenerProfesionalesVistaS = () => {
-  return new Promise((resolve, reject) => {
-    obtenerProfesionalesM((err, result) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(result);
-    });
-  });
-};
+  return new Promise ((resolve,reject) => {
+    obtenerProfesionalesVistaM((err, result)=>{
+          if(err){
+              return reject(err)
+          }
+          resolve(result)
+      })
+  })
+}
 
 
 export const actualizarEspecialidadS = (profesional_id, nueva_especialidad, matricula) => {

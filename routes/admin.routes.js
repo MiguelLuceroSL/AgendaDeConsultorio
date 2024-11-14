@@ -31,13 +31,7 @@ router.get('/readProfesional', authRequired, verifyRol('admin'), (req, res) => {
 
 
 router.get('/updateProfesional', authRequired, verifyRol('admin'), async (req, res) => {
-  try {
-    const profesionales = await obtenerProfesionalesC();
-    res.render('admin/adminUpdateProfesional', { profesionales });
-  } catch (error) {
-    console.error('Error al cargar los médicos para actualizar:', error);
-    res.status(500).send('Error al cargar los médicos para actualizar');
-  }
+  res.render('admin/adminUpdateProfesional');
 });
 
 router.post('/actualizarEspecialidad', authRequired, verifyRol('admin'), actualizarEspecialidadC);

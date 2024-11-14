@@ -1,5 +1,5 @@
 import express from 'express';
-import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC} from '../controllers/turnoController.js';
+import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC} from '../controllers/turnoController.js';
 
 const router = express.Router()
 
@@ -12,5 +12,7 @@ router.delete('/borrar/:id', borrarTurnoC);
 router.put('/actualizar', actualizarTurnoC);
 
 router.put('/confirmar', confTurnoC);
+
+router.get('/listarProfesionales', obtenerProfesionalesVistaC);
 
 export default router;

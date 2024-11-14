@@ -39,14 +39,17 @@ export const borrarProfesionalEspecialidadM = (id, callback) => {
   db.query(sql, [id], callback);
 };
 
-export const obtenerProfesionalesM = (callback) => {
+export const obtenerProfesionalesM = (especialidad, callback) => {
   const sql = `
-    SELECT p.nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
+    SELECT p.id, p.nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
     FROM profesional_especialidad pe
     JOIN profesional p ON pe.profesional_id = p.id
-    JOIN especialidad e ON pe.especialidad_id = e.id;
+    JOIN especialidad e ON pe.especialidad_id = e.id
+    ${especialidad ? 'WHERE e.nombre = ?' : ''};
   `;
-  db.query(sql, (err, result) => {
+  const params = especialidad ? [especialidad] : [];
+
+  db.query(sql, params, (err, result) => {
     if (err) {
       console.error('Error en la consulta:', err);
       return callback(err);
@@ -55,6 +58,28 @@ export const obtenerProfesionalesM = (callback) => {
     callback(null, result);
   });
 };
+
+
+export const obtenerProfesionalesVistaM = () => {
+  const sql = `
+    SELECT p.nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
+    FROM profesional_especialidad pe
+    JOIN profesional p ON pe.profesional_id = p.id
+    JOIN especialidad e ON pe.especialidad_id = e.id;
+  `;
+  return new Promise((resolve, reject) => {
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.error('Error en la consulta:', err);
+        reject(err);
+      } else {
+        console.log('Resultado de profesionales:', result);
+        resolve(result);
+      }
+    });
+  });
+};
+
 
 
 export const actualizarEspecialidadM = (profesional_id, nueva_especialidad, matricula, callback) => {
