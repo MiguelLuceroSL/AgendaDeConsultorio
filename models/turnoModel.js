@@ -58,3 +58,19 @@ export const confTurnoM =(confirmado, id, callback) =>{
         callback(null,res)
     })
 }
+
+export const traerTurnosPorFecha = (fecha, callback) => {
+    console.log("🚀 ~ traerTurnosPorFecha ~ fecha:", fecha)
+    const sql = 'SELECT * FROM turnos WHERE fecha = ?;'
+    console.log("🚀 ~ traerTurnosPorFecha ~ sql:", sql)
+    
+    db.query (sql, [fecha],  (err,res) =>{
+        if(err){
+            callback(err,null)
+            return
+        }
+        console.log("🚀 ~ db.query ~ res:", res)
+        callback(null,res)
+    })
+        
+}

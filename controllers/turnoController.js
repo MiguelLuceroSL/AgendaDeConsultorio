@@ -1,19 +1,21 @@
-import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS } from '../services/turnoService.js';
+import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosPorFechaS } from '../services/turnoService.js';
 import {obtenerProfesionalesS, obtenerProfesionalesVistaS} from "../services/profesionalService.js";
 import { obtenerPacientesVistaS } from '../services/pacienteService.js';
 
 
-export const crearTurnoC = async (req, res) =>{
-    const{ paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado} = (req.body)
-
+export const crearTurnoC = async (req, res) => {
+    console.log(req.body);
+    const { paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora } = req.body;
+    const estado = "Confirmado"; 
+  
     try {
-        const result = await crearTurnoS(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, confirmado)
-        res.json({message: 'Turno creado con exitosamente', data: result})
+      const result = await crearTurnoS(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado);
+      res.json({ message: 'Turno creado exitosamente', data: result });
     } catch (err) {
-        console.error('Error al crear turno:', err)
-        res.status(500).json({message: 'Hubo un error al crear el turno'})
+      console.error('Error al crear turno:', err);
+      res.status(500).json({ message: 'Hubo un error al crear el turno' });
     }
-}
+  };
 
 export const selTurnoC = async (req,res) => {
     const {nombre_completo} = req.query
@@ -70,9 +72,23 @@ export const obtenerProfesionalesVistaC = async (req, res) => {
     try {
       const profesionales = await obtenerProfesionalesVistaS();
       const pacientes = await obtenerPacientesVistaS()
+      //const horarios = await traerTurnosPorFechaS()
       res.render('secretaria/secretariaGestionTurno', {profesionales, pacientes});
     } catch (err) {
       console.error('Error al obtener los profesionales:', err);
       res.status(500).json({ message: 'Hubo un error al obtener los profesionales.' });
     }
   };
+
+
+  export const traerTurnosPorFechaC = async (req,res) => {
+    const {fecha} = req.params
+
+    try {
+        const turnos = await traerTurnosPorFechaS(fecha)
+        res.json(turnos)
+    } catch (err) {
+        console.error('Error al obtener fechas: ', err)
+        res.status(500).json({message: 'Hubo un error al obtener fechas'})
+    }
+}

@@ -1,4 +1,4 @@
-import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM } from '../models/turnoModel.js';
+import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnosPorFecha } from '../models/turnoModel.js';
 
 export const crearTurnoS = (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) =>{
     return new Promise((resolve, reject)=>{
@@ -47,6 +47,18 @@ export const actualizarTurnoS =(fecha,hora,estado, id) =>{
 export const confTurnoS = (confirmado, id)=>{
     return new Promise((resolve,reject)=>{
         confTurnoM(confirmado,id,(err,result)=>{
+            if(err){
+                return reject(err)
+            }
+            resolve(result)
+        })
+    })
+}
+
+
+export const traerTurnosPorFechaS= (fecha) =>{
+    return new Promise((resolve, reject)=>{
+        traerTurnosPorFecha(fecha,(err, result)=>{
             if(err){
                 return reject(err)
             }
