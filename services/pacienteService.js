@@ -1,4 +1,4 @@
-import {crearPacienteM, borrarPacienteM} from '../models/pacienteModel.js';
+import {crearPacienteM, borrarPacienteM, obtenerPacientesVistaM} from '../models/pacienteModel.js';
 
 export const crearPacienteS = (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento) => {
     return new Promise((resolve, reject) => {
@@ -19,3 +19,14 @@ export const borrarPacienteS = (dni) => {
         });
     });
 };
+
+export const obtenerPacientesVistaS = () => {
+    return new Promise ((resolve,reject) => {
+        obtenerPacientesVistaM((err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            resolve(result)
+        })
+    })
+}
