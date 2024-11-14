@@ -1,11 +1,12 @@
 import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS } from '../services/turnoService.js';
+import {obtenerProfesionalesS} from "../services/profesionalService.js";
 
 
 export const crearTurnoC = async (req, res) =>{
-    const{ paciente_id, agenda_id, detalle_turno, fecha, hora, estado, confirmado } = (req.body)
+    const{ paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado} = (req.body)
 
     try {
-        const result = await crearTurnoS(paciente_id, agenda_id, detalle_turno, fecha, hora, estado, confirmado)
+        const result = await crearTurnoS(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, confirmado)
         res.json({message: 'Turno creado con exitosamente', data: result})
     } catch (err) {
         console.error('Error al crear turno:', err)
@@ -62,3 +63,15 @@ export const confTurnoC = async (req, res) =>{
         res.status(500).json({ message: 'Hubo un error al confirmar el turno' })
     }
 }
+
+
+export const obtenerProfesionalesVistaC = async (req, res) => {
+    try {
+      const profesionales = await obtenerProfesionalesS();
+      console.log("🚀 ~ obtenerProfesionalesC ~ profesionales:", profesionales)
+      res.render('secretaria/secretariaGestionTurno', {profesionales});
+    } catch (err) {
+      console.error('Error al obtener los profesionales:', err);
+      res.status(500).json({ message: 'Hubo un error al obtener los profesionales.' });
+    }
+  };

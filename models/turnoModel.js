@@ -1,8 +1,8 @@
 import db from '../config/db.js';
 
-export const crearTurnoM = (paciente_id, agenda_id, detalle_turno, fecha, hora, estado, confirmado, callback) => {
-    const sql = 'INSERT INTO `turnos`(paciente_id, agenda_id, detalle_turno, fecha, hora, estado, confirmado) VALUES (?,?,?,?,?,?,?)'
-    db.query(sql , [paciente_id, agenda_id, detalle_turno, fecha, hora, estado, confirmado], (err,res) =>{
+export const crearTurnoM = (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, callback) => {
+    const sql = 'INSERT INTO turnos(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) VALUES (?,?,?,?,?,?)'
+    db.query(sql , [paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado], (err,res) =>{
         if(err){
             callback(err, null);
             return

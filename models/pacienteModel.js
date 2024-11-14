@@ -16,7 +16,6 @@ export const crearPacienteM = (nombre_completo, dni, obra_social, telefono, emai
 
     // Obtenemos el usuario_id del resultado
     const usuario_id = result[0].usuario_id;
-    console.log("🚀 ~ db.query ~ usuario_id:", usuario_id)
     // Ahora hacemos la inserción del paciente en la tabla paciente
     const sqlPaciente = 'INSERT INTO paciente (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, usuario_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
@@ -36,8 +35,6 @@ export const rolById = (id, callback) => {
     if (err) {
       return callback(err);
     }
-    console.log('result[0]:',result[0])
-    console.log('result[0].rol:',result[0].rol)
     return result[0].rol;
   });
 };

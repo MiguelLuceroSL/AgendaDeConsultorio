@@ -4,7 +4,7 @@ import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizar
 export const crearProfesionalC = async (req, res) => {
   const { nombre_completo, especialidad, matricula } = req.body;
 
-  console.log("Datos recibidos:", { nombre_completo, especialidad, matricula });
+  
 
   try {
     await crearProfesionalS(nombre_completo, especialidad, matricula);
@@ -18,7 +18,7 @@ export const crearProfesionalC = async (req, res) => {
 
 export const borrarProfesionalC = async (req, res) => {
   const { id } = req.body;
-  console.log("ID Recibida: " + id);
+  
   try {
     await profesionalBorrarS(id);
     console.log("Profesional borrado exitosamente.");

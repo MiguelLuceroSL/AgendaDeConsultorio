@@ -3,7 +3,7 @@ import {crearPacienteS, borrarPacienteS } from '../services/pacienteService.js';
 export const crearPaciente = async (req, res) => {
     const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento } = req.body;
 
-    console.log("Datos recibidos:", { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento });
+
 
     try {
         await crearPacienteS(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento);
@@ -17,7 +17,7 @@ export const crearPaciente = async (req, res) => {
 
 export const borrarPaciente = async (req, res) => {
     const { dni } = req.body;
-    console.log("DNI Recibido: " + dni);
+    
     try {
         await borrarPacienteS(dni);
         console.log("Paciente borrado exitosamente.");

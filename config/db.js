@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'aass',
+  database: 'agenda_consultorio',
   //para miguel aass
   //para juan agenda_consultorio
 });
