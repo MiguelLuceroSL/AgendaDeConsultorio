@@ -33,7 +33,7 @@ export const obtenerProfesionalesC = async (req, res) => {
   const especialidad = req.query.especialidad;
   try {
     const profesionales = await obtenerProfesionalesS(especialidad);
-    console.log('Profesionalessssssssssssssssssssssss:', profesionales);
+    console.log('Profesionales con estado:', profesionales);
     res.render('admin/adminReadProfesional', { profesionales, especialidad });
   } catch (err) {
     console.error('Error al obtener los profesionales:', err);
