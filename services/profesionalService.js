@@ -32,13 +32,11 @@ export const obtenerProfesionalesS = (especialidad) => {
 };
 
 export const obtenerProfesionalesVistaS = () => {
-  console.log('entramos en el service vista')
   return new Promise ((resolve,reject) => {
     obtenerProfesionalesVistaM((err, result)=>{
           if(err){
               return reject(err)
           }
-          console.log('antes de resolver service vista')
           resolve(result)
       })
   })

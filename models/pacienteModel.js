@@ -39,19 +39,17 @@ export const rolById = (id, callback) => {
   });
 };
 
-export const obtenerPacientesVistaM = () => {
+export const obtenerPacientesVistaM = (callback) => {
   const sql = `SELECT id, nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento FROM paciente`;
-  return new Promise((resolve, reject) => {
     db.query(sql, (err, result) => {
       if (err) {
         console.error('Error en la consulta:', err);
-        reject(err);
+        return callback(err);
       } else {
         console.log('Resultado de Pacientes:', result);
-        resolve(result);
+        callback(null, result);
       }
     });
-  });
 };
 
 //SELECT id, nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento FROM paciente

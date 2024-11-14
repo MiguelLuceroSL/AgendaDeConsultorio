@@ -61,7 +61,6 @@ export const obtenerProfesionalesM = (especialidad, callback) => {
 
 
 export const obtenerProfesionalesVistaM = (callback) => {
-  console.log('entramos al model vista')
   const sql = `
     SELECT p.nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
     FROM profesional_especialidad pe
@@ -73,8 +72,6 @@ export const obtenerProfesionalesVistaM = (callback) => {
         console.error('Error en la consulta:', err);
         return callback(err);
       } else {
-        console.log('antes del ultimo de model');
-        console.log('resultttttttttt ', result)
         callback(null, result);
       }
     });

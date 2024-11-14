@@ -1,5 +1,6 @@
 import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS } from '../services/turnoService.js';
 import {obtenerProfesionalesS, obtenerProfesionalesVistaS} from "../services/profesionalService.js";
+import { obtenerPacientesVistaS } from '../services/pacienteService.js';
 
 
 export const crearTurnoC = async (req, res) =>{
@@ -68,8 +69,8 @@ export const confTurnoC = async (req, res) =>{
 export const obtenerProfesionalesVistaC = async (req, res) => {
     try {
       const profesionales = await obtenerProfesionalesVistaS();
-      console.log("🚀 ~ obtenerProfesionalesC ~ profesionales:", profesionales)
-      res.render('secretaria/secretariaGestionTurno', {profesionales});
+      const pacientes = await obtenerPacientesVistaS()
+      res.render('secretaria/secretariaGestionTurno', {profesionales, pacientes});
     } catch (err) {
       console.error('Error al obtener los profesionales:', err);
       res.status(500).json({ message: 'Hubo un error al obtener los profesionales.' });
