@@ -1,7 +1,7 @@
 doctype html
 html
     head
-        title Cargar Medico
+        title Cargar Médico
         link(rel="stylesheet", href="/css/adminCargarProfesional.css")
     body
         header
@@ -9,25 +9,25 @@ html
             nav 
                 ul(class="ulHeader")
                     li: a(href="/admin/home") Inicio
-                    li: a(href="/admin/cargarProfesional") Medicos
+                    li: a(href="/admin/cargarProfesional") Médicos
                     li: a(href="/admin/registerSecretaria") Registrar secretaria
                     li: a(href="/admin/cargarAgenda") Agendas
                     li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
         main 
-            h1 Cargar Medicos
+            h1 Cargar Médicos
             section(class="sectionCrud")
                 article(class="articleCrud") 
                     a(href="http://localhost:3000/admin/createProfesional", rel="noopener noreferrer"): img(src="/img/create.png", alt="logoCreate" class="logoCreate")
-                    span Cargar un medico
+                    span Cargar un médico
                 article(class="articleCrud") 
                     a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer"): img(src="/img/read.png", alt="logoRead" class="logoRead")
-                    span Lista de medicos
+                    span Lista de médicos
                 article(class="articleCrud") 
                     a(href="http://localhost:3000/admin/updateProfesional", rel="noopener noreferrer"): img(src="/img/update.png", alt="logoUpdate" class="logoUpdate")
-                    span Editar datos de un medico
+                    span Editar datos de un médico
                 article(class="articleCrud")
                     a(href="http://localhost:3000/admin/deleteProfesional", rel="noopener noreferrer"): img(src="/img/inactivar.png", alt="logoDelete" class="logoDelete")
-                    span Activar / Inactivar un medico
+                    span Activar / Inactivar un médico
         footer(class="footer")
             section(class="sectionFooter")
                 ul Nuestros GitHub

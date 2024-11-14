@@ -15,22 +15,27 @@ html
                     li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
         main
             h1 ¡¡¡Se actualizo el nombre correctamente!!!
-            p Buscar la ID en este 
+            p Buscar la ID o Matrícula en este 
                 a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
             h2 Actualizar especialidad de un médico
             form(action="/admin/actualizarEspecialidad" method="POST")
-                input(type="text" name="id" placeholder="id del medico" required)
-                input(type="text" name="nueva_especialidad" placeholder="Nueva especialidad" required)
+                input(type="text" name="matricula" placeholder="Matrícula del médico" required)
+                select(name="especialidad" required)
+                    option(value="1") Cardiología
+                    option(value="2") Pediatría
+                    option(value="3") Kinesiología
+                    option(value="4") Psicología
+                    option(value="5") Odontología
                 button(type="submit") Actualizar
-            h2 Actualizar matricula de un médico
+            h2 Actualizar matrícula de un médico
             form(action="/admin/actualizarMatricula" method="POST")
                 input(type="text" name="matricula" placeholder="Matrícula actual" required)
                 input(type="text" name="nueva_matricula" placeholder="Nueva matrícula" required)
                 button(type="submit") Actualizar
             h2 Actualizar nombre completo de un médico
             form(action="/admin/actualizarNombreCompleto" method="POST")
-                input(type="text" name="profesional_id" placeholder="id del medico" required)
-                input(type="text" name="nuevo_nombre_completo" placeholder="Nueva nombre completo" required)
+                input(type="text" name="profesional_id" placeholder="ID del médico" required)
+                input(type="text" name="nuevo_nombre_completo" placeholder="Nuevo nombre completo" required)
                 button(type="submit") Actualizar
         footer(class="footer")
             section(class="sectionFooter")
@@ -42,4 +47,3 @@ html
                     li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
                     li: a(href="https://www.linkedin.com/in/lucero-roque-roberto-miguel-2122bb251/") Lucero Miguel
         script(src="/js/logout.js")
-        script(src="/js/profesionales.js")

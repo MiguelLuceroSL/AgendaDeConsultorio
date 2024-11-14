@@ -1,37 +1,37 @@
 doctype html
 html
     head
-        title Cargar Medico
+        title Cargar Médico
         link(rel="stylesheet", href="/css/adminCargarProfesional.css")
-        link(rel="stylesheet", href="/css/adminCreateProfesional.css")
+        link(rel="stylesheet", href="/css/adminFormCargar.css")
     body
         header
             a(href="http://localhost:3000/admin/home", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
             nav 
                 ul(class="ulHeader")
                     li: a(href="/admin/home") Inicio
-                    li: a(href="/admin/cargarProfesional") Medicos
+                    li: a(href="/admin/cargarProfesional") Médicos
                     li: a(href="/admin/registerSecretaria") Registrar secretaria
                     li: a(href="/admin/cargarAgenda") Agendas
                     li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
         main
             form.formCreate(action="/profesional/crear", method="POST")
-                span.spanCreate Cargar un medico
+                span.spanCreate Cargar un médico
                 fieldset.nombreCompleto 
                     label.lbNombreCompleto(for="nombre_completo") Nombre completo: 
                     input.inputNombreCompleto(type="text", id="nombre_completo", name="nombre_completo", required, placeholder="Nombre completo")
                 fieldset.matricula
                     label.lbMatricula(for="matricula") Matricula: 
-                    input.inputMatricula(type="text", id="matricula", name="matricula", required, placeholder="Matricula")
+                    input.inputMatricula(type="text", id="matricula", name="matricula", required, placeholder="Matrícula")
                 fieldset.especialidad 
                     label.lbEspecialidad(for="especialidad") Especialidad: 
                     select.selectEspecialidad(name="especialidad")
-                        option(value="cardiologia") Cardiologia
+                        option(value="cardiologia") Cardiología
                         option(value="pediatria") Pediatria
-                        option(value="kinesiologia") Kinesiologia
-                        option(value="psicologia") Psicologia
-                        option(value="odontologia") Odontologia
-                button.botonCreate(type="submit") Cargar medico
+                        option(value="kinesiologia") Kinesiología
+                        option(value="psicologia") Psicología
+                        option(value="odontologia") Odontología
+                button.botonCreate(type="submit") Cargar médico
         footer(class="footer")
             section(class="sectionFooter")
                 ul Nuestros GitHub

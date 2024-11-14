@@ -43,9 +43,9 @@ export const obtenerProfesionalesVistaS = () => {
 }
 
 
-export const actualizarEspecialidadS = (profesional_id, nueva_especialidad) => {
+export const actualizarEspecialidadS = (matricula, especialidad) => {
   return new Promise((resolve, reject) => {
-      actualizarEspecialidadM(profesional_id, nueva_especialidad, (err, result) => {
+      actualizarEspecialidadM(matricula, especialidad, (err, result) => {
           if (err) {
               return reject(err);
           }

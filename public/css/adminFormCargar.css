@@ -1,0 +1,152 @@
+html{
+    width: 100vw;
+    height: 100vh;
+    background-color: #FBFBFB;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+header{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logoHeader{
+    margin-left: 120px;
+}
+
+nav{
+    margin-right: 120px;
+}
+
+.ulHeader{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.logout{
+    cursor: pointer;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+fieldset{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content:space-between;
+    width: 400px;
+    height: 20px;
+}
+
+input, select{
+    width: 150px;
+}
+
+.botonCreate{
+    background-color: #FFDDAE;
+    border: none;
+    padding: 15px 32px; 
+    text-align: center; 
+    text-decoration: none; 
+    display: inline-block; 
+    font-size: 16px; 
+    margin: 4px 2px; 
+    cursor: pointer; 
+    border-radius: 5px;
+    -webkit-box-shadow: 0 10px 6px -6px #1b1a1a;
+    -moz-box-shadow: 0 10px 6px -6px #242222;
+    box-shadow: 0 10px 6px -6px #2b2a2a;
+}
+
+.botonCreate:hover{
+    background-color: #f3c88d;
+}
+
+.sectionCrud{
+    display: flex;
+    flex-direction: row;
+}
+
+.logoDelete{
+    width: 225px;
+    height: 225px;
+}
+
+.articleCrud{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.aLink{
+    font-weight: bold;
+}
+
+.footer{
+    border-top: 1px solid rgb(129, 129, 129);
+    width: 60vw; 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 10px;
+}
+
+.sectionFooter{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+ul{
+    font-size: larger;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    font-weight:600;
+}
+
+li{
+    list-style-type: none;
+    font-size: medium;
+    margin-top: 5px;
+    text-decoration: none;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+    font-weight:400;
+}
+
+a:hover{
+    text-decoration:dotted;
+    color: #daa761;
+}
+
+.logoFooter{
+    width: 80px;
+    height: 80px;
+}

@@ -1,0 +1,27 @@
+h1{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+form{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    gap: 20px;
+}
+
+select{
+    width: 100px;
+}
+
+table{
+    width: 800px;
+    text-align: center;
+    border: 1px solid black;
+}
+
+tr, th, td{
+    border: 1px solid black;
+}

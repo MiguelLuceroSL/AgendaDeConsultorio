@@ -1,7 +1,7 @@
 doctype html
 html
     head
-        title Cargar Medico
+        title Cargar Médico
         link(rel="stylesheet", href="/css/adminCargarProfesional.css")
     body
         header
@@ -9,12 +9,17 @@ html
             nav 
                 ul(class="ulHeader")
                     li: a(href="/admin/home") Inicio
-                    li: a(href="/admin/cargarProfesional") Medicos
+                    li: a(href="/admin/cargarProfesional") Médicos
                     li: a(href="/admin/registerSecretaria") Registrar secretaria
                     li: a(href="/admin/cargarAgenda") Agendas
                     li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
         main 
-            h1 Activar / Inactivar un Medico
+            p Buscar la ID o Matrícula en este 
+                a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
+            h1 Activar / Inactivar un Médico
+            form(action="/admin/cambiarEstado" method="POST")
+                input(type="text" name="id" placeholder="ID del médico" required)
+                button(type="submit") Cambiar de estado
         footer(class="footer")
             section(class="sectionFooter")
                 ul Nuestros GitHub

@@ -28,8 +28,21 @@ export const profesionalCrearM =(nombre_completo, especialidad, matricula, callb
 }
 
 export const profesionalBorrarM = (id, callback) => {
-  const sql = 'DELETE FROM profesional WHERE id = ?';
-  db.query(sql, [id], callback);
+  const sqlPrimera = 'SELECT estado FROM profesional WHERE id=?';
+  db.query(sqlPrimera,[id], ((error, result) => {
+    if(error){
+      return callback(error);
+    }
+    console.log('resultttttttttttttttado ',result.estado)
+    const estado = result.estado;
+    const sql = 'UPDATE profesional SET estado=? WHERE id=?';
+    db.query(sql, [estado, id], (error, result) => {
+      if(error){
+        return callback(error)
+      }
+      callback(null, result)
+    });
+  }))
 };
 
 
@@ -79,9 +92,9 @@ export const obtenerProfesionalesVistaM = (callback) => {
 
 
 
-export const actualizarEspecialidadM = (profesional_id, nueva_especialidad, callback) => {
-  const sql = `UPDATE profesional_especialidad SET especialidad_id = (SELECT id FROM especialidad WHERE nombre = ?), matricula = ? WHERE profesional_id = ?;`;
-  db.query(sql, [nueva_especialidad, matricula, profesional_id], callback);
+export const actualizarEspecialidadM = (matricula, especialidad, callback) => {
+  const sql = `UPDATE profesional_especialidad SET especialidad_id=? WHERE matricula=?;`;
+  db.query(sql, [especialidad, matricula], callback);
 };
 
 export const actualizarMatriculaM = (matricula, nueva_matricula, callback) => {

@@ -21,11 +21,11 @@ export const borrarProfesionalC = async (req, res) => {
   
   try {
     await profesionalBorrarS(id);
-    console.log("Profesional borrado exitosamente.");
-    res.status(200).send("Profesional borrado exitosamente.");
+    console.log("Se cambio el estado del profesional exitosamente.");
+    res.redirect('adminDeleteSuccess');
   } catch (err) {
-    console.error("Error al borrar el profesional: ", err);
-    res.status(500).send("Hubo un error al borrar el profesional.");
+    console.error("Error al cambiar el estado del profesional: ", err);
+    res.status(500).send("Hubo un error al cambiar el estado del profesional.");
   }
 };
 
@@ -42,11 +42,11 @@ export const obtenerProfesionalesC = async (req, res) => {
 };
 
 export const actualizarEspecialidadC = async (req, res) => {
-  const { profesional_id, nueva_especialidad } = req.body;
+  const { matricula, especialidad } = req.body;
   try {
-    await actualizarEspecialidadS(profesional_id, nueva_especialidad);
+    await actualizarEspecialidadS(matricula, especialidad);
     console.log("Especialidad actualizada exitosamente.");
-    res.status(200).json({message: 'Se actualizo correctamente'})
+    res.redirect('adminUpdateEspecialidadSuccess');
   } catch (err) {
     console.error("Error al actualizar la especialidad:", err);
     res.status(500).send("Hubo un error al actualizar la especialidad.");
@@ -58,7 +58,7 @@ export const actualizarMatriculaC = async (req, res) => {
   try {
     await actualizarEspecialidadS(profesional_id, matricula);
     console.log("Matricula actualizada exitosamente.");
-    res.status(200).json({message: 'Se actualizo correctamente'});
+    res.redirect('adminUpdateMatriculaSuccess');
   } catch (err) {
     console.error("Error al actualizar la especialidad:", err);
     res.status(500).send("Hubo un error al actualizar la especialidad.");
