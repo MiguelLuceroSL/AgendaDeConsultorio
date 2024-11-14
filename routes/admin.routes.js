@@ -1,5 +1,5 @@
 import express from 'express';
-import { obtenerProfesionalesC, actualizarEspecialidadC } from '../controllers/profesionalController.js';
+import { obtenerProfesionalesC, actualizarEspecialidadC, actualizarMatriculaC, actualizarNombreCompletoC } from '../controllers/profesionalController.js';
 import { authRequired } from '../middlewares/validateToken.js';
 import verifyRol from '../middlewares/verifyRol.js';
 const router = express.Router();
@@ -35,6 +35,8 @@ router.get('/updateProfesional', authRequired, verifyRol('admin'), async (req, r
 });
 
 router.post('/actualizarEspecialidad', authRequired, verifyRol('admin'), actualizarEspecialidadC);
+router.post('/actualizarMatricula', authRequired, verifyRol('admin'), actualizarMatriculaC);
+router.post('/actualizarNombreCompleto', authRequired, verifyRol('admin'), actualizarNombreCompletoC);
 
 router.get('/deleteProfesional', authRequired, verifyRol('admin'), (req, res) => {
   res.render('admin/adminDeleteProfesional');

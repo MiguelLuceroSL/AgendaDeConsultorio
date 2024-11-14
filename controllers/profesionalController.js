@@ -1,4 +1,4 @@
-import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS} from "../services/profesionalService.js";
+import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS, actualizarNombreCompletoS} from "../services/profesionalService.js";
 
 
 export const crearProfesionalC = async (req, res) => {
@@ -42,13 +42,37 @@ export const obtenerProfesionalesC = async (req, res) => {
 };
 
 export const actualizarEspecialidadC = async (req, res) => {
-  const { profesional_id, nueva_especialidad, matricula } = req.body;
+  const { profesional_id, nueva_especialidad } = req.body;
   try {
-    await actualizarEspecialidadS(profesional_id, nueva_especialidad, matricula);
+    await actualizarEspecialidadS(profesional_id, nueva_especialidad);
     console.log("Especialidad actualizada exitosamente.");
     res.status(200).json({message: 'Se actualizo correctamente'})
   } catch (err) {
     console.error("Error al actualizar la especialidad:", err);
     res.status(500).send("Hubo un error al actualizar la especialidad.");
+  }
+};
+
+export const actualizarMatriculaC = async (req, res) => {
+  const { profesional_id, matricula } = req.body;
+  try {
+    await actualizarEspecialidadS(profesional_id, matricula);
+    console.log("Matricula actualizada exitosamente.");
+    res.status(200).json({message: 'Se actualizo correctamente'});
+  } catch (err) {
+    console.error("Error al actualizar la especialidad:", err);
+    res.status(500).send("Hubo un error al actualizar la especialidad.");
+  }
+};
+
+export const actualizarNombreCompletoC = async (req, res) => {
+  const { profesional_id, nuevo_nombre_completo } = req.body;
+  try {
+    await actualizarNombreCompletoS(profesional_id, nuevo_nombre_completo);
+    console.log("Nombre completo actualizado exitosamente.");
+    res.status(200).json({message: 'Se actualizo el nombre completo correctamente'})
+  } catch (err) {
+    console.error("Error al actualizar el nombre completo:", err);
+    res.status(500).send("Hubo un error al actualizar el nombre completo.");
   }
 };

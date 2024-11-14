@@ -60,29 +60,39 @@ export const obtenerProfesionalesM = (especialidad, callback) => {
 };
 
 
-export const obtenerProfesionalesVistaM = () => {
+export const obtenerProfesionalesVistaM = (callback) => {
+  console.log('entramos al model vista')
   const sql = `
     SELECT p.nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
     FROM profesional_especialidad pe
     JOIN profesional p ON pe.profesional_id = p.id
     JOIN especialidad e ON pe.especialidad_id = e.id;
   `;
-  return new Promise((resolve, reject) => {
     db.query(sql, (err, result) => {
       if (err) {
         console.error('Error en la consulta:', err);
-        reject(err);
+        return callback(err);
       } else {
-        console.log('Resultado de profesionales:', result);
-        resolve(result);
+        console.log('antes del ultimo de model');
+        console.log('resultttttttttt ', result)
+        callback(null, result);
       }
     });
-  });
 };
 
 
 
-export const actualizarEspecialidadM = (profesional_id, nueva_especialidad, matricula, callback) => {
+export const actualizarEspecialidadM = (profesional_id, nueva_especialidad, callback) => {
   const sql = `UPDATE profesional_especialidad SET especialidad_id = (SELECT id FROM especialidad WHERE nombre = ?), matricula = ? WHERE profesional_id = ?;`;
   db.query(sql, [nueva_especialidad, matricula, profesional_id], callback);
+};
+
+export const actualizarMatriculaM = (matricula, nueva_matricula, callback) => {
+  const sql = `UPDATE profesional_especialidad SET matricula=? WHERE matricula=?;`;
+  db.query(sql, [nueva_matricula, matricula], callback);
+};
+
+export const actualizarNombreCompletoM = (profesional_id, nuevo_nombre_completo, callback) => {
+  const sql = `UPDATE profesional SET nombre_completo=? WHERE id=?;`;
+  db.query(sql, [nuevo_nombre_completo, profesional_id], callback);
 };
