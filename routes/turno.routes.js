@@ -4,6 +4,9 @@ import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obten
 const router = express.Router()
 
 router.post('/crear', crearTurnoC);
+router.get('/secretaria/secretariaTurnoSuccess', (req, res) => {
+    res.render('secretaria/secretariaTurnoSuccess')
+})
 
 router.get('/buscar', selTurnoC);
 

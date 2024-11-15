@@ -9,11 +9,11 @@ export const crearTurnoC = async (req, res) => {
     const estado = "Confirmado"; 
   
     try {
-      const result = await crearTurnoS(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado);
-      res.json({ message: 'Turno creado exitosamente', data: result });
+      await crearTurnoS(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado);
+      res.redirect('secretaria/secretariaTurnoSuccess');
     } catch (err) {
-      console.error('Error al crear turno:', err.message);  // Cambié a err.message para que puedas ver el mensaje de error
-      res.status(500).json({ message: err.message });  // Pasamos el mensaje de error a la respuesta
+      console.error('Error al crear turno:', err.message);
+      res.status(500).json({ message: err.message });
     }
 };
 
@@ -84,6 +84,10 @@ export const obtenerProfesionalesVistaC = async (req, res) => {
   export const traerTurnosC = async (req,res) => {
     try {
         const turnos = await traerTurnosS()
+        turnos.forEach(turno => {
+            const date = new Date(turno.fecha);
+            turno.fecha = date.toLocaleDateString('en-GB'); 
+        });
         res.render('secretaria/secretariaPanel', { turnos })
     } catch (err) {
         console.error('Error al obtener Turnos: ', err)

@@ -5,7 +5,7 @@ html
         link(rel="stylesheet", href="/css/adminCargarProfesional.css")
     body
         header
-            a(href="http://localhost:3000/admin/home", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
+            a(href="https://agendadeconsultorio.onrender.com/admin/home", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
             nav 
                 ul(class="ulHeader")
                     li: a(href="/admin/home") Inicio
@@ -15,7 +15,7 @@ html
                     li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
         main 
             p Buscar la ID o Matrícula en este 
-                a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
+                a(href="https://agendadeconsultorio.onrender.com/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
             h1 Activar / Inactivar un Médico
             form(action="/admin/cambiarEstado" method="POST")
                 input(type="text" name="id" placeholder="ID del médico" required)
