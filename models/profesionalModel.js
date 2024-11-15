@@ -75,10 +75,10 @@ export const obtenerProfesionalesM = (especialidad, callback) => {
 
 export const obtenerProfesionalesVistaM = (callback) => {
   const sql = `
-    SELECT p.nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
+    SELECT pe.id ,p.nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
     FROM profesional_especialidad pe
     JOIN profesional p ON pe.profesional_id = p.id
-    JOIN especialidad e ON pe.especialidad_id = e.id;
+    JOIN especialidad e ON pe.especialidad_id = e.id
   `;
     db.query(sql, (err, result) => {
       if (err) {

@@ -1,15 +1,28 @@
-import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnosPorFecha } from '../models/turnoModel.js';
+import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM } from '../models/turnoModel.js';
 
-export const crearTurnoS = (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) =>{
-    return new Promise((resolve, reject)=>{
-        crearTurnoM(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, (err, result) =>{
-            if (err){
-                return reject(err)
+export const crearTurnoS = (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) => {
+    return new Promise((resolve, reject) => {
+        // Verificacion por si ya existe un turno para ese profesional en esa fecha y hora
+        verificarTurnoExistenteM(profesional_especialidad_id, fecha, hora, (err, results) => {
+            if (err) {
+                return reject(err);
             }
-            resolve(result)
-        })
-    })
-}
+
+            if (results.length > 0) {
+                // Si ya existe, rechazamos la promesa con un mensaje de error
+                return reject(new Error('Ya existe un turno para este profesional en esa fecha y hora.'));
+            }
+
+            // Si no existe, procedemos a crear el turno
+            crearTurnoM(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(result);
+            });
+        });
+    });
+};
 
 export const selTurnoS= (nombre_completo) =>{
     return new Promise((resolve, reject)=>{
@@ -56,9 +69,9 @@ export const confTurnoS = (confirmado, id)=>{
 }
 
 
-export const traerTurnosPorFechaS= (fecha) =>{
+export const traerTurnosS= () =>{
     return new Promise((resolve, reject)=>{
-        traerTurnosPorFecha(fecha,(err, result)=>{
+        traerTurnos((err, result)=>{
             if(err){
                 return reject(err)
             }

@@ -59,18 +59,45 @@ export const confTurnoM =(confirmado, id, callback) =>{
     })
 }
 
-export const traerTurnosPorFecha = (fecha, callback) => {
-    console.log("🚀 ~ traerTurnosPorFecha ~ fecha:", fecha)
-    const sql = 'SELECT * FROM turnos WHERE fecha = ?;'
-    console.log("🚀 ~ traerTurnosPorFecha ~ sql:", sql)
+export const traerTurnos = (callback) => {
+    const sql = `
+    SELECT 
+        t.id, 
+        p.nombre_completo AS paciente_nombre, 
+        CONCAT(pr.nombre_completo, ' / ', e.nombre) AS profesional_especialidad, 
+        t.detalle_turno, 
+        t.fecha, 
+        t.hora, 
+        t.estado
+    FROM 
+        turnos t
+    JOIN 
+        paciente p ON t.paciente_id = p.id
+    JOIN 
+        profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
+    JOIN 
+        profesional pr ON pe.profesional_id = pr.id
+    JOIN 
+        especialidad e ON pe.especialidad_id = e.id;
+    `;
     
-    db.query (sql, [fecha],  (err,res) =>{
-        if(err){
-            callback(err,null)
-            return
+    db.query(sql, (err, res) => {
+        if (err) {
+            callback(err, null);
+            return;
         }
-        console.log("🚀 ~ db.query ~ res:", res)
-        callback(null,res)
-    })
-        
-}
+        callback(null, res);
+    });
+};
+
+
+export const verificarTurnoExistenteM = (profesional_especialidad_id, fecha, hora, callback) => {
+    const sql = 'SELECT * FROM turnos WHERE profesional_especialidad_id = ? AND fecha = ? AND hora = ?';
+    db.query(sql, [profesional_especialidad_id, fecha, hora], (err, results) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, results); 
+    });
+};

@@ -1,5 +1,5 @@
 import express from 'express';
-import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosPorFechaC} from '../controllers/turnoController.js';
+import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC} from '../controllers/turnoController.js';
 
 const router = express.Router()
 
@@ -15,6 +15,6 @@ router.put('/confirmar', confTurnoC);
 
 router.get('/listarProfesionales', obtenerProfesionalesVistaC);
 
-router.get('/turnosDisponibles/:fecha', traerTurnosPorFechaC)
+router.get('/listarTurnos', traerTurnosC)
 
 export default router;

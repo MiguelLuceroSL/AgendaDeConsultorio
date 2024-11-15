@@ -1,4 +1,4 @@
-import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosPorFechaS } from '../services/turnoService.js';
+import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS } from '../services/turnoService.js';
 import {obtenerProfesionalesS, obtenerProfesionalesVistaS} from "../services/profesionalService.js";
 import { obtenerPacientesVistaS } from '../services/pacienteService.js';
 
@@ -12,10 +12,10 @@ export const crearTurnoC = async (req, res) => {
       const result = await crearTurnoS(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado);
       res.json({ message: 'Turno creado exitosamente', data: result });
     } catch (err) {
-      console.error('Error al crear turno:', err);
-      res.status(500).json({ message: 'Hubo un error al crear el turno' });
+      console.error('Error al crear turno:', err.message);  // Cambié a err.message para que puedas ver el mensaje de error
+      res.status(500).json({ message: err.message });  // Pasamos el mensaje de error a la respuesta
     }
-  };
+};
 
 export const selTurnoC = async (req,res) => {
     const {nombre_completo} = req.query
@@ -81,14 +81,15 @@ export const obtenerProfesionalesVistaC = async (req, res) => {
   };
 
 
-  export const traerTurnosPorFechaC = async (req,res) => {
-    const {fecha} = req.params
-
+  export const traerTurnosC = async (req,res) => {
     try {
-        const turnos = await traerTurnosPorFechaS(fecha)
-        res.json(turnos)
+        const turnos = await traerTurnosS()
+        res.render('secretaria/secretariaPanel', { turnos })
     } catch (err) {
-        console.error('Error al obtener fechas: ', err)
-        res.status(500).json({message: 'Hubo un error al obtener fechas'})
+        console.error('Error al obtener Turnos: ', err)
+        res.status(500).json({message: 'Hubo un error al obtener Turnos'})
     }
 }
+
+//secretariaPanel
+
