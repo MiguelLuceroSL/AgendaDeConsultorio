@@ -67,7 +67,6 @@ export const obtenerProfesionalesM = (especialidad, callback) => {
       console.error('Error en la consulta:', err);
       return callback(err);
     }
-    console.log('Resultado de profesionales:', result);
     callback(null, result);
   });
 };

@@ -46,7 +46,6 @@ export const obtenerPacientesVistaM = (callback) => {
         console.error('Error en la consulta:', err);
         return callback(err);
       } else {
-        console.log('Resultado de Pacientes:', result);
         callback(null, result);
       }
     });
