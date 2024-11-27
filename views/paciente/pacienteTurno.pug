@@ -5,13 +5,7 @@ html
         link(rel="stylesheet" href="/css/pacienteTurno.css")
         link(rel="stylesheet" href="/css/footer.css")
     body
-        header
-            a(href="http://localhost:3000/pacientes/paciente", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
-            nav 
-                ul(class="ulHeader")
-                    li: a(href="/pacientes/paciente") Inicio
-                    li: a(href="/pacientes/turno") Sacar Turnos
-                    li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
+        include includes/headerPaciente
         h1 Bienvenido, paciente!
         p Pronto podrás sacar tus propios turnos, por el momento lo hará la secretaria por vos!
         include includes/footer

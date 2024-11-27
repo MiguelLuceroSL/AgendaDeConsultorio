@@ -6,14 +6,7 @@ html
         link(rel="stylesheet" href="/css/adminCargarProfesional.css")
         link(rel="stylesheet" href="/css/footer.css")
     body
-        header
-            a(href="/admin/home" rel="noopener noreferrer"): img(src="/img/agenda.png" alt="" class="logoHeader")
-            nav 
-                ul(class="ulHeader")
-                    li: a(href="/admin/home") Inicio
-                    li: a(href="/admin/cargarProfesional") Médicos
-                    li: a(href="/admin/registerSecretaria") Registrar secretaria
-                    li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
+        include includes/headerAdmin
         main
             h1 ¡¡¡Se actualizo la matrícula exitosamente!!!
             p Buscar la ID o Matrícula en este 
