@@ -3,6 +3,7 @@ html
     head
         title Actualizar Médico
         link(rel="stylesheet" href="/css/adminCargarProfesional.css")
+        link(rel="stylesheet" href="/css/footer.css")
     body
         header
             a(href="/admin/home" rel="noopener noreferrer"): img(src="/img/agenda.png" alt="" class="logoHeader")
@@ -14,7 +15,7 @@ html
                     li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
         main
             p Buscar la ID o Matrícula en este 
-                a(href="https://agendadeconsultorios-vho3.onrender.com/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
+                a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
             h2 Actualizar especialidad de un médico
             form(action="/admin/actualizarEspecialidad" method="POST")
                 input(type="text" name="matricula" placeholder="Matrícula del médico" required)

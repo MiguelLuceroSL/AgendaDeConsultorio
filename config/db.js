@@ -1,17 +1,17 @@
 import mysql from 'mysql2';
 const connection = mysql.createConnection({
+  /*
   host: process.env.DB_HOST,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-
+  */
   //Para hacer pruebas en localhost descomentar esto de abajo, y comentar las variables .env
-/*
+
   host: 'localhost',
   user: 'root',
   password: '',
   database: 'aasss',
-  */
   //para miguel aasss
   //para juan agenda_consultorio
 });
