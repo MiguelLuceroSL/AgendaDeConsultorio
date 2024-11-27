@@ -19,13 +19,5 @@ html
             input.inputPwLogin(type="password", id="loginPassword", name="password", required, placeholder="Contraseña")
           a(href="/pwOlvidada" class="pwOlvidada") ¿Olvidaste tu contraseña? 
           button.botonLogin(type="submit") Iniciar Sesión
-    footer(class="footer")
-      section(class="sectionFooter")
-        ul Nuestros GitHub
-          li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
-          li: a(href="https://github.com/MiguelLuceroSL") Lucero Miguel
-        img(src="/img/agenda.png", alt="" class="logoFooter")
-        ul Nuestros LinkedIn
-          li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
-          li: a(href="https://www.linkedin.com/in/lucero-roque-roberto-miguel-2122bb251/") Lucero Miguel 
+    include includes/footer
     script(type="module" src="/js/login.js")

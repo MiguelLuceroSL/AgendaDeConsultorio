@@ -29,13 +29,5 @@ html
                 article(class="articleCrud")
                     a(href="http://localhost:3000/admin/deleteProfesional", rel="noopener noreferrer"): img(src="/img/inactivar.png", alt="logoDelete" class="logoDelete")
                     span Activar / Inactivar un médico
-        footer(class="footer")
-            section(class="sectionFooter")
-                ul Nuestros GitHub
-                    li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
-                    li: a(href="https://github.com/MiguelLuceroSL") Lucero Miguel
-                img(src="/img/agenda.png", alt="" class="logoFooter")
-                ul Nuestros LinkedIn
-                    li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
-                    li: a(href="https://www.linkedin.com/in/lucero-roque-roberto-miguel-2122bb251/") Lucero Miguel 
+        include includes/footer
         script(src="/js/logout.js")

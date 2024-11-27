@@ -14,13 +14,5 @@ html
           li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
     h1 Bienvenido, paciente!
     p Aquí puedes gestionar tus consultas médicas.
-    footer(class="footer")
-      section(class="sectionFooter")
-        ul(class="ulFooter") Nuestros GitHub
-          li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
-          li: a(href="https://github.com/MiguelLuceroSL") Lucero Miguel
-        img(src="/img/agenda.png" alt="" class="logoFooter")
-        ul(class="ulFooter") Nuestros LinkedIn
-          li: a(href="https://github.com/JuanCarrillo2435") Carrillo Juan
-          li: a(href="https://www.linkedin.com/in/lucero-roque-roberto-miguel-2122bb251/") Lucero Miguel
+    include includes/footer
     script(src="/js/logout.js")
