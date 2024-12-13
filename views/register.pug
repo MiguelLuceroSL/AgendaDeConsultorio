@@ -2,20 +2,38 @@ doctype html
 html
   head
     title Registro Login
-    link(rel="stylesheet", href="/css/login.css")
-    link(rel="stylesheet" href="/css/footer.css")
+    link(rel="stylesheet", href="/css/registerPrueba.css")
+    link(rel="stylesheet" href="/css/footerRegister.css")
   body
     header 
       a(href="http://localhost:3000/", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
     section.seccion
       article.articuloRegistro
+        span.spanRegistro REGISTRARSE
         form.formRegistro(action="/auth/register", method="POST")
-          span.spanRegistro REGISTRARSE
-          fieldset.emailRegistro
-            label.lbEmailRegistro(for="registerEmail") Correo electrónico:
-            input.inputEmailRegistro(type="email", id="registerEmail", name="email", required, placeholder="Correo electrónico")
-          fieldset.pwRegistro
-            label.lbPwRegistro(for="registerPassword") Contraseña:
-            input.inputPwRegistro(type="password", id="registerPassword", name="password", required, placeholder="Contraseña")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerNombre") Nombre completo:
+            input.inputRegistro(type="text", id="registerNombre", name="nombre", required, placeholder="Nombre completo")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerEmail") Correo electrónico:
+            input.inputRegistro(type="email", id="registerEmail", name="email", required, placeholder="Correo electrónico")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerDni") DNI:
+            input.inputRegistro(type="text", id="registerDni", name="dni", required, placeholder="DNI")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerMutual") Mutual:
+            input.inputRegistro(type="text", id="registerMutual", name="mutual", required, placeholder="Mutual que posee o ponga Ninguna")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerDireccion") Dirección:
+            input.inputRegistro(type="text", id="registerDireccion", name="direccion", required, placeholder="Dirección")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerTelefono") Teléfono:
+            input.inputRegistro(type="text", id="registerTelefono", name="telefono", required, placeholder="Teléfono")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerFechaNacimiento") Fecha de nacimiento:
+            input.inputRegistro(type="date", id="registerFechaNacimiento", name="fecha_nacimiento", required)
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerPassword") Contraseña:
+            input.inputRegistro(type="password", id="registerPassword", name="password", required, placeholder="Contraseña")
           button.botonRegistro(type="submit") Registrarse
     include includes/footer

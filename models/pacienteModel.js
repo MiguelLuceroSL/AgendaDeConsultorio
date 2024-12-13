@@ -51,4 +51,16 @@ export const obtenerPacientesVistaM = (callback) => {
     });
 };
 
+export const obtenerPacienteDniM = (dni, callback) => {
+  const sql = `SELECT nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento FROM paciente WHERE dni=?`;
+    db.query(sql, [dni], (err, result) => {
+      if (err) {
+        console.error('Error en la consulta:', err);
+        return callback(err);
+      } else {
+        callback(null, result);
+      }
+    });
+};
+
 //SELECT id, nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento FROM paciente

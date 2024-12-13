@@ -1,0 +1,79 @@
+html{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-color: #FBFBFB;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.seccion{
+    width: 60vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 80px;
+    margin-top: 60px;
+}
+
+.spanRegistro{
+    font-size: 30px;
+    padding: 20px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.formRegistro {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se ajusten en filas */
+    gap: 20px; /* Espacio entre los campos */
+    justify-content: space-between; /* Espaciado entre columnas */
+    width: 1000px; /* Ancho máximo del formulario */
+    margin: auto; /* Centra el formulario */
+    -webkit-box-shadow: 0 10px 6px -6px #777;
+    -moz-box-shadow: 0 10px 6px -6px #777;
+    box-shadow: 0 10px 6px -6px #777;
+    border-radius: 20px;
+    background-color: #C6E7FF;
+    border: 1px solid rgb(65, 65, 65);
+    padding: 50px;
+  }
+  
+  /* Cada fieldset ocupará el 48% del ancho */
+  form.formRegistro fieldset {
+    flex: 1 1 28%; /* Base 48%, crece si hay espacio */
+    display: flex;
+    flex-direction: column;
+    border: none;
+  }
+  
+  /* Asegúrate de que los labels y los inputs sean visibles */
+  form.formRegistro label {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  form.formRegistro input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Botón de registro centrado */
+  .botonRegistro {
+    flex: 1 1 40%; /* Ocupa toda la fila */
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .botonRegistro:hover {
+    background-color: #0056b3;
+  }

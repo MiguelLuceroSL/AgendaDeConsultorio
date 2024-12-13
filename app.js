@@ -26,7 +26,7 @@ import turnoRoutes from './routes/turno.routes.js';
 
 // Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));

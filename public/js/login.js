@@ -15,69 +15,77 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ email, password }),
                 credentials: 'include'
             });
-
-            const data = await response.json();
+            console.log('dps del fetch')
             if (response.ok) {
+                const data = await response.json();
+                console.log("🚀 ~ data:", data)
+                // Manejo de roles y redirecciones
+
                 if (data.rol === 'paciente') {
-                    console.log("5F-ENTRAMOS AL USERROLE");
-                    try {
-                        const responsePaciente = await fetchWithAuth('/pacientes/paciente');
-                        console.log("🚀 ~ responsePaciente:", responsePaciente);
-                        if (responsePaciente.ok) {
-                            setTimeout(() => {
-                                window.location.href = '/pacientes/paciente';
-                            }, 1000);
-                        } else {
-                            console.error('Error al acceder a la vista protegida:', await responsePaciente.text());
-                            alert('No se pudo acceder a la vista del paciente.');
-                        }
-                    } catch (error) {
-                        console.error('Error en la solicitud de redirección:', error.message);
-                    }
+                    console.log("Bienvenido, paciente:", data.datosPaciente.nombre_completo);
+                    localStorage.setItem('datosPaciente', JSON.stringify(data.datosPaciente));
+                    await redirectWithAuth('/pacientes/paciente');
                 } else if (data.rol === 'admin') {
                     console.log("6F-ENTRAMOS AL USERROLE del admin");
-                    try {
-                        const responseAdmin = await fetchWithAuth('/admin/home');
-                        console.log("🚀 ~ responseAdmin:", responseAdmin);
-                        if (responseAdmin.ok) {
-                            setTimeout(() => {
-                                window.location.href = '/admin/home';
-                            }, 1000);
-                        } else {
-                            console.error('Error al acceder a la vista protegida:', await responseAdmin.text());
-                            alert('No se pudo acceder a la vista del admin.');
-                        }
-                    } catch (error) {
-                        console.error('Error en la solicitud de redirección:', error.message);
-                    }
+                    await redirectWithAuth('/admin/home');
                 } else if (data.rol === 'secretaria') {
                     console.log("7F-ENTRAMOS AL USERROLE de la secretaria");
-                    try {
-                        const responseSecre = await fetchWithAuth('/secretaria/home');
-                        console.log("🚀 ~ responseAdmin:", responseSecre);
-                        if (responseSecre.ok) {
-                            setTimeout(() => {
-                                window.location.href = '/secretaria/home';
-                            }, 1000);
-                        } else {
-                            console.error('Error al acceder a la vista protegida:', await responseSecre.text());
-                            alert('No se pudo acceder a la vista de la secretaria.');
-                        }
-                    } catch (error) {
-                        console.error('Error en la solicitud de redirección:', error.message);
-                    }
+                    await redirectWithAuth('/secretaria/home');
                 }
             } else {
-                alert('Error al iniciar sesión. Verifica tus credenciales.');
+                // Extraer y mostrar mensaje de error del backend
+                const errorMessage = await response.text();
+                document.querySelector('#error-message').textContent = "Credenciales invalidas";
+                console.log('Error del login: ', errorMessage);
             }
         } catch (error) {
             console.error('Error al hacer login:', error.message);
+            document.querySelector('#error-message').textContent =
+                'Ocurrió un error inesperado. Intenta nuevamente.';
         }
     });
 });
 
+async function redirectWithAuth(url) {
+    try {
+        const datosPaciente = JSON.parse(localStorage.getItem('datosPaciente'));
+        if (datosPaciente) {
+            const response = await fetchWithAuth(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ datosPaciente })
+            });
+            if (response.ok) {
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 1000);
+            } else {
+                const error = await response.text();
+                console.error(`Error al acceder a la vista protegida (${url}):`, error);
+                alert(`No se pudo acceder a la vista protegida (${url}).`);
+            }
+        } else {
+            const response = await fetchWithAuth(url);
+            console.log(`🚀 ~ Redirect response to ${url}:`, response);
+            if (response.ok) {
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 1000);
+            } else {
+                const error = await response.text();
+                console.error(`Error al acceder a la vista protegida (${url}):`, error);
+                alert(`No se pudo acceder a la vista protegida (${url}).`);
+            }
+        }
+    } catch (error) {
+        console.error('Error en la solicitud de redirección:', error.message);
+    }
+}
+
 async function fetchWithAuth(url, options = {}) {
     options.credentials = 'include';
-    console.log("OPTIONS!!! ",options);
+    console.log("OPTIONS!!! ", options);
     return await fetch(url, options);
-};
+}

@@ -1,0 +1,121 @@
+html{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-color: #FBFBFB;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.seccion{
+    width: 60vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* viejo
+.articuloRegistro{
+    width: 400px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    -webkit-box-shadow: 0 10px 6px -6px #777;
+    -moz-box-shadow: 0 10px 6px -6px #777;
+    box-shadow: 0 10px 6px -6px #777;
+    border-radius: 20px;
+    background-color: #C6E7FF;
+    height: auto;
+    padding: 20px;
+    border: 1px solid rgb(65, 65, 65);
+}*/
+
+.articuloRegistro {
+    width: 100%; /* Permitir que se expanda al 100% del contenedor */
+    max-width: 600px; /* Ancho máximo para mantenerlo centrado */
+    margin: auto; /* Centrar el artículo */
+}
+
+/*
+viejo
+.formRegistro{
+    display: flex;
+    flex-direction: column;
+}*/
+
+.formRegistro {
+    display: flex;
+    flex-wrap: wrap; /* Permite el ajuste a nuevas filas */
+    gap: 20px; /* Espaciado entre las columnas y filas */
+    justify-content: space-between; /* Distribución de espacio entre columnas */
+}
+.spanRegistro{
+    font-size: 30px;
+    padding: 20px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+/* viejo
+.emailRegistro, .pwRegistro, .rolRegistro, .nombreRegistro, .dniRegistro, .mutualRegistro, .direccionRegistro, .telefonoRegistro, .fechaNacimientoRegistro{
+    width: 20px;
+    border: none;
+}*/
+.campoRegistro {
+    width: calc(50% - 10px); /* Cada campo ocupa la mitad del ancho disponible */
+    display: flex;
+    flex-direction: column; /* Asegura que label y input estén en vertical */
+}
+
+.lbRegistro{
+    font-size: 16px;
+}
+
+/* viejo
+.inputEmailRegistro, .inputPwRegistro, .inputRolRegistro, .inputNombreRegistro, .inputDniRegistro, .inputMutualRegistro, .inputDireccionRegistro, .inputTelefonoRegistro, .inputFechaNacimientoRegistro{
+    border: 1px solid black;
+    margin-top: 10px;
+    height: 25px;
+    width: 250px;
+    font-size: 14px;
+}*/
+
+.inputRegistro {
+    width: 100%; 
+    height: 30px;
+    font-size: 14px;
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+/* viejo
+.botonRegistro{
+    background-color: #FFDDAE;
+    border: none;
+    padding: 10px 25px; 
+    text-align: center; 
+    text-decoration: none; 
+    display: inline-block; 
+    font-size: 16px; 
+    margin: 4px 2px; 
+    cursor: pointer; 
+    border-radius: 5px;
+    -webkit-box-shadow: 0 10px 6px -6px #1b1a1a;
+    -moz-box-shadow: 0 10px 6px -6px #242222;
+    box-shadow: 0 10px 6px -6px #2b2a2a;
+}*/
+.botonRegistro {
+    width: 100%; /* Botón a ancho completo */
+    margin-top: 20px;
+    text-align: center;
+}
+
+.botonRegistro:hover{
+    background-color: #f3c88d;
+}

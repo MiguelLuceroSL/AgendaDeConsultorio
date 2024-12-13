@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 
                 if (response.ok) {
+                    localStorage.removeItem('datosPaciente');
                     window.location.href = '/auth/login'; // Redirige al login si el logout es exitoso
                 } else {
                     console.error('Error al hacer logout:', await response.text());

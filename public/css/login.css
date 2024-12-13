@@ -36,7 +36,7 @@ header{
     gap: 10px;
 }
 
-.articuloLogin, .articuloRegistro{
+.articuloLogin{
     height: 100%;
     width: 400px;
     display: flex;
@@ -53,41 +53,33 @@ header{
     background-color: #D4F6FF;
 }
 
-.articuloRegistro{
-    background-color: #C6E7FF;
-}
-
-.formLogin, .formRegistro{
+.formLogin{
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
 }
 
-.formRegistro{
-    gap: 5px;
-}
-
-.articuloLogin, .articuloRegistro{
+.articuloLogin{
     border: 1px solid rgb(65, 65, 65);
 }
 
-.spanLogin, .spanRegistro{
+.spanLogin{
     font-size: 30px;
     padding: 20px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-.emailLogin, .pwLogin, .emailRegistro, .pwRegistro, .rolRegistro{
+.emailLogin, .pwLogin{
     width: 20px;
     border: none;
 }
 
-.lbEmailLogin, .lbPwLogin, .lbEmailRegistro, .lbPwRegistro, .lbRolRegistro{
+.lbEmailLogin, .lbPwLogin{
     font-size: 18px;
 }
 
-.inputEmailLogin, .inputPwLogin, .inputEmailRegistro, .inputPwRegistro, .inputRolRegistro{
+.inputEmailLogin, .inputPwLogin{
     border: 1px solid black;
     margin-top: 10px;
     height: 35px;
@@ -99,7 +91,7 @@ header{
     color: black;
 }
 
-.botonLogin, .botonRegistro{
+.botonLogin{
     background-color: #FFDDAE;
     border: none;
     padding: 15px 32px; 
@@ -115,19 +107,11 @@ header{
     box-shadow: 0 10px 6px -6px #2b2a2a;
 }
 
-.botonLogin:hover, .botonRegistro:hover{
+.botonLogin:hover{
     background-color: #f3c88d;
 }
 
-
-.selectRol{
-    width: 170px;
-    height: 25px;
-    margin-top: 5px;
-    border-radius: 5px;
-    border: 1px solid black;
-}
-
-.selectRol:hover{
-    cursor: pointer;
+.pError{
+    color: red; 
+    font-size: 0.9em;
 }

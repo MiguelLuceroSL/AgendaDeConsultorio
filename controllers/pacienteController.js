@@ -1,4 +1,4 @@
-import {crearPacienteS, borrarPacienteS, obtenerPacientesVistaS } from '../services/pacienteService.js';
+import { crearPacienteS, borrarPacienteS, obtenerPacientesVistaS } from '../services/pacienteService.js';
 
 export const crearPaciente = async (req, res) => {
     const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento } = req.body;
@@ -17,7 +17,7 @@ export const crearPaciente = async (req, res) => {
 
 export const borrarPaciente = async (req, res) => {
     const { dni } = req.body;
-    
+
     try {
         await borrarPacienteS(dni);
         console.log("Paciente borrado exitosamente.");
@@ -33,12 +33,26 @@ export const borrarPaciente = async (req, res) => {
 export const obtenerPacientesVistaC = async (req, res) => {
     try {
         console.log("entramos al controlador de pacientes")
-      const pacientes = await obtenerPacientesVistaS();
-      console.log("🚀 ~ obtenerPacientesVistaC ~ profesionales:", profesionales)
-      
-      res.render('secretaria/secretariaGestionTurno', {pacientes});
+        const pacientes = await obtenerPacientesVistaS();
+        console.log("🚀 ~ obtenerPacientesVistaC ~ pacientes:", pacientes)
+
+        res.render('secretaria/secretariaGestionTurno', { pacientes });
     } catch (err) {
-      console.error('Error al obtener los pacientes:', err);
-      res.status(500).json({ message: 'Hubo un error al obtener los pacientes.' });
+        console.error('Error al obtener los pacientes:', err);
+        res.status(500).json({ message: 'Hubo un error al obtener los pacientes.' });
     }
-  };
+};
+
+export const obtenerPacienteDniC = async (req, res) => {
+    const { dni } = req.body;
+    try {
+        console.log("entramos al controlador de paciente by dni")
+        const pacienteDni = await obtenerPacienteDniS(dni);
+        console.log("🚀 ~ obtenerPacientesVistaC ~ profesionales:", pacienteDni)
+
+        res.render('pacientes/perfil', { pacienteDni });
+    } catch (err) {
+        console.error('Error al obtener los pacientes:', err);
+        res.status(500).json({ message: 'Hubo un error al obtener los pacientes.' });
+    }
+};

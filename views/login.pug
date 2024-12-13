@@ -19,5 +19,6 @@ html
             input.inputPwLogin(type="password", id="loginPassword", name="password", required, placeholder="Contraseña")
           a(href="/pwOlvidada" class="pwOlvidada") ¿Olvidaste tu contraseña? 
           button.botonLogin(type="submit") Iniciar Sesión
+          p(class="pError" id="error-message")
     include includes/footer
     script(type="module" src="/js/login.js")

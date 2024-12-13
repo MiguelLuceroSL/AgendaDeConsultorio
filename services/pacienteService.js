@@ -29,4 +29,15 @@ export const obtenerPacientesVistaS = () => {
             resolve(result)
         })
     })
-}
+};
+
+export const obtenerPacienteDniS = (dni) => {
+    return new Promise ((resolve,reject) => {
+        obtenerPacienteDniM(dni, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            resolve(result)
+        })
+    })
+};
