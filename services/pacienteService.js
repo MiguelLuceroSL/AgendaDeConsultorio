@@ -1,4 +1,4 @@
-import {crearPacienteM, borrarPacienteM, obtenerPacientesVistaM} from '../models/pacienteModel.js';
+import {crearPacienteM, borrarPacienteM, obtenerPacientesVistaM, pacienteByUserIdM} from '../models/pacienteModel.js';
 
 export const crearPacienteS = (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento) => {
     return new Promise((resolve, reject) => {
@@ -37,7 +37,30 @@ export const obtenerPacienteDniS = (dni) => {
             if(err){
                 return reject(err)
             }
+            console.log('PACIENTE SERVICE: ', result);
             resolve(result)
         })
     })
+};
+
+export const pacienteByUserIdS = (usuario_id) => {
+    return new Promise((resolve, reject)=>{
+        pacienteByUserIdM(usuario_id,(err, result)=>{
+            if(err){
+                return reject(err);
+            }
+            resolve(result);
+        })
+    })
+};
+
+export const updatePacienteS = (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento) => {
+    return new Promise((resolve, reject) => {
+        updatePacienteM(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(result);
+        });
+    });
 };

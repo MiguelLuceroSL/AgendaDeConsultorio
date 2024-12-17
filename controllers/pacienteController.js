@@ -1,4 +1,4 @@
-import { crearPacienteS, borrarPacienteS, obtenerPacientesVistaS } from '../services/pacienteService.js';
+import { crearPacienteS, borrarPacienteS, obtenerPacientesVistaS, pacienteByUserIdS } from '../services/pacienteService.js';
 
 export const crearPaciente = async (req, res) => {
     const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento } = req.body;
@@ -56,3 +56,44 @@ export const obtenerPacienteDniC = async (req, res) => {
         res.status(500).json({ message: 'Hubo un error al obtener los pacientes.' });
     }
 };
+
+export const pacienteByUserIdC = async (req, res) => {
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    console.log('reqqqqqqqqq QQQQQQQQQQQQQQQQQQQQQQQQQQ', req.res.req.user.id)
+    const id = req.res.req.user.id;
+    try {
+        console.log('entramos al pacienteByUserIdController')
+        console.log('ID CONTROLLER: ',id)
+        const paciente = await pacienteByUserIdS(id)
+        console.log('tenemos al paciente!')
+        console.log('paciente: ', paciente);
+        res.render('paciente/paciente', { paciente });
+    } catch (error) {
+        console.error('Error al obtener el paciente: ', error);
+        res.status(500).json({message: 'Hubo un error al obtener el paciente.'});
+    }
+};
+
+export const pacientePerfilC = async (req, res) => {
+    const id = req.res.req.user.id;
+    try {
+        const paciente = await pacienteByUserIdS(id)
+        res.render('paciente/pacientePerfil', { paciente });
+    } catch (error) {
+        console.error('Error al obtener el paciente: ', error);
+        res.status(500).json({message: 'Hubo un error al obtener el paciente.'});
+    }
+};
+
+export const updatePacienteC = async (req, res) => {
+    const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento } = req.body;
+    try {
+        await updatePacienteS(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento);
+        console.log("Paciente editado exitosamente.");
+        res.json({ message: "Paciente editado exitosamente" });
+    } catch (err) {
+        console.error("Error al editar el Paciente:", err);
+        res.json("Hubo un error al editar el Paciente.");
+    }
+
+}

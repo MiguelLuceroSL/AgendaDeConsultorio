@@ -51,12 +51,10 @@ async function redirectWithAuth(url) {
         const datosPaciente = JSON.parse(localStorage.getItem('datosPaciente'));
         if (datosPaciente) {
             const response = await fetchWithAuth(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ datosPaciente })
+                method: 'GET',
+                credentials: 'include',
             });
+    
             if (response.ok) {
                 setTimeout(() => {
                     window.location.href = url;

@@ -63,4 +63,22 @@ export const obtenerPacienteDniM = (dni, callback) => {
     });
 };
 
+export const pacienteByUserIdM = (usuario_id, callback) => {
+  const sql = `SELECT nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento FROM paciente WHERE usuario_id = ?`;
+    db.query(sql, [usuario_id], (err, result)=>{
+      if (err) {
+        console.error('Error en la consulta: ',err);
+        return callback(err);
+      } else {
+        console.log('PACIENTE MODEL: ', result)
+        callback(null, result)
+      }
+    });
+}
+
+export const updatePacienteM = (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, callback) => {
+  const sql = 'UPDATE paciente SET nombre_completo=?,dni=?,obra_social=?,telefono=?,email=?,direccion=?,fecha_nacimiento=?,fotocopia_documento=? WHERE dni=?'
+  db.query(sql, [nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, dni], callback);
+};
+
 //SELECT id, nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento FROM paciente

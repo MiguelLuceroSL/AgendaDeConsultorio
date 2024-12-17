@@ -6,7 +6,9 @@ html
     link(rel="stylesheet" href="/css/footer.css")
   body
     include ../includes/headerPaciente
-    h1 Bienvenido, #{user.nombre_completo}!
-    p Aquí puedes gestionar tus consultas médicas.
+    h1 Bienvenido, #{paciente[0].nombre_completo}!
+    section
+      article
+        
     include ../includes/footer
     script(src="/js/logout.js")

@@ -5,8 +5,35 @@ html
     link(rel="stylesheet" href="/css/paciente.css")
     link(rel="stylesheet" href="/css/footer.css")
   body
-    include includes/headerPaciente
-    h1 Bienvenido, paciente!
-    p Aquí puedes gestionar tus consultas médicas.
-    include includes/footer
+    include ../includes/headerPaciente
+    h1 Datos Personales
+    section
+      article
+        form.formRegistro(action="/pacientes/perfil", method="POST")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerNombre") Nombre completo:
+            input.inputRegistro(type="text", id="registerNombre", name="nombre", required, placeholder="Nombre completo")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerEmail") Correo electrónico:
+            input.inputRegistro(type="email", id="registerEmail", name="email", required, placeholder="Correo electrónico")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerDni") DNI:
+            input.inputRegistro(type="text", id="registerDni", name="dni", required, placeholder="DNI")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerMutual") Mutual:
+            input.inputRegistro(type="text", id="registerMutual", name="mutual", required, placeholder="Mutual que posee o ponga Ninguna")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerDireccion") Dirección:
+            input.inputRegistro(type="text", id="registerDireccion", name="direccion", required, placeholder="Dirección")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerTelefono") Teléfono:
+            input.inputRegistro(type="text", id="registerTelefono", name="telefono", required, placeholder="Teléfono")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerFechaNacimiento") Fecha de nacimiento:
+            input.inputRegistro(type="date", id="registerFechaNacimiento", name="fecha_nacimiento", required)
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerPassword") Contraseña:
+            input.inputRegistro(type="password", id="registerPassword", name="password", required, placeholder="Contraseña")
+          button.botonRegistro(type="submit") Registrarse
+    include ../includes/footer
     script(src="/js/logout.js")
