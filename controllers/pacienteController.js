@@ -86,6 +86,7 @@ export const pacientePerfilC = async (req, res) => {
 };
 
 export const updatePacienteC = async (req, res) => {
+    console.log('REQ.BODY del Update: ', req.body);
     const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento } = req.body;
     try {
         await updatePacienteS(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento);

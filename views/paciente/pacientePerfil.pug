@@ -9,31 +9,68 @@ html
     h1 Datos Personales
     section
       article
-        form.formRegistro(action="/pacientes/perfil", method="POST")
-          fieldset.campoRegistro
-            label.lbRegistro(for="registerNombre") Nombre completo:
-            input.inputRegistro(type="text", id="registerNombre", name="nombre", required, placeholder="Nombre completo")
-          fieldset.campoRegistro
-            label.lbRegistro(for="registerEmail") Correo electrónico:
-            input.inputRegistro(type="email", id="registerEmail", name="email", required, placeholder="Correo electrónico")
-          fieldset.campoRegistro
-            label.lbRegistro(for="registerDni") DNI:
-            input.inputRegistro(type="text", id="registerDni", name="dni", required, placeholder="DNI")
-          fieldset.campoRegistro
-            label.lbRegistro(for="registerMutual") Mutual:
-            input.inputRegistro(type="text", id="registerMutual", name="mutual", required, placeholder="Mutual que posee o ponga Ninguna")
-          fieldset.campoRegistro
-            label.lbRegistro(for="registerDireccion") Dirección:
-            input.inputRegistro(type="text", id="registerDireccion", name="direccion", required, placeholder="Dirección")
-          fieldset.campoRegistro
-            label.lbRegistro(for="registerTelefono") Teléfono:
-            input.inputRegistro(type="text", id="registerTelefono", name="telefono", required, placeholder="Teléfono")
-          fieldset.campoRegistro
-            label.lbRegistro(for="registerFechaNacimiento") Fecha de nacimiento:
-            input.inputRegistro(type="date", id="registerFechaNacimiento", name="fecha_nacimiento", required)
-          fieldset.campoRegistro
-            label.lbRegistro(for="registerPassword") Contraseña:
-            input.inputRegistro(type="password", id="registerPassword", name="password", required, placeholder="Contraseña")
-          button.botonRegistro(type="submit") Registrarse
+        form.formPerfil(action="/pacientes/perfil", method="POST")
+          fieldset.campoPerfil
+            label.lbPerfil(for="perfilNombre") Nombre completo:
+            input.inputPerfil(
+              type="text", 
+              id="perfilNombre", 
+              name="nombre",
+              placeholder=paciente[0].nombre_completo,
+              value=paciente[0].nombre_completo,
+              disabled
+            )
+          fieldset.campoPerfil
+            label.lbPerfil(for="perfilEmail") Correo electrónico:
+            input.inputPerfil(
+              type="email", 
+              id="perfilEmail", 
+              name="email", 
+              required, 
+              placeholder=paciente[0].email,
+              disabled
+            )
+          fieldset.campoPerfil
+            label.lbPerfil(for="perfilDni") DNI:
+            input.inputPerfil(
+              type="text", 
+              id="perfilDni", 
+              name="dni", 
+              placeholder=paciente[0].dni,
+              disabled
+            )
+          fieldset.campoPerfil
+            label.lbPerfil(for="perfilMutual") Mutual:
+            input.inputPerfil(
+              type="text", 
+              id="perfilMutual", 
+              name="mutual", 
+              placeholder=paciente[0].obra_social
+            )
+          fieldset.campoPerfil
+            label.lbPerfil(for="perfilDireccion") Dirección:
+            input.inputPerfil(
+              type="text", 
+              id="perfilDireccion", 
+              name="direccion", 
+              placeholder=paciente[0].direccion
+            )
+          fieldset.campoPerfil
+            label.lbPerfil(for="perfilTelefono") Teléfono:
+            input.inputPerfil(
+              type="text", 
+              id="perfilTelefono", 
+              name="telefono", 
+              placeholder=paciente[0].telefono
+            )
+          fieldset.campoPerfil
+            label.lbPerfil(for="perfilFechaNacimiento") Fecha de nacimiento:
+            input.inputPerfil(
+              type="date", 
+              id="perfilFechaNacimiento", 
+              name="fecha_nacimiento",
+              value=paciente[0].fecha_nacimiento
+            )
+          button.botonPerfil(type="submit") Editar
     include ../includes/footer
     script(src="/js/logout.js")
