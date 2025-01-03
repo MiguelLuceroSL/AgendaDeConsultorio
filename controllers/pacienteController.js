@@ -1,12 +1,12 @@
 import { crearPacienteS, borrarPacienteS, obtenerPacientesVistaS, pacienteByUserIdS } from '../services/pacienteService.js';
 
 export const crearPaciente = async (req, res) => {
-    const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento } = req.body;
+    const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, icon } = req.body;
 
 
 
     try {
-        await crearPacienteS(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento);
+        await crearPacienteS(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, icon);
         console.log("Paciente creado exitosamente.");
         res.json({ message: "Paciente creado exitosamente" });
     } catch (err) {
@@ -63,14 +63,14 @@ export const pacienteByUserIdC = async (req, res) => {
     const id = req.res.req.user.id;
     try {
         console.log('entramos al pacienteByUserIdController')
-        console.log('ID CONTROLLER: ',id)
+        console.log('ID CONTROLLER: ', id)
         const paciente = await pacienteByUserIdS(id)
         console.log('tenemos al paciente!')
         console.log('paciente: ', paciente);
         res.render('paciente/paciente', { paciente });
     } catch (error) {
         console.error('Error al obtener el paciente: ', error);
-        res.status(500).json({message: 'Hubo un error al obtener el paciente.'});
+        res.status(500).json({ message: 'Hubo un error al obtener el paciente.' });
     }
 };
 
@@ -78,10 +78,34 @@ export const pacientePerfilC = async (req, res) => {
     const id = req.res.req.user.id;
     try {
         const paciente = await pacienteByUserIdS(id)
-        res.render('paciente/pacientePerfil', { paciente });
+        const date = new Date(paciente[0].fecha_nacimiento);
+        const formattedDate = date.toLocaleDateString("es-AR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
+        console.log('pacienteeeeeeD', paciente)
+        res.render('paciente/pacientePerfil', { paciente, formattedDate });
     } catch (error) {
         console.error('Error al obtener el paciente: ', error);
-        res.status(500).json({message: 'Hubo un error al obtener el paciente.'});
+        res.status(500).json({ message: 'Hubo un error al obtener el paciente.' });
+    }
+};
+
+export const pacienteEditarC = async (req, res) => {
+    const id = req.res.req.user.id;
+    try {
+        const paciente = await pacienteByUserIdS(id)
+        const date = new Date(paciente[0].fecha_nacimiento);
+        const formattedDate = date.toLocaleDateString("es-AR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
+        res.render('paciente/pacienteEditar', { paciente, formattedDate });
+    } catch (error) {
+        console.error('Error al obtener el paciente: ', error);
+        res.status(500).json({ message: 'Hubo un error al obtener el paciente.' });
     }
 };
 

@@ -17,9 +17,9 @@ export const crearPacienteM = (nombre_completo, dni, obra_social, telefono, emai
     // Obtenemos el usuario_id del resultado
     const usuario_id = result[0].usuario_id;
     // Ahora hacemos la inserción del paciente en la tabla paciente
-    const sqlPaciente = 'INSERT INTO paciente (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, usuario_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-
-    db.query(sqlPaciente, [nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, usuario_id], callback);
+    const sqlPaciente = 'INSERT INTO paciente (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, usuario_id, icon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const icon = Math.floor(Math.random() * 17) + 1;
+    db.query(sqlPaciente, [nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, usuario_id, icon], callback);
   });
 
 };
@@ -40,7 +40,7 @@ export const rolById = (id, callback) => {
 };
 
 export const obtenerPacientesVistaM = (callback) => {
-  const sql = `SELECT id, nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento FROM paciente`;
+  const sql = `SELECT id, nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, icon FROM paciente`;
     db.query(sql, (err, result) => {
       if (err) {
         console.error('Error en la consulta:', err);
@@ -52,19 +52,21 @@ export const obtenerPacientesVistaM = (callback) => {
 };
 
 export const obtenerPacienteDniM = (dni, callback) => {
-  const sql = `SELECT nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento FROM paciente WHERE dni=?`;
+  const sql = `SELECT nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, icon FROM paciente WHERE dni=?`;
     db.query(sql, [dni], (err, result) => {
       if (err) {
         console.error('Error en la consulta:', err);
         return callback(err);
       } else {
+        
         callback(null, result);
+        
       }
     });
 };
 
 export const pacienteByUserIdM = (usuario_id, callback) => {
-  const sql = `SELECT nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento FROM paciente WHERE usuario_id = ?`;
+  const sql = `SELECT nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, icon FROM paciente WHERE usuario_id = ?`;
     db.query(sql, [usuario_id], (err, result)=>{
       if (err) {
         console.error('Error en la consulta: ',err);

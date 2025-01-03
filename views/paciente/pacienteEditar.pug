@@ -9,31 +9,68 @@ html
     h1 Datos Personales
     section
       article
-        form.formPerfil(action="/pacientes/editar", method="POST")
+        form.formPerfil(action="/pacientes/perfil", method="POST")
           fieldset.campoPerfil
             label.lbPerfil(for="perfilNombre") Nombre completo:
-            input.inputPerfil(type="text", id="perfilNombre", name="nombre", required, placeholder=${paciente.nombre_completo})
+            input.inputPerfil(
+              type="text", 
+              id="perfilNombre", 
+              name="nombre",
+              placeholder=paciente[0].nombre_completo,
+              value=paciente[0].nombre_completo,
+              disabled
+            )
           fieldset.campoPerfil
             label.lbPerfil(for="perfilEmail") Correo electrónico:
-            input.inputPerfil(type="email", id="perfilEmail", name="email", required, placeholder="Correo electrónico")
+            input.inputPerfil(
+              type="email", 
+              id="perfilEmail", 
+              name="email", 
+              required, 
+              placeholder=paciente[0].email,
+              disabled
+            )
           fieldset.campoPerfil
             label.lbPerfil(for="perfilDni") DNI:
-            input.inputPerfil(type="text", id="perfilDni", name="dni", required, placeholder="DNI")
+            input.inputPerfil(
+              type="text", 
+              id="perfilDni", 
+              name="dni", 
+              placeholder=paciente[0].dni,
+              disabled
+            )
           fieldset.campoPerfil
             label.lbPerfil(for="perfilMutual") Mutual:
-            input.inputPerfil(type="text", id="perfilMutual", name="mutual", required, placeholder="Mutual que posee o ponga Ninguna")
+            input.inputPerfil(
+              type="text", 
+              id="perfilMutual", 
+              name="mutual", 
+              placeholder=paciente[0].obra_social
+            )
           fieldset.campoPerfil
             label.lbPerfil(for="perfilDireccion") Dirección:
-            input.inputPerfil(type="text", id="perfilDireccion", name="direccion", required, placeholder="Dirección")
+            input.inputPerfil(
+              type="text", 
+              id="perfilDireccion", 
+              name="direccion", 
+              placeholder=paciente[0].direccion
+            )
           fieldset.campoPerfil
             label.lbPerfil(for="perfilTelefono") Teléfono:
-            input.inputPerfil(type="text", id="perfilTelefono", name="telefono", required, placeholder="Teléfono")
+            input.inputPerfil(
+              type="text", 
+              id="perfilTelefono", 
+              name="telefono", 
+              placeholder=paciente[0].telefono
+            )
           fieldset.campoPerfil
             label.lbPerfil(for="perfilFechaNacimiento") Fecha de nacimiento:
-            input.inputPerfil(type="date", id="perfilFechaNacimiento", name="fecha_nacimiento", required)
-          fieldset.campoPerfil
-            label.lbPerfil(for="perfilPassword") Contraseña:
-            input.inputPerfil(type="password", id="perfilPassword", name="password", required, placeholder="Contraseña")
+            span=formattedDate
+            input.inputPerfil(
+              type="date", 
+              id="perfilFechaNacimiento", 
+              name="fecha_nacimiento"
+            )
           button.botonPerfil(type="submit") Editar
     include ../includes/footer
     script(src="/js/logout.js")
