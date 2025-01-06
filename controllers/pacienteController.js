@@ -2,9 +2,6 @@ import { crearPacienteS, borrarPacienteS, obtenerPacientesVistaS, pacienteByUser
 
 export const crearPaciente = async (req, res) => {
     const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, icon } = req.body;
-
-
-
     try {
         await crearPacienteS(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, icon);
         console.log("Paciente creado exitosamente.");
@@ -17,7 +14,6 @@ export const crearPaciente = async (req, res) => {
 
 export const borrarPaciente = async (req, res) => {
     const { dni } = req.body;
-
     try {
         await borrarPacienteS(dni);
         console.log("Paciente borrado exitosamente.");
@@ -27,15 +23,13 @@ export const borrarPaciente = async (req, res) => {
         res.json("Hubo un error al borrar el paciente.")
     }
 
-}
-
+};
 
 export const obtenerPacientesVistaC = async (req, res) => {
     try {
         console.log("entramos al controlador de pacientes")
         const pacientes = await obtenerPacientesVistaS();
         console.log("🚀 ~ obtenerPacientesVistaC ~ pacientes:", pacientes)
-
         res.render('secretaria/secretariaGestionTurno', { pacientes });
     } catch (err) {
         console.error('Error al obtener los pacientes:', err);
@@ -49,7 +43,6 @@ export const obtenerPacienteDniC = async (req, res) => {
         console.log("entramos al controlador de paciente by dni")
         const pacienteDni = await obtenerPacienteDniS(dni);
         console.log("🚀 ~ obtenerPacientesVistaC ~ profesionales:", pacienteDni)
-
         res.render('pacientes/perfil', { pacienteDni });
     } catch (err) {
         console.error('Error al obtener los pacientes:', err);
@@ -120,5 +113,31 @@ export const updatePacienteC = async (req, res) => {
         console.error("Error al editar el Paciente:", err);
         res.json("Hubo un error al editar el Paciente.");
     }
+};
 
-}
+export const updateFotoC = async (req, res) => {
+    console.log('REQ.BODY del Update fotooooooooooooo: ', req.body);
+    const { dni, icon } = req.body;
+    try {
+        await updateFotoS(dni, icon);
+        console.log("Foto editada exitosamente.");
+        res.json({ message: "Foto editada exitosamente" });
+    } catch (err) {
+        console.error("Error al editar la foto:", err);
+        res.json("Hubo un error al editar la foto.");
+    }
+};
+
+export const getFotoC = async (req, res) => {
+    const id = req.res.req.user.id;
+    try {
+        const paciente = await pacienteByUserIdS(id);
+        console.log('pacienteeeeeeFOTOOOOOOOOO', paciente[0])
+        const dni = paciente[0].dni
+        const icon = paciente[0].icon
+        res.render('paciente/pacienteEditarFoto', { dni, icon });
+    } catch (error) {
+        console.error('Error al obtener el paciente: ', error);
+        res.status(500).json({ message: 'Hubo un error al obtener el paciente.' });
+    }
+};

@@ -83,4 +83,9 @@ export const updatePacienteM = (nombre_completo, dni, obra_social, telefono, ema
   db.query(sql, [nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, dni], callback);
 };
 
+export const updateFotoM = (dni, icon, callback) => {
+  const sql = 'UPDATE paciente SET icon=? WHERE dni=?'
+  db.query(sql, [icon, dni], callback);
+};
+
 //SELECT id, nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento FROM paciente

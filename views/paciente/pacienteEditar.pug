@@ -10,6 +10,9 @@ html
     section
       article
         form.formPerfil(action="/pacientes/perfil", method="POST")
+          fieldset.campoPerfil(class="campoImg")
+            img(src=`/img/icon/${paciente[0].icon}.jpg`, alt="icon" class="iconEdit" id="icon")
+            a(href="/pacientes/foto") Cambiar foto de perfil
           fieldset.campoPerfil
             label.lbPerfil(for="perfilNombre") Nombre completo:
             input.inputPerfil(

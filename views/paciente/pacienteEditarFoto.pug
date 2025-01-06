@@ -1,0 +1,27 @@
+doctype html
+html
+    head
+        title Vista Paciente
+        link(rel="stylesheet" href="/css/paciente.css")
+        link(rel="stylesheet" href="/css/footer.css")
+    body
+        include ../includes/headerPaciente
+        h1 ¡Elige tu foto de perfil!
+        section
+            form.formPerfil(action="/pacientes/foto" method="POST")
+                //- Generar las imágenes dinámicamente
+                each num in Array.from({ length: 21 }, (_, i) => i + 1)
+                    fieldset.campoPerfil
+                        input.inputPerfil(
+                            type="radio", 
+                            id=`foto${num}`, 
+                            name="icon", 
+                            value=num
+                        )
+                        label(for=`foto${num}`)
+                            img(src=`/img/icon/${num}.jpg`, alt=`icon${num}`, class="iconEdit")
+                            span=num
+                input(type="hidden", name="dni", value=dni)
+                button.botonPerfil(type="submit") Editar
+        include ../includes/footer
+        script(src="/js/logout.js")

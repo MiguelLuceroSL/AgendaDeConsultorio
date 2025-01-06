@@ -64,3 +64,14 @@ export const updatePacienteS = (nombre_completo, dni, obra_social, telefono, ema
         });
     });
 };
+
+export const updateFotoS = (dni, icon) => {
+    return new Promise((resolve, reject) => {
+        updateFotoM(dni, icon, (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(result);
+        });
+    });
+};
