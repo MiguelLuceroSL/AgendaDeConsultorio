@@ -72,7 +72,6 @@ export const pacienteByUserIdM = (usuario_id, callback) => {
         console.error('Error en la consulta: ',err);
         return callback(err);
       } else {
-        console.log('PACIENTE MODEL: ', result)
         callback(null, result)
       }
     });

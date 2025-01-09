@@ -1,4 +1,4 @@
-import { crearPacienteS, borrarPacienteS, obtenerPacientesVistaS, pacienteByUserIdS } from '../services/pacienteService.js';
+import { crearPacienteS, borrarPacienteS, obtenerPacientesVistaS, pacienteByUserIdS, updateFotoS } from '../services/pacienteService.js';
 
 export const crearPaciente = async (req, res) => {
     const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, icon } = req.body;
@@ -121,7 +121,7 @@ export const updateFotoC = async (req, res) => {
     try {
         await updateFotoS(dni, icon);
         console.log("Foto editada exitosamente.");
-        res.json({ message: "Foto editada exitosamente" });
+        res.render('paciente/pacienteEditarFotoSuccess');
     } catch (err) {
         console.error("Error al editar la foto:", err);
         res.json("Hubo un error al editar la foto.");
@@ -132,7 +132,6 @@ export const getFotoC = async (req, res) => {
     const id = req.res.req.user.id;
     try {
         const paciente = await pacienteByUserIdS(id);
-        console.log('pacienteeeeeeFOTOOOOOOOOO', paciente[0])
         const dni = paciente[0].dni
         const icon = paciente[0].icon
         res.render('paciente/pacienteEditarFoto', { dni, icon });

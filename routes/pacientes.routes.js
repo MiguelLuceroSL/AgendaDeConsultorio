@@ -26,12 +26,11 @@ router.post('/editar', (req, res) => {
 });
 
 router.get('/foto',funcion2, authRequired, verifyRol('paciente'), (req, res) => {
-  console.log('gettttt fotoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO', req.res.req.user)
   getFotoC(req, res);
-  res.render('paciente/pacienteEditarFoto');
 });
 
 router.post('/foto', (req, res) => {
+  console.log('entramos al post edit foto')
   updateFotoC(req, res);
 });
 

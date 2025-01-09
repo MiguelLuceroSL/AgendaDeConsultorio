@@ -90,6 +90,7 @@ li {
 }
 
 .botonEditar {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     height: 45px;
     width: 100px;
     background-color: #007bff;
@@ -113,4 +114,52 @@ li {
 
 .aEditar:hover{
     color: white !important;
+}
+
+.formPerfilFoto {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas iguales */
+    gap: 16px; /* Espaciado entre los elementos */
+    margin: 20px auto; /* Centrar el formulario */
+    max-width: 800px; /* Ancho máximo para el formulario */
+}
+
+.campoPerfilFoto {
+    text-align: center; /* Centrar contenido dentro del campo */
+}
+
+.articleFoto{
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.iconEdit {
+    width: 60px; /* Ancho de las imágenes */
+    height: 60px; /* Alto de las imágenes */
+    object-fit: cover; /* Ajustar imágenes sin distorsión */
+    border-radius: 50%; /* Hacer las imágenes circulares */
+    border: 2px solid #ccc; /* Agregar borde */
+    transition: transform 0.3s ease; /* Efecto al pasar el cursor */
+}
+
+.iconEdit:hover {
+    transform: scale(1.1); /* Ampliar ligeramente al pasar el cursor */
+    border-color: #007bff; /* Cambiar color del borde */
+}
+
+.botonEditarFoto {
+    grid-column: span 4; /* El botón ocupa las 4 columnas */
+    justify-self: center; /* Centra el botón horizontalmente */
+    margin-top: 20px; /* Espacio superior */
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.botonEditarFoto:hover {
+    background-color: #0056b3;
 }
