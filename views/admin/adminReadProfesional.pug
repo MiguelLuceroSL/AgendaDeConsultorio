@@ -7,7 +7,7 @@ html
         link(rel="stylesheet" href="/css/adminRead.css")
         link(rel="stylesheet" href="/css/footer.css")
     body
-        include includes/headerAdmin
+        include ../includes/headerAdmin
         main 
             h1 Listado de Profesionales
             form(action="/profesional/listar" method="get")
@@ -40,6 +40,6 @@ html
                                 td= profesional.estado === 1 ? 'Activo' : 'Inactivo'
             else
                 p No se encontraron profesionales para la especialidad seleccionada.
-        include includes/footer
+        include ../includes/footer
         script(src="/js/logout.js")
         script(src="/js/profesionales.js")
