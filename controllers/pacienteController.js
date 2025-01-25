@@ -77,13 +77,17 @@ export const pacientePerfilC = async (req, res) => {
             month: "2-digit",
             year: "numeric"
         });
-        console.log('pacienteeeeeeD', paciente)
         res.render('paciente/pacientePerfil', { paciente, formattedDate });
     } catch (error) {
         console.error('Error al obtener el paciente: ', error);
         res.status(500).json({ message: 'Hubo un error al obtener el paciente.' });
     }
 };
+
+export const pacienteEditadoC = async (req, res) => {
+    console.log('¡PACIENTE TRATANDO DE SER EDITADO!');
+    console.log('REQ del EDITADO: ', req);
+}
 
 export const pacienteEditarC = async (req, res) => {
     const id = req.res.req.user.id;

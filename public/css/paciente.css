@@ -116,6 +116,20 @@ li {
     color: white !important;
 }
 
+.formPerfilEditar{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.campoPerfilEditar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
 .formPerfilFoto {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 columnas iguales */
@@ -134,12 +148,12 @@ li {
 }
 
 .iconEdit {
-    width: 60px; /* Ancho de las imágenes */
-    height: 60px; /* Alto de las imágenes */
-    object-fit: cover; /* Ajustar imágenes sin distorsión */
-    border-radius: 50%; /* Hacer las imágenes circulares */
-    border: 2px solid #ccc; /* Agregar borde */
-    transition: transform 0.3s ease; /* Efecto al pasar el cursor */
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    transition: transform 0.3s ease;
 }
 
 .iconEdit:hover {
@@ -161,5 +175,21 @@ li {
 }
 
 .botonEditarFoto:hover {
+    background-color: #0056b3;
+}
+
+.botonCambiarFoto {
+    justify-self: center; /* Centra el botón horizontalmente */
+    margin-top: 20px; /* Espacio superior */
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.botonCambiarFoto:hover {
     background-color: #0056b3;
 }

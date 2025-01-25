@@ -9,11 +9,11 @@ html
     h1 Datos Personales
     section
       article
-        form.formPerfil(action="/pacientes/perfil", method="POST")
-          fieldset.campoPerfil(class="campoImg")
+        form.formPerfilEditar(action="/pacientes/perfil", method="POST")
+          fieldset.campoPerfilEditar(class="campoImg")
             img(src=`/img/icon/${paciente[0].icon}.jpg`, alt="icon" class="iconEdit" id="icon")
-            a(href="/pacientes/foto") Cambiar foto de perfil
-          fieldset.campoPerfil
+            a.botonCambiarFoto(href="/pacientes/foto") Cambiar foto de perfil
+          fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilNombre") Nombre completo:
             input.inputPerfil(
               type="text", 
@@ -23,7 +23,7 @@ html
               value=paciente[0].nombre_completo,
               disabled
             )
-          fieldset.campoPerfil
+          fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilEmail") Correo electrónico:
             input.inputPerfil(
               type="email", 
@@ -33,7 +33,7 @@ html
               placeholder=paciente[0].email,
               disabled
             )
-          fieldset.campoPerfil
+          fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilDni") DNI:
             input.inputPerfil(
               type="text", 
@@ -42,7 +42,7 @@ html
               placeholder=paciente[0].dni,
               disabled
             )
-          fieldset.campoPerfil
+          fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilMutual") Mutual:
             input.inputPerfil(
               type="text", 
@@ -50,7 +50,7 @@ html
               name="mutual", 
               placeholder=paciente[0].obra_social
             )
-          fieldset.campoPerfil
+          fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilDireccion") Dirección:
             input.inputPerfil(
               type="text", 
@@ -58,7 +58,7 @@ html
               name="direccion", 
               placeholder=paciente[0].direccion
             )
-          fieldset.campoPerfil
+          fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilTelefono") Teléfono:
             input.inputPerfil(
               type="text", 
@@ -66,7 +66,7 @@ html
               name="telefono", 
               placeholder=paciente[0].telefono
             )
-          fieldset.campoPerfil
+          fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilFechaNacimiento") Fecha de nacimiento:
             span=formattedDate
             input.inputPerfil(
@@ -74,6 +74,6 @@ html
               id="perfilFechaNacimiento", 
               name="fecha_nacimiento"
             )
-          button.botonPerfil(type="submit") Editar
+          button.botonEditarFoto(type="submit") Editar
     include ../includes/footer
     script(src="/js/logout.js")
