@@ -1,62 +1,73 @@
 import bcrypt from 'bcryptjs';
-import db from '../config/db.js';
 import { createAccessToken } from '../libs/jwt.js';
 import jwt from 'jsonwebtoken';
 
-export const login = (req, res) => {
-  console.log('entrando al fetch back')
-  console.log('REQ BACK LOGIN: ',req.body)
+import connectDB from '../config/db.js';
+
+export const login = async (req, res) => {
+  console.log('Entrando al fetch back');
+  console.log('REQ BACK LOGIN:', req.body);
+
   try {
+    const db = await connectDB(); // Esperar la conexión
+
     const { email, password } = req.body;
-    db.query('SELECT * FROM usuario WHERE email = ?', [email], async (err, result) => {
-      if (err) return res.status(500).send('Error en el servidor');
-      if (result.length === 0) return res.status(404).send('Usuario no encontrado');
-      console.log('entrando al try del fetch back')
-      const user = result[0];
-      console.log("user authController: ", user);
-      const passwordIsValid = bcrypt.compareSync(password, user.password);
-      if (!passwordIsValid) return res.status(401).send('Contraseña incorrecta');
-      const token = await createAccessToken({ id: user.usuario_id });
-      res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'Lax' });
-      if (user.rol === 'paciente') {
-        console.log('entramos al rol paciente');
-        db.query('SELECT * FROM paciente WHERE usuario_id = ?', [user.usuario_id], (err, pacienteResult) => {
-          if (err) return res.status(500).send('Error al obtener los datos del paciente');
-          if (pacienteResult.length === 0) return res.status(404).send('Datos del paciente no encontrados');
-          const paciente = pacienteResult[0];
-          return res.json({
-            id: user.usuario_id,
-            username: user.username,
-            email: user.email,
-            rol: user.rol,
-            datosPaciente: {
-              nombre_completo: paciente.nombre_completo,
-              dni: paciente.dni,
-              obra_social: paciente.obra_social,
-              telefono: paciente.telefono,
-              email: paciente.email,
-              direccion: paciente.direccion,
-              fecha_nacimiento: paciente.fecha_nacimiento,
-            },
-          });
-        }
-        );
-      } else {
-        console.log('entramos al rol que no es paciente');
-        return res.json({
-          id: user.usuario_id,
-          username: user.username,
-          email: user.email,
-          rol: user.rol,
-        });
-      }
-    });
+    const [result] = await db.execute('SELECT * FROM usuario WHERE email = ?', [email]);
+
+    if (result.length === 0) return res.status(404).send('Usuario no encontrado');
+
+    console.log('Entrando al try del fetch back');
+    const user = result[0];
+    console.log('User authController:', user);
+
+    const passwordIsValid = bcrypt.compareSync(password, user.password);
+    if (passwordIsValid) {
+      console.log("contraseñas coinciden")
+    } else {
+      console.log("contraseñas no coinciden")
+    }
+    if (!passwordIsValid) return res.status(401).send('Contraseña incorrecta');
+
+    const token = await createAccessToken({ id: user.usuario_id });
+    res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'Lax' });
+
+    if (user.rol === 'paciente') {
+      console.log('Entramos al rol paciente');
+      const [pacienteResult] = await db.execute('SELECT * FROM paciente WHERE usuario_id = ?', [user.usuario_id]);
+      console.log("PACIENTE RESULT: ",pacienteResult);
+      if (pacienteResult.length === 0) return res.status(404).send('Datos del paciente no encontrados');
+
+      const paciente = pacienteResult[0];
+      return res.json({
+        id: user.usuario_id,
+        username: user.username,
+        email: user.email,
+        rol: user.rol,
+        datosPaciente: {
+          nombre_completo: paciente.nombre_completo,
+          dni: paciente.dni,
+          obra_social: paciente.obra_social,
+          telefono: paciente.telefono,
+          email: paciente.email,
+          direccion: paciente.direccion,
+          fecha_nacimiento: paciente.fecha_nacimiento,
+        },
+      });
+    } else {
+      console.log('Entramos al rol que no es paciente');
+      return res.json({
+        id: user.usuario_id,
+        username: user.username,
+        email: user.email,
+        rol: user.rol,
+      });
+    }
   } catch (error) {
-    console.log('entramos al catch del fetch back')
-    res.status(500).json({ 'Error message: ': error.message });
+    console.log('Entramos al catch del fetch back');
+    res.status(500).json({ error: error.message });
   }
-  console.log('NO entramos ni al try ni al catch del fetch back')
 };
+
 
 
 export const register = async (req, res) => {
