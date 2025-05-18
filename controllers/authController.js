@@ -76,13 +76,14 @@ export const register = async (req, res) => {
   const rol = "paciente";
 
   try {
+    const connection = await connectDB(); // Esperar la conexión
     // Inserta en la tabla usuario
     const insertUserQuery = 'INSERT INTO usuario(email, password, rol) VALUES (?, ?, ?)';
-    await db.query(insertUserQuery, [email, passwordHash, rol]);
+    await connection.execute(insertUserQuery, [email, passwordHash, rol]);
 
     // Obtiene el usuario_id recién creado
     const selectUserIdQuery = 'SELECT usuario_id FROM usuario WHERE email = ?';
-    const [userResult] = await db.query(selectUserIdQuery, [email]);
+    const [userResult] = await connection.execute(selectUserIdQuery, [email]);
 
     if (userResult.length === 0) {
       return res.status(404).send('Datos del usuario no encontrados.');
@@ -96,7 +97,7 @@ export const register = async (req, res) => {
         nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, usuario_id
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    await db.query(insertPacienteQuery, [nombre, dni, mutual, telefono, email, direccion, fecha_nacimiento, usuarioId]);
+    await connection.execute(insertPacienteQuery, [nombre, dni, mutual, telefono, email, direccion, fecha_nacimiento, usuarioId]);
 
     // Renderiza la vista de éxito
     res.render('registerSuccess', { message: '¡Usuario creado con éxito!' });
@@ -108,14 +109,23 @@ export const register = async (req, res) => {
 };
 
 
-export const registerSecretaria = (req, res) => {
-  const { email, password } = req.body;
-  const passwordHash = bcrypt.hashSync(password, 8);
-  const rol = "secretaria";
-  db.query('INSERT INTO usuario(email, password, rol) VALUES (?,?,?)', [email, passwordHash, rol], (err, result) => {
-    if (err) return res.status(500).send('Error al registrar la secretaria.');
+export const registerSecretaria = async (req, res) => {
+  
+  try {
+    const { email, password } = req.body;
+    const passwordHash = bcrypt.hashSync(password, 8);
+    const rol = "secretaria";
+    const connection = await connectDB();
+    await connection.execute(
+      'INSERT INTO usuario(email, password, rol) VALUES (?, ?, ?)',
+      [email, passwordHash, rol]
+    );
+
     return res.render('admin/adminSecretariaSuccess', { message: '¡Secretaria creada con éxito!' });
-  });
+  } catch (error) {
+    console.error('Error al registrar secretaria:', error);
+    return res.status(500).send('Error al registrar secretaria.');
+  }
 };
 
 export const getRole = (req, res) => {
