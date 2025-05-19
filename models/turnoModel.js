@@ -1,4 +1,4 @@
-import db from '../config/db.js';
+import connectDB from '../config/db.js';
 
 export const crearTurnoM = (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, callback) => {
     const sql = 'INSERT INTO turnos(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) VALUES (?,?,?,?,?,?)'
@@ -59,8 +59,10 @@ export const confTurnoM =(confirmado, id, callback) =>{
     })
 }
 
-export const traerTurnos = (callback) => {
-    const sql = `
+export const traerTurnos = async(callback) => {
+    try{
+        const connection = await connectDB();
+        const sql = `
     SELECT 
         t.id, 
         p.nombre_completo AS paciente_nombre, 
@@ -74,20 +76,21 @@ export const traerTurnos = (callback) => {
     JOIN 
         paciente p ON t.paciente_id = p.id
     JOIN 
-        profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
+        profesional_especialidad pe ON t.agenda_id = pe.id
     JOIN 
         profesional pr ON pe.profesional_id = pr.id
     JOIN 
         especialidad e ON pe.especialidad_id = e.id;
     `;
     
-    db.query(sql, (err, res) => {
-        if (err) {
-            callback(err, null);
-            return;
-        }
-        callback(null, res);
-    });
+    const [rows] = await connection.query(sql);
+
+    callback(null, rows);
+    }catch(error){
+    console.error('Error al traer turnos:', error);
+    callback(error);
+    }
+    
 };
 
 

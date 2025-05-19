@@ -18,6 +18,10 @@ router.put('/confirmar', confTurnoC);
 
 router.get('/listarProfesionales', obtenerProfesionalesVistaC);
 
+//router.get('/gestionTurno', obtenerProfesionalesVistaC);
+
 router.get('/listarTurnos', traerTurnosC)
+
+
 
 export default router;

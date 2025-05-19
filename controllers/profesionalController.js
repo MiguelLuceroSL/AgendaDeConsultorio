@@ -1,4 +1,4 @@
-import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS, actualizarNombreCompletoS} from "../services/profesionalService.js";
+import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS, actualizarNombreCompletoS, obtenerProfesionalesVistaS} from "../services/profesionalService.js";
 
 
 export const crearProfesionalC = async (req, res) => {

@@ -84,7 +84,7 @@ export const obtenerProfesionalesVistaM = (callback) => {
     JOIN profesional p ON pe.profesional_id = p.id
     JOIN especialidad e ON pe.especialidad_id = e.id
   `;
-  db.query(sql, (err, result) => {
+  connectDB.query(sql, (err, result) => {
     if (err) {
       console.error('Error en la consulta:', err);
       return callback(err);

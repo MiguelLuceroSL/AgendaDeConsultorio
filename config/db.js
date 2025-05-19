@@ -5,7 +5,7 @@ const connectDB = async () => {
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'aasss',
+    database: 'agenda_consultorios',
   });
 
   console.log('Conectado a la base de datos MySQL');
