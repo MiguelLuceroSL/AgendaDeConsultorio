@@ -1,14 +1,15 @@
 import connectDB from '../config/db.js';
 
-export const crearTurnoM = (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, callback) => {
+export const crearTurnoM = async(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) => {
+    try{
+        const connection = await connectDB();
     const sql = 'INSERT INTO turnos(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) VALUES (?,?,?,?,?,?)'
-    db.query(sql , [paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado], (err,res) =>{
-        if(err){
-            callback(err, null);
-            return
-        }
-        return callback(null, res)
-    })
+    const [result] = await connection.execute(sql, [paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado]);
+    return result;
+  } catch (error) {
+    console.error('Error al crear turno:', error);
+    throw(error);
+  }
 }
 
 export const selTurnoM = (nombre_completo,callback)=>{
@@ -76,7 +77,7 @@ export const traerTurnos = async(callback) => {
     JOIN 
         paciente p ON t.paciente_id = p.id
     JOIN 
-        profesional_especialidad pe ON t.agenda_id = pe.id
+        profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
     JOIN 
         profesional pr ON pe.profesional_id = pr.id
     JOIN 
@@ -94,13 +95,15 @@ export const traerTurnos = async(callback) => {
 };
 
 
-export const verificarTurnoExistenteM = (profesional_especialidad_id, fecha, hora, callback) => {
+
+export const verificarTurnoExistenteM = async (profesional_especialidad_id, fecha, hora) => {
+  try {
+    const connection = await connectDB();
     const sql = 'SELECT * FROM turnos WHERE profesional_especialidad_id = ? AND fecha = ? AND hora = ?';
-    db.query(sql, [profesional_especialidad_id, fecha, hora], (err, results) => {
-        if (err) {
-            callback(err, null);
-            return;
-        }
-        callback(null, results); 
-    });
+    const [results] = await connection.execute(sql, [profesional_especialidad_id, fecha, hora]);
+    return results;
+  } catch (error) {
+    console.error('Error al verificar si existe el turno:', error);
+    throw error;
+  }
 };

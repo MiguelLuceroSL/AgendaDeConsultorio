@@ -77,22 +77,23 @@ export const obtenerProfesionalesM = async (especialidad, callback) => {
 };
 
 
-export const obtenerProfesionalesVistaM = (callback) => {
+export const obtenerProfesionalesVistaM = async(callback) => {
+  try{
+        const connection = await connectDB();
   const sql = `
     SELECT pe.id ,p.nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
     FROM profesional_especialidad pe
     JOIN profesional p ON pe.profesional_id = p.id
     JOIN especialidad e ON pe.especialidad_id = e.id
   `;
-  connectDB.query(sql, (err, result) => {
-    if (err) {
-      console.error('Error en la consulta:', err);
-      return callback(err);
-    } else {
-      callback(null, result);
+     const [rows] = await connection.query(sql);
+
+    callback(null, rows);
+    }catch(error){
+    console.error('Error al traer profesionales:', error);
+    callback(error);
     }
-  });
-};
+  }
 
 
 

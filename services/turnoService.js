@@ -1,27 +1,19 @@
 import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM } from '../models/turnoModel.js';
 
-export const crearTurnoS = (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) => {
-    return new Promise((resolve, reject) => {
+export const crearTurnoS = async(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) => {
+        try{
         // Verificacion por si ya existe un turno para ese profesional en esa fecha y hora
-        verificarTurnoExistenteM(profesional_especialidad_id, fecha, hora, (err, results) => {
-            if (err) {
-                return reject(err);
-            }
-
-            if (results.length > 0) {
-                // Si ya existe, rechazamos la promesa con un mensaje de error
-                return reject(new Error('Ya existe un turno para este profesional en esa fecha y hora.'));
-            }
+        const turnoExistente = await verificarTurnoExistenteM(profesional_especialidad_id, fecha, hora);
+            if (turnoExistente.length > 0) {
+                throw new Error('Ya existe un turno para este profesional en esa fecha y hora.');
+    }
 
             // Si no existe, procedemos a crear el turno
-            crearTurnoM(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, (err, result) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(result);
-            });
-        });
-    });
+        const resultado = await crearTurnoM(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado);
+        return resultado;
+        } catch (error) {
+            throw error;
+  }
 };
 
 export const selTurnoS= (nombre_completo) =>{

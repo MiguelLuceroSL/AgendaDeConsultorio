@@ -16,7 +16,7 @@ router.put('/actualizar', actualizarTurnoC);
 
 router.put('/confirmar', confTurnoC);
 
-router.get('/listarProfesionales', obtenerProfesionalesVistaC);
+//router.get('/listarProfesionales', obtenerProfesionalesVistaC);
 
 //router.get('/gestionTurno', obtenerProfesionalesVistaC);
 
