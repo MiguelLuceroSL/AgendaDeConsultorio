@@ -98,8 +98,7 @@ selectProfesional.addEventListener('change', async () => {
 const diaFin = agenda.dia_fin ? new Date(agenda.dia_fin).toISOString().split('T')[0] : null;
 
 inputFecha.setAttribute('min', diaInicio);
-if (diaFin) inputFecha.setAttribute('max', diaFin);
-else inputFecha.removeAttribute('max'); // sin fin
+inputFecha.setAttribute('max', diaFin);
 
 inputFecha.disabled = false;
 inputFecha.value = ''; // reinicia la fecha seleccionada
