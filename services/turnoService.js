@@ -1,4 +1,4 @@
-import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM } from '../models/turnoModel.js';
+import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM,obtenerTurnosOcupados} from '../models/turnoModel.js';
 
 export const crearTurnoS = async(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) => {
         try{
@@ -71,3 +71,10 @@ export const traerTurnosS= () =>{
         })
     })
 }
+
+export const getTurnosOcupadosService = async (profesionalId, fecha) => {
+  if (!profesionalId || !fecha) {
+    throw new Error('Faltan parámetros');
+  }
+  return await obtenerTurnosOcupados(profesionalId, fecha);
+};

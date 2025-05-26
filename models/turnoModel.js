@@ -107,3 +107,18 @@ export const verificarTurnoExistenteM = async (profesional_especialidad_id, fech
     throw error;
   }
 };
+
+export const obtenerTurnosOcupados = async (profesionalId, fecha) => {
+  const connection = await connectDB();
+  const sql = `
+    SELECT hora FROM turnos
+    WHERE profesional_especialidad_id = ?
+      AND fecha = ?
+      AND estado IN ('Confirmado', 'Reservada', 'Presente', 'En consulta')
+  `;
+  const [rows] = await connection.execute(sql, [profesionalId, fecha]);
+  await connection.end();
+
+  return rows.map(row => row.hora.slice(0, 5));
+};
+

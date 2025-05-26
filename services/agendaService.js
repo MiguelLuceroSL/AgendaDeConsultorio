@@ -1,4 +1,4 @@
-import {crearAgendaM, obtenerAgendasM, actulizarAgendaM, borrarAgenda } from "../models/agendaModel.js"
+import {crearAgendaM, obtenerAgendasM, actulizarAgendaM, borrarAgenda,obtenerAgendasActivasM } from "../models/agendaModel.js"
 
 export const crearAgendaS = (profesional_especialidad_id, sucursal_id,dia_inicio, dia_fin, horario_inicio, horario_fin, estado) => {
     return new Promise((resolve, reject) => {
@@ -44,3 +44,18 @@ export const borrarAgendaS = (id) => {
         })
     })
 }
+
+
+export const obtenerAgendasActivasS = async (profesionalId) => {
+  if (!profesionalId) {
+    throw new Error('El ID del profesional es obligatorio.');
+  }
+
+  const agendas = await obtenerAgendasActivasM(profesionalId);
+
+  if (agendas.length === 0) {
+    throw new Error('El medico seleccionado no tiene turnos momentaneamente.');
+  }
+
+  return agendas;
+};

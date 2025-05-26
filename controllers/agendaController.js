@@ -1,5 +1,5 @@
 import db from '../config/db.js';
-import { crearAgendaS, obtenerAgendaS, actulizarAgendaS, borrarAgendaS } from '../services/agendaService.js'; 
+import { crearAgendaS, obtenerAgendaS, actulizarAgendaS, borrarAgendaS,obtenerAgendasActivasS } from '../services/agendaService.js'; 
 
 
 
@@ -51,4 +51,16 @@ export const borrarAgendaC = async (req,res) => {
     res.status(500).json({ message: 'Hubo un error al eliminar la agenda'})
   }
 }
+
+
+export const obtenerAgendasActivasC = async (req, res) => {
+  try {
+    const profesionalId = req.params.profesionalId;
+    const agendas = await obtenerAgendasActivasS(profesionalId);
+    res.status(200).json(agendas);
+  } catch (error) {
+    console.error('Error en controlador Agenda:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
 

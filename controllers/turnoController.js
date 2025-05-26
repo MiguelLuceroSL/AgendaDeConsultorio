@@ -1,4 +1,4 @@
-import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS } from '../services/turnoService.js';
+import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS,getTurnosOcupadosService} from '../services/turnoService.js';
 import {obtenerProfesionalesS, obtenerProfesionalesVistaS} from "../services/profesionalService.js";
 import { obtenerPacientesVistaS } from '../services/pacienteService.js';
 
@@ -94,6 +94,18 @@ export const obtenerProfesionalesVistaC = async (req, res) => {
         res.status(500).json({message: 'Hubo un error al obtener Turnos'})
     }
 }
+
+
+export const getTurnosOcupadosController = async (req, res) => {
+  try {
+    const { profesionalId, fecha } = req.query;
+    const horariosOcupados = await getTurnosOcupadosService(profesionalId, fecha);
+    res.json(horariosOcupados); // ["09:30", "10:00"]
+  } catch (err) {
+    console.error('Error al obtener turnos ocupados:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
 
 //secretariaPanel
 
