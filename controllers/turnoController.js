@@ -100,7 +100,7 @@ export const getTurnosOcupadosController = async (req, res) => {
   try {
     const { profesionalId, fecha } = req.query;
     const horariosOcupados = await getTurnosOcupadosService(profesionalId, fecha);
-    res.json(horariosOcupados); // ["09:30", "10:00"]
+    res.json(horariosOcupados);
   } catch (err) {
     console.error('Error al obtener turnos ocupados:', err);
     res.status(500).json({ error: 'Error interno del servidor' });

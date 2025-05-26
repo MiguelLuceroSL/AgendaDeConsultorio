@@ -1,4 +1,4 @@
-import db from '../config/db.js';
+
 import { crearAgendaS, obtenerAgendaS, actulizarAgendaS, borrarAgendaS,obtenerAgendasActivasS } from '../services/agendaService.js'; 
 
 
