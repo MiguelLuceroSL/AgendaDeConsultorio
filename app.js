@@ -33,7 +33,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Rutas
 app.use('/auth', authRoutes);
-app.use('/agenda', agendaRoutes);
+app.use('/agendas', agendaRoutes);
 app.use('/profesional', profesionalRoutes);
 app.use('/pacientes', pacienteRoutes);
 app.use('/admin', adminRoutes);

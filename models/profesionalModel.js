@@ -77,7 +77,7 @@ export const obtenerProfesionalesM = async (especialidad, callback) => {
 };
 
 
-export const obtenerProfesionalesVistaM = async(callback) => {
+export const obtenerProfesionalesVistaM = async() => {
   try{
         const connection = await connectDB();
   const sql = `
@@ -88,10 +88,10 @@ export const obtenerProfesionalesVistaM = async(callback) => {
   `;
      const [rows] = await connection.query(sql);
 
-    callback(null, rows);
+    return rows;
     }catch(error){
     console.error('Error al traer profesionales:', error);
-    callback(error);
+    throw error;
     }
   }
 

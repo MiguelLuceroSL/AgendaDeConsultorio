@@ -32,16 +32,14 @@ export const obtenerProfesionalesS = (especialidad) => {
   });
 };
 
-export const obtenerProfesionalesVistaS = () => {
-  return new Promise ((resolve,reject) => {
-    obtenerProfesionalesVistaM((err, result)=>{
-          if(err){
-              return reject(err)
-          }
-          resolve(result)
-      })
-  })
-}
+export const obtenerProfesionalesVistaS = async () => {
+  try {
+    return await obtenerProfesionalesVistaM();
+  } catch (error) {
+    console.error('Error en servicio obtenerProfesionalesVistaS:', error);
+    throw error;
+  }
+};
 
 
 export const actualizarEspecialidadS = (matricula, especialidad) => {

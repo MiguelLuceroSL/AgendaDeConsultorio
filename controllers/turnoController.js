@@ -72,6 +72,9 @@ export const obtenerProfesionalesVistaC = async (req, res) => {
     try {
       const profesionales = await obtenerProfesionalesVistaS();
       const pacientes = await obtenerPacientesVistaS()
+
+    console.log('Profesionales:', profesionales?.length);
+    console.log('Pacientes:', pacientes?.length);
       //const horarios = await traerTurnosPorFechaS()
       res.render('secretaria/secretariaGestionTurno', {profesionales, pacientes});
     } catch (err) {

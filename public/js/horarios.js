@@ -1,47 +1,29 @@
-/*document.addEventListener("DOMContentLoaded", () => {
- const fecha = document.getElementById("fecha")
-    fecha.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      try {
-        const response = await fetch("/turnosDisponibles/"+fecha, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-          credentials: "include",
-        });
-      } catch (error) {
-        console.error("Error al hacer login:", error.message);
-      }
-    });
-});*/
-
-
-/*document.addEventListener('DOMContentLoaded', () => {
-    const horarioSelect = document.getElementById('horario');
-    const horaInicio = 9;
-    const horaFin = 18;
-    const intervalo = 30; 
-  
-    for (let hora = horaInicio; hora < horaFin; hora++) {
-      for (let minutos = 0; minutos < 60; minutos += intervalo) {
-        const opcionHora = document.createElement('option');
-        const horaString = `${hora.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
-        opcionHora.value = horaString;
-        opcionHora.textContent = horaString;
-        horarioSelect.appendChild(opcionHora);
-      }
-    }
-  });*/
-
 document.addEventListener('DOMContentLoaded', () => {
 
 const selectProfesional = document.getElementById('profesional');
 const inputFecha = document.getElementById('fecha');
 const selectHorario = document.getElementById('horario');
 
-let agenda = null;
+const diasSemanaMap = {
+    'domingo': 'domingo',
+    'lunes': 'lunes',
+    'martes': 'martes',
+    'miercoles': 'miercoles',
+    'miércoles': 'miercoles',
+    'jueves': 'jueves',
+    'viernes': 'viernes',
+    'sabado': 'sabado',
+    'sábado': 'sabado'
+  };
+let fp = null;
+
+function normalizarDia(dia) {
+  return dia
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // separa las tildes de la letra y elimina tildes
+    .trim();
+}
+
 
 function renderHorarios(horarios) {
   selectHorario.innerHTML = '<option disabled selected>Selecciona un horario</option>';
@@ -53,21 +35,20 @@ function renderHorarios(horarios) {
   });
 }
 
-async function obtenerAgenda(profesionalId) {
+async function obtenerAgendas(profesionalId) {
   try {
-    const res = await fetch(`/agenda/agendas/${profesionalId}`);
-    const data = await res.json();
-    return data[0];
+    const res = await fetch(`/agendas/agendas/${profesionalId}`);
+    return await res.json();
   } catch (err) {
-    console.error('Error al obtener la agenda:', err);
-    return null;
+    console.error('Error al obtener las agendas:', err);
+    return [];
   }
 }
 
 async function obtenerTurnosOcupados(profesionalId, fecha) {
   try {
     const res = await fetch(`/turnos/horarios/ocupados?profesionalId=${profesionalId}&fecha=${fecha}`)
-    return await res.json(); // array de horarios ocupados
+    return await res.json();
   } catch (err) {
     console.error('Error al obtener turnos ocupados:', err);
     return [];
@@ -76,13 +57,13 @@ async function obtenerTurnosOcupados(profesionalId, fecha) {
 
 function generarHorarios(horaInicio, horaFin, duracion) {
   const horarios = [];
-  let actual = new Date(`1970-01-01T${horaInicio}`);
-  const fin = new Date(`1970-01-01T${horaFin}`);
+  let inicio = new Date(`2025-05-05T${horaInicio}`);
+  const fin = new Date(`2025-05-05T${horaFin}`);
   const minutos = parseInt(duracion.split(':')[1]);
 
-  while (actual < fin) {
-    horarios.push(actual.toTimeString().slice(0, 5));
-    actual.setMinutes(actual.getMinutes() + minutos);
+  while (inicio < fin) {
+    horarios.push(inicio.toTimeString().slice(0, 5)); //para solo usar la hora
+    inicio.setMinutes(inicio.getMinutes() + minutos); //le sumamos los tiempos de consulta
   }
 
   return horarios;
@@ -93,29 +74,101 @@ selectProfesional.addEventListener('change', async () => {
   const profesionalId = selectProfesional.value;
   if (!profesionalId) return;
 
-  agenda = await obtenerAgenda(profesionalId);
-  const diaInicio = new Date(agenda.dia_inicio).toISOString().split('T')[0];
-const diaFin = agenda.dia_fin ? new Date(agenda.dia_fin).toISOString().split('T')[0] : null;
+  const agendas = await obtenerAgendas(profesionalId);
+  if (!agendas.length) return;
 
-inputFecha.setAttribute('min', diaInicio);
-inputFecha.setAttribute('max', diaFin);
+  inputFecha.disabled = false;
+  inputFecha.value = '';
+  selectHorario.innerHTML = '<option disabled selected>Selecciona un horario</option>';
 
-inputFecha.disabled = false;
-inputFecha.value = ''; // reinicia la fecha seleccionada
-selectHorario.innerHTML = '<option disabled selected>Selecciona un horario</option>';
+  // Guardar agendas para usar luego
+  window._agendas = agendas;
+
+    const diasPermitidosSet = new Set(); //set elimina duplicados pero manteniendo horarios
+  agendas.forEach(agenda => {
+    agenda.dias.forEach(dia => diasPermitidosSet.add(dia));  // ya vienen sin tilde, no hace falta normalizar acá
+  });
+  window._diasPermitidos = [...diasPermitidosSet];
+  console.log('Días permitidos:', window._diasPermitidos);
+
+  if (fp) fp.destroy(); // destruyo si ya hay un flatpickr activo
+
+   const minDate = agendas.reduce((min, a) => {
+    const d = new Date(a.dia_inicio);
+    return d < min ? d : min;
+  }, new Date(8640000000000000));
+
+  const maxDate = agendas.reduce((max, a) => {
+    const d = new Date(a.dia_fin);
+    return d > max ? d : max;
+  }, new Date(-8640000000000000));
+
+  fp = flatpickr(inputFecha, {
+    dateFormat: "Y-m-d",
+    minDate,
+    maxDate,
+    disable: [
+      function(date) {
+        const dia = normalizarDia(date.toLocaleDateString('es-AR', { weekday: 'long' }));
+        // Devuelvo true para deshabilitar los días NO incluidos en el array de días permitidos
+        return !window._diasPermitidos.includes(dia);
+      }
+    ]
+  });
+
 });
+
+
+
+
 
 // Cuando seleccionan una fecha
 inputFecha.addEventListener('change', async () => {
   const profesionalId = selectProfesional.value;
   const fecha = inputFecha.value;
-  if (!profesionalId || !fecha || !agenda) return;
+  const agendas = window._agendas;
+  const diasPermitidos = window._diasPermitidos;
+  if (!profesionalId || !fecha || !Array.isArray(agendas) || agendas.length === 0) return;
+  
 
-  const horariosBase = generarHorarios(
-    agenda.horario_inicio,
-    agenda.horario_fin,
-    agenda.tiempo_consulta
-  );
+  const [ano, mes, dia] = fecha.split('-');
+  const fechaObj = new Date(ano, mes - 1, dia, 12);
+  const diaOriginal = fechaObj.toLocaleDateString('es-AR', { weekday: 'long' }).toLowerCase();
+  const diaSemana = diasSemanaMap[diaOriginal];
+
+  
+  const fechaStr = fechaObj.toISOString().slice(0, 10);
+
+  console.log('Día original:', diaOriginal);
+  console.log('Día mapeado:', diaSemana);
+  console.log('Agendas:', agendas);
+  console.log('Fecha seleccionada:', fechaStr);
+  
+
+  const agendasDelDia = agendas.filter(agenda => {
+    const inicioStr = new Date(agenda.dia_inicio).toISOString().slice(0, 10);
+    const finStr = new Date(agenda.dia_fin).toISOString().slice(0, 10);
+
+    console.log(`Analizando agenda ${agenda.id} con rango ${inicioStr} a ${finStr}`);
+
+    return (
+      agenda.dias.includes(diaSemana) &&
+      fechaStr >= inicioStr &&
+      fechaStr <= finStr
+    );
+  });
+
+  console.log('Agendas que coinciden con el día y fecha:', agendasDelDia);
+
+  let horariosBase = [];
+  for (const agenda of agendasDelDia) {
+    const franjas = generarHorarios(
+      agenda.horario_inicio,
+      agenda.horario_fin,
+      agenda.tiempo_consulta
+    );
+    horariosBase.push(...franjas);
+  }
 
   const ocupados = await obtenerTurnosOcupados(profesionalId, fecha);
   const disponibles = horariosBase.filter(h => !ocupados.includes(h));
