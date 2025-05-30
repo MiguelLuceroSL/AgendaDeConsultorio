@@ -4,17 +4,10 @@ const selectProfesional = document.getElementById('profesional');
 const inputFecha = document.getElementById('fecha');
 const selectHorario = document.getElementById('horario');
 
-const diasSemanaMap = {
-    'domingo': 'domingo',
-    'lunes': 'lunes',
-    'martes': 'martes',
-    'miercoles': 'miercoles',
-    'miércoles': 'miercoles',
-    'jueves': 'jueves',
-    'viernes': 'viernes',
-    'sabado': 'sabado',
-    'sábado': 'sabado'
-  };
+const FECHA_MAXIMA = new Date(8640000000000000); 
+const FECHA_MINIMA = new Date(-8640000000000000); 
+
+
 let fp = null;
 
 function normalizarDia(dia) {
@@ -75,8 +68,21 @@ selectProfesional.addEventListener('change', async () => {
   if (!profesionalId) return;
 
   const agendas = await obtenerAgendas(profesionalId);
-  if (!agendas.length) return;
+  if (!agendas.length){
+    alert("El medico no tiene turnos en este momento")
+    selectProfesional.value = ''
+    selectHorario.value = '';
+    selectHorario.disabled = true;
+    inputFecha.value = '';
+    inputFecha.disabled = true;
 
+    window._agendas = [];
+    window._diasPermitidos = [];
+
+    return
+  } 
+
+  selectHorario.disabled = false;
   inputFecha.disabled = false;
   inputFecha.value = '';
   selectHorario.innerHTML = '<option disabled selected>Selecciona un horario</option>';
@@ -93,15 +99,15 @@ selectProfesional.addEventListener('change', async () => {
 
   if (fp) fp.destroy(); // destruyo si ya hay un flatpickr activo
 
-   const minDate = agendas.reduce((min, a) => {
-    const d = new Date(a.dia_inicio);
-    return d < min ? d : min;
-  }, new Date(8640000000000000));
+   const minDate = agendas.reduce((min, agen) => {
+    const diaInicio = new Date(agen.dia_inicio);
+    return diaInicio < min ? diaInicio : min;
+  }, FECHA_MAXIMA);
 
-  const maxDate = agendas.reduce((max, a) => {
-    const d = new Date(a.dia_fin);
-    return d > max ? d : max;
-  }, new Date(-8640000000000000));
+  const maxDate = agendas.reduce((max, agen) => {
+    const diaFin = new Date(agen.dia_fin);
+    return diaFin > max ? diaFin : max;
+  }, FECHA_MINIMA);
 
   fp = flatpickr(inputFecha, {
     dateFormat: "Y-m-d",
@@ -127,29 +133,25 @@ inputFecha.addEventListener('change', async () => {
   const profesionalId = selectProfesional.value;
   const fecha = inputFecha.value;
   const agendas = window._agendas;
-  const diasPermitidos = window._diasPermitidos;
-  if (!profesionalId || !fecha || !Array.isArray(agendas) || agendas.length === 0) return;
+  if (!fecha || agendas.length === 0) return;
   
 
   const [ano, mes, dia] = fecha.split('-');
   const fechaObj = new Date(ano, mes - 1, dia, 12);
-  const diaOriginal = fechaObj.toLocaleDateString('es-AR', { weekday: 'long' }).toLowerCase();
-  const diaSemana = diasSemanaMap[diaOriginal];
+  const diaSemana = normalizarDia(fechaObj.toLocaleDateString('es-AR', { weekday: 'long' }));
 
   
   const fechaStr = fechaObj.toISOString().slice(0, 10);
 
-  console.log('Día original:', diaOriginal);
   console.log('Día mapeado:', diaSemana);
   console.log('Agendas:', agendas);
   console.log('Fecha seleccionada:', fechaStr);
   
 
-  const agendasDelDia = agendas.filter(agenda => {
+    const agendasDelDia = agendas.filter(agenda => {
     const inicioStr = new Date(agenda.dia_inicio).toISOString().slice(0, 10);
     const finStr = new Date(agenda.dia_fin).toISOString().slice(0, 10);
 
-    console.log(`Analizando agenda ${agenda.id} con rango ${inicioStr} a ${finStr}`);
 
     return (
       agenda.dias.includes(diaSemana) &&
@@ -167,7 +169,7 @@ inputFecha.addEventListener('change', async () => {
       agenda.horario_fin,
       agenda.tiempo_consulta
     );
-    horariosBase.push(...franjas);
+    horariosBase.push(...franjas); //se juntam todas las franjas horarias en un solo array
   }
 
   const ocupados = await obtenerTurnosOcupados(profesionalId, fecha);
