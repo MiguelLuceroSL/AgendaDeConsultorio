@@ -13,5 +13,3 @@ const connectDB = async () => {
 };
 
 export default connectDB;
-//para miguel aasss
-//para juan agenda_consultorio
