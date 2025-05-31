@@ -22,7 +22,6 @@ export const borrarPaciente = async (req, res) => {
         console.error("Error al borrar el paciente: ", err);
         res.json("Hubo un error al borrar el paciente.")
     }
-
 };
 
 export const obtenerPacientesVistaC = async (req, res) => {
@@ -87,7 +86,7 @@ export const pacientePerfilC = async (req, res) => {
 export const pacienteEditadoC = async (req, res) => {
     console.log('¡PACIENTE TRATANDO DE SER EDITADO!');
     console.log('REQ del EDITADO: ', req);
-}
+};
 
 export const pacienteEditarC = async (req, res) => {
     const id = req.res.req.user.id;
