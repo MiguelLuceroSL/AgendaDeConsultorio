@@ -56,8 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const minutos = parseInt(duracion.split(":")[1]);
 
     while (inicio < fin) {
-      horarios.push(inicio.toTimeString().slice(0, 5));
-      inicio.setMinutes(inicio.getMinutes() + minutos);
+      horarios.push(inicio.toTimeString().slice(0, 5)); //para solo usar la hora
+      inicio.setMinutes(inicio.getMinutes() + minutos); //le sumamos los tiempos de consulta
     }
 
     return horarios;
@@ -92,9 +92,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Guardar agendas para usar luego
     window._agendas = agendas;
 
-    const diasPermitidosSet = new Set();
+    const diasPermitidosSet = new Set(); //set elimina duplicados pero manteniendo horarios
     agendas.forEach((agenda) => {
-      agenda.dias.forEach((dia) => diasPermitidosSet.add(dia)); // ya vienen sin tilde, no hace falta normalizar acá
+      agenda.dias.forEach((dia) => diasPermitidosSet.add(dia));
     });
     window._diasPermitidos = [...diasPermitidosSet];
     console.log("Días permitidos:", window._diasPermitidos);
