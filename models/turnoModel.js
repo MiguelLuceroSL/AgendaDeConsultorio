@@ -64,7 +64,7 @@ export const traerTurnos = async(callback) => {
     try{
         const connection = await connectDB();
         const sql = `
-    SELECT 
+    SELECT DISTINCT
         t.id, 
         p.nombre_completo AS paciente_nombre, 
         pr.nombre_completo AS nombre_medico,
@@ -101,7 +101,7 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
     const connection = await connectDB();
 
     let sql = `
-      SELECT 
+      SELECT DISTINCT
           t.id, 
           p.nombre_completo AS paciente_nombre, 
           pr.nombre_completo AS nombre_medico,
