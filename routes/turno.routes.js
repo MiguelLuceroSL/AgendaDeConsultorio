@@ -25,5 +25,8 @@ router.get('/horarios/ocupados', getTurnosOcupadosController);
 router.get('/listarTurnos', traerTurnosC)
 
 
+/*router.get('/secretaria/home', (req, res) => {
+  res.redirect('/turnos/listarTurnos');
+});*/
 
 export default router;

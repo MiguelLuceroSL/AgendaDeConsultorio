@@ -1,4 +1,4 @@
-import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM,obtenerTurnosOcupados} from '../models/turnoModel.js';
+import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM,obtenerTurnosOcupados, traerTurnosFiltrados} from '../models/turnoModel.js';
 
 export const crearTurnoS = async(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) => {
         try{
@@ -71,6 +71,18 @@ export const traerTurnosS= () =>{
         })
     })
 }
+
+
+
+export const traerTurnosFiltradosS = (filtros) => {
+  return new Promise((resolve, reject) => {
+    traerTurnosFiltrados(filtros, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
 
 export const getTurnosOcupadosService = async (profesionalId, fecha) => {
   if (!profesionalId || !fecha) {

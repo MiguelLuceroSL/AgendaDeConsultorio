@@ -67,7 +67,8 @@ export const traerTurnos = async(callback) => {
     SELECT 
         t.id, 
         p.nombre_completo AS paciente_nombre, 
-        CONCAT(pr.nombre_completo, ' / ', e.nombre) AS profesional_especialidad, 
+        pr.nombre_completo AS nombre_medico,
+        e.nombre AS especialidad,
         t.detalle_turno, 
         t.fecha, 
         t.hora, 
@@ -92,6 +93,65 @@ export const traerTurnos = async(callback) => {
     callback(error);
     }
     
+};
+
+
+export const traerTurnosFiltrados = async (filtros, callback) => {
+  try {
+    const connection = await connectDB();
+
+    let sql = `
+      SELECT 
+          t.id, 
+          p.nombre_completo AS paciente_nombre, 
+          pr.nombre_completo AS nombre_medico,
+          e.nombre AS especialidad,
+          s.nombre AS sucursal,
+          t.detalle_turno, 
+          t.fecha, 
+          t.hora, 
+          t.estado
+      FROM turnos t
+      JOIN paciente p ON t.paciente_id = p.id
+      JOIN profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
+      JOIN profesional pr ON pe.profesional_id = pr.id
+      JOIN especialidad e ON pe.especialidad_id = e.id
+      JOIN agenda a ON a.profesional_especialidad_id = pe.id
+      JOIN sucursal s ON a.sucursal_id = s.id
+      WHERE 1 = 1
+    `;
+
+    const params = [];
+
+    if (filtros.sucursal) {
+      sql += ' AND s.nombre = ?';
+      params.push(filtros.sucursal);
+    }
+    if (filtros.paciente) {
+      sql += ' AND LOWER(p.nombre_completo) LIKE ?';
+      params.push(`%${filtros.paciente.toLowerCase()}%`);
+    }
+    if (filtros.profesional) {
+      sql += ' AND LOWER(pr.nombre_completo) LIKE ?';
+      params.push(`%${filtros.profesional.toLowerCase()}%`);
+    }
+
+    const [rows] = await connection.query(sql, params);
+    callback(null, rows);
+  } catch (err) {
+    callback(err);
+  }
+};
+
+export const obtenerTodasLasSucursales = async () => {
+  try {
+    const connection = await connectDB();
+    const [rows] = await connection.query('SELECT nombre FROM sucursal');
+    return rows;
+  } catch (err) {
+    console.error('Error al obtener sucursales:', err);
+    throw err;
+  }
 };
 
 

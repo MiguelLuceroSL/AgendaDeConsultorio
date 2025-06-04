@@ -1,6 +1,7 @@
-import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS,getTurnosOcupadosService} from '../services/turnoService.js';
+import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS,getTurnosOcupadosService, traerTurnosFiltradosS} from '../services/turnoService.js';
 import {obtenerProfesionalesS, obtenerProfesionalesVistaS} from "../services/profesionalService.js";
 import { obtenerPacientesVistaS } from '../services/pacienteService.js';
+import { obtenerTodasLasSucursales } from '../models/turnoModel.js';
 
 
 export const crearTurnoC = async (req, res) => {
@@ -84,7 +85,7 @@ export const obtenerProfesionalesVistaC = async (req, res) => {
   };
 
 
-  export const traerTurnosC = async (req,res) => {
+  /*export const traerTurnosC = async (req,res) => {
     try {
         const turnos = await traerTurnosS()
         turnos.forEach(turno => {
@@ -96,7 +97,31 @@ export const obtenerProfesionalesVistaC = async (req, res) => {
         console.error('Error al obtener Turnos: ', err)
         res.status(500).json({message: 'Hubo un error al obtener Turnos'})
     }
-}
+}*/
+
+export const traerTurnosC = async (req, res) => {
+  try {
+    const filtros = {
+      sucursal: req.query.sucursal || null,
+      paciente: req.query.paciente || null,
+      profesional: req.query.profesional || null
+    };
+
+    const turnos = await traerTurnosFiltradosS(filtros);
+    const sucursales = await obtenerTodasLasSucursales();
+
+    turnos.forEach(t => {
+      const date = new Date(t.fecha);
+      t.fecha = date.toLocaleDateString('es-AR');
+    });
+
+    res.render('secretaria/secretariaTurnos', { turnos, sucursales });
+  } catch (err) {
+    console.error('Error al obtener Turnos:', err);
+    res.status(500).json({ message: 'Hubo un error al obtener Turnos' });
+  }
+};
+
 
 
 export const getTurnosOcupadosController = async (req, res) => {
