@@ -66,10 +66,11 @@ export const traerTurnos = async(callback) => {
         const sql = `
     SELECT DISTINCT
         t.id, 
-        p.nombre_completo AS paciente_nombre, 
+        p.nombre_completo AS paciente_nombre,
         pr.nombre_completo AS nombre_medico,
         e.nombre AS especialidad,
-        t.detalle_turno, 
+        t.detalle_turno,
+        s.nombre AS sucursal,
         t.fecha, 
         t.hora, 
         t.estado
@@ -82,10 +83,58 @@ export const traerTurnos = async(callback) => {
     JOIN 
         profesional pr ON pe.profesional_id = pr.id
     JOIN 
-        especialidad e ON pe.especialidad_id = e.id;
+        especialidad e ON pe.especialidad_id = e.id
+    JOIN
+    	agenda a ON a.profesional_especialidad_id = pe.id
+    JOIN
+    	sucursal s ON a.sucursal_id = s.id
     `;
     
     const [rows] = await connection.query(sql);
+
+    callback(null, rows);
+    }catch(error){
+    console.error('Error al traer turnos:', error);
+    callback(error);
+    }
+    
+};
+
+export const traerTurnoPorIdM = async(id, callback) => {
+    try{
+        const connection = await connectDB();
+        const sql = `
+    SELECT DISTINCT
+        t.id, 
+        p.nombre_completo AS paciente_nombre,
+        p.dni,
+        p.obra_social,
+        p.telefono,
+        pr.nombre_completo AS nombre_medico,
+        e.nombre AS especialidad,
+        t.detalle_turno,
+        s.nombre AS sucursal,
+        t.fecha, 
+        t.hora, 
+        t.estado
+    FROM 
+        turnos t
+    JOIN 
+        paciente p ON t.paciente_id = p.id
+    JOIN 
+        profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
+    JOIN 
+        profesional pr ON pe.profesional_id = pr.id
+    JOIN 
+        especialidad e ON pe.especialidad_id = e.id
+    JOIN
+    	agenda a ON a.profesional_especialidad_id = pe.id
+    JOIN
+    	sucursal s ON a.sucursal_id = s.id
+    WHERE t.id = ?
+    `;
+    
+    const [rows] = await connection.query(sql, [id]);
 
     callback(null, rows);
     }catch(error){
@@ -102,23 +151,29 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
 
     let sql = `
       SELECT DISTINCT
-          t.id, 
-          p.nombre_completo AS paciente_nombre, 
-          pr.nombre_completo AS nombre_medico,
-          e.nombre AS especialidad,
-          s.nombre AS sucursal,
-          t.detalle_turno, 
-          t.fecha, 
-          t.hora, 
-          t.estado
-      FROM turnos t
-      JOIN paciente p ON t.paciente_id = p.id
-      JOIN profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
-      JOIN profesional pr ON pe.profesional_id = pr.id
-      JOIN especialidad e ON pe.especialidad_id = e.id
-      JOIN agenda a ON a.profesional_especialidad_id = pe.id
-      JOIN sucursal s ON a.sucursal_id = s.id
-      WHERE 1 = 1
+        t.id, 
+        p.nombre_completo AS paciente_nombre, 
+        pr.nombre_completo AS nombre_medico,
+        e.nombre AS especialidad,
+        t.detalle_turno,
+        s.nombre AS sucursal,
+        t.fecha, 
+        t.hora, 
+        t.estado
+    FROM 
+        turnos t
+    JOIN 
+        paciente p ON t.paciente_id = p.id
+    JOIN 
+        profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
+    JOIN 
+        profesional pr ON pe.profesional_id = pr.id
+    JOIN 
+        especialidad e ON pe.especialidad_id = e.id
+    JOIN
+    	agenda a ON a.profesional_especialidad_id = pe.id
+    JOIN
+    	sucursal s ON a.sucursal_id = s.id
     `;
 
     const params = [];
@@ -182,3 +237,28 @@ export const obtenerTurnosOcupados = async (profesionalId, fecha) => {
   return rows.map(row => row.hora.slice(0, 5));
 };
 
+/*    SELECT DISTINCT
+        t.id, 
+        p.nombre_completo AS paciente_nombre, 
+        pr.nombre_completo AS nombre_medico,
+        e.nombre AS especialidad,
+        t.detalle_turno,
+        s.nombre AS sucursal,
+        t.fecha, 
+        t.hora, 
+        t.estado
+    FROM 
+        turnos t
+    JOIN 
+        paciente p ON t.paciente_id = p.id
+    JOIN 
+        profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
+    JOIN 
+        profesional pr ON pe.profesional_id = pr.id
+    JOIN 
+        especialidad e ON pe.especialidad_id = e.id
+    JOIN
+    	agenda a ON pe.profesional_id = a.profesional_especialidad_id
+    JOIN
+    	sucursal s ON a.sucursal_id = s.id
+    	*/

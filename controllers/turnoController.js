@@ -1,4 +1,4 @@
-import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS,getTurnosOcupadosService, traerTurnosFiltradosS} from '../services/turnoService.js';
+import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS,getTurnosOcupadosService, traerTurnosFiltradosS, traerTurnoPorIdS} from '../services/turnoService.js';
 import {obtenerProfesionalesS, obtenerProfesionalesVistaS} from "../services/profesionalService.js";
 import { obtenerPacientesVistaS } from '../services/pacienteService.js';
 import { obtenerTodasLasSucursales } from '../models/turnoModel.js';
@@ -132,6 +132,21 @@ export const getTurnosOcupadosController = async (req, res) => {
   } catch (err) {
     console.error('Error al obtener turnos ocupados:', err);
     res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+export const traerTurnoPorIdC = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const turno = await traerTurnoPorIdS(id);
+    if (!turno) {
+      return res.status(404).render('error', { message: 'Turno no encontrado' });
+    }
+
+    res.render('secretaria/secretariaDetalleTurno', { turno });
+  } catch (error) {
+    console.error('Error al obtener los detalles del turno:', error);
+    res.status(500).send('Error al cargar detalles');
   }
 };
 
