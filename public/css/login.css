@@ -11,10 +11,6 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
-header{
-    position: absolute;
-    top: 0;
-}
 
 .seccion{
     width: 60vw;

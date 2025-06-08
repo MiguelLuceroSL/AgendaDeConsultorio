@@ -50,6 +50,7 @@ viejo
 }*/
 
 .formRegistro {
+    height: 1200px;
     display: flex;
     flex-wrap: wrap; /* Permite el ajuste a nuevas filas */
     gap: 20px; /* Espaciado entre las columnas y filas */

@@ -27,6 +27,7 @@ body {
 }
 
 .formRegistro {
+    height: 40vh;
     display: flex;
     flex-wrap: wrap; /* Permite que los elementos se ajusten en filas */
     gap: 20px; /* Espacio entre los campos */
