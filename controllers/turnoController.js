@@ -143,6 +143,13 @@ export const traerTurnoPorIdC = async (req, res) => {
       return res.status(404).render('error', { message: 'Turno no encontrado' });
     }
 
+    const fecha = new Date(turno.fecha);
+    const opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const fechaFormateada = fecha.toLocaleDateString('es-AR', opcionesFecha);
+    turno.fechaFormateada = fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
+
+    turno.horaFormateada = turno.hora?.slice(0, 5) || turno.hora;
+
     res.render('secretaria/secretariaDetalleTurno', { turno });
   } catch (error) {
     console.error('Error al obtener los detalles del turno:', error);
