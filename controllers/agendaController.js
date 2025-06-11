@@ -7,39 +7,107 @@ import {obtenerProfesionalesVistaM} from "../models/profesionalModel.js";
 
 export const crearAgendaC = async (req, res) => {
   try {
-    const { profesional_especialidad_id,sucursal_id, dia_inicio, dia_fin, tiempo_consulta, dias } = req.body;
+    const { profesional_especialidad_id, sucursal_id, dia_inicio, dia_fin, tiempo_consulta, dias } = req.body;
 
+    console.log("🚀 ~ crearAgendaC ~ req.body:", req.body);
+
+    if (!profesional_especialidad_id || !sucursal_id || !dia_inicio || !dia_fin || !tiempo_consulta) {
+      return res.status(400).json({ error: "Todos los campos son requeridos" });
+    }
+
+    const diasActivos = Object.values(dias).some(dia => dia.activo);
+    if (!diasActivos) {
+      return res.status(400).json({ error: "Debe seleccionar al menos un día de atención" });
+    }
+
+    const agendasCreadas = [];
+
+    // Procesar cada día
     for (const [dia, datos] of Object.entries(dias)) {
       if (datos.activo) {
         const franjas = [];
 
+        // Verificar y agregar turno mañana
         if (datos.manana_inicio && datos.manana_fin) {
-          franjas.push({ inicio: datos.manana_inicio, fin: datos.manana_fin });
-        }
-        if (datos.tarde_inicio && datos.tarde_fin) {
-          franjas.push({ inicio: datos.tarde_inicio, fin: datos.tarde_fin });
+          if (datos.manana_inicio >= datos.manana_fin) {
+            return res.status(400).json({ 
+              error: `El horario de mañana del ${dia} es inválido: la hora de inicio debe ser menor que la de fin` 
+            });
+          }
+          franjas.push({ 
+            inicio: datos.manana_inicio, 
+            fin: datos.manana_fin,
+            turno: 'mañana'
+          });
         }
 
+        // Verificar y agregar turno tarde
+        if (datos.tarde_inicio && datos.tarde_fin) {
+          if (datos.tarde_inicio >= datos.tarde_fin) {
+            return res.status(400).json({ 
+              error: `El horario de tarde del ${dia} es inválido: la hora de inicio debe ser menor que la de fin` 
+            });
+          }
+          franjas.push({ 
+            inicio: datos.tarde_inicio, 
+            fin: datos.tarde_fin,
+            turno: 'tarde'
+          });
+        }
+
+        // Verificar que no se solapen los turnos del mismo día
+        if (franjas.length === 2) {
+          const [mañana, tarde] = franjas;
+          if (mañana.fin > tarde.inicio) {
+            return res.status(400).json({ 
+              error: `Los horarios de mañana y tarde del ${dia} se solapan` 
+            });
+          }
+        }
+
+        // Crear agenda para cada franja horaria
         for (const franja of franjas) {
-          await crearAgendaS(
-            {
-              profesional_especialidad_id,
-              sucursal_id,
-              horario_inicio: franja.inicio,
-              horario_fin: franja.fin,
-              tiempo_consulta,
-              dia_inicio,
-              dia_fin
-            },
-            [dia] // lista de días asociados a esa franja
-          );
+          try {
+            const resultado = await crearAgendaS(
+              {
+                profesional_especialidad_id,
+                sucursal_id,
+                horario_inicio: franja.inicio,
+                horario_fin: franja.fin,
+                tiempo_consulta,
+                dia_inicio,
+                dia_fin
+              },
+              [dia] // lista de días asociados a esa franja
+            );
+            
+            agendasCreadas.push({
+              dia,
+              turno: franja.turno,
+              horario: `${franja.inicio} - ${franja.fin}`,
+              agendaId: resultado.agendaId
+            });
+
+          } catch (error) {
+            console.error(`Error creando agenda para ${dia} (${franja.turno}):`, error);
+            return res.status(error.status || 500).json({ 
+              error: error.message || "Error interno del servidor" 
+            });
+          }
         }
       }
     }
 
-    res.status(201).json({ message: 'Agenda creada correctamente' });
+    res.status(201).json({
+      message: "Agendas creadas exitosamente",
+      agendas: agendasCreadas
+    });
+
   } catch (error) {
-    res.status(500).json({ error: 'Error al crear agenda' });
+    console.error('Error en crearAgendaC:', error);
+    res.status(500).json({ 
+      error: "Error interno del servidor al crear las agendas" 
+    });
   }
 };
 

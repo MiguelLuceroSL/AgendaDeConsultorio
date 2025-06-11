@@ -56,4 +56,79 @@ document.addEventListener('DOMContentLoaded',() =>{
     })
 
     })
+
+      const form = document.querySelector('.form-agenda');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // Construir el objeto completo, por ejemplo:
+  const profesional_especialidad_id = form.profesional_especialidad_id.value;
+  const sucursal_id = form.sucursal_id.value;
+  const dia_inicio = form.dia_inicio.value;
+  const dia_fin = form.dia_fin.value;
+  const tiempo_consulta = form.tiempo_consulta.value;
+
+  
+   const diasMapping = {
+    'Lunes': 'lunes',
+    'Martes': 'martes',
+    'Miércoles': 'miercoles',
+    'Jueves': 'jueves',
+    'Viernes': 'viernes',
+    'Sábado': 'sabado',
+    'Domingo': 'domingo'
+  };
+
+  const dias = {};
+
+  document.querySelectorAll('tbody tr').forEach(tr => {
+    const diaTexto = tr.querySelector('td').textContent.trim();
+    const diaKey = diasMapping[diaTexto];
+    const activo = tr.querySelector('input[type="checkbox"]').checked;
+    const manana_inicio = tr.querySelector('input[name*="[manana_inicio]"]').value;
+    const manana_fin = tr.querySelector('input[name*="[manana_fin]"]').value;
+    const tarde_inicio = tr.querySelector('input[name*="[tarde_inicio]"]').value;
+    const tarde_fin = tr.querySelector('input[name*="[tarde_fin]"]').value;
+
+    dias[diaKey] = {
+      activo,
+      manana_inicio,
+      manana_fin,
+      tarde_inicio,
+      tarde_fin
+    };
+  });
+
+  const bodyData = {
+    profesional_especialidad_id,
+    sucursal_id,
+    dia_inicio,
+    dia_fin,
+    tiempo_consulta,
+    dias
+  };
+
+  try {
+    const response = await fetch('/agendas/crear', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bodyData)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      alert(errorData.error || "Error al crear la agenda");
+    } else {
+      alert("Agenda creada correctamente");
+      window.location.href = "/secretaria/home";
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Error de red. Intente nuevamente.");
+  }
+});
 })

@@ -1,8 +1,31 @@
-import {crearAgendaM, obtenerAgendasM, actulizarAgendaM, borrarAgenda,obtenerAgendasActivasM, obtenerSucursales } from "../models/agendaModel.js"
+import {crearAgendaM, obtenerAgendasM, actulizarAgendaM, borrarAgenda,obtenerAgendasActivasM, obtenerSucursales, obtenerAgendasOcupadasM } from "../models/agendaModel.js"
 
 export const crearAgendaS = async (agendaData, diasSemana) => {
   try{
-  return await crearAgendaM(agendaData, diasSemana);
+  const {profesional_especialidad_id, dia_inicio, dia_fin, horario_inicio, horario_fin} = agendaData
+
+ for (const dia of diasSemana) {
+      const conflictos = await obtenerAgendasOcupadasM(
+        profesional_especialidad_id,
+        dia_inicio,
+        dia_fin,
+        horario_inicio,
+        horario_fin,
+        dia
+      );
+
+      if (conflictos.length > 0) {
+        const error = new Error(
+          `Ya existe una agenda para el día ${dia} en el horario ${horario_inicio} - ${horario_fin} en el rango de fechas especificado`
+        );
+        error.status = 400;
+        throw error;
+      }
+    }
+
+  console.log("🚀 ~ crearAgendaS ~ agendaData:", agendaData)
+  return await crearAgendaM (agendaData, diasSemana)
+
   }catch(error){
     console.error('Error en el servicio al crear agenda:', error);
     throw error;

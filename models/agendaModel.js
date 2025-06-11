@@ -26,6 +26,7 @@ export const crearAgendaM = async (agendaData, diasSemana) => {
       agendaData.dia_fin,
       'Activo'
     ]);
+    console.log("🚀 ~ crearAgendaM ~ result:", result)
 
     const agendaId = result.insertId;
 
@@ -101,3 +102,44 @@ export const obtenerAgendasActivasPorProfesional = async (profesionalId) => {
     return [];
   }
 };
+
+export const obtenerAgendasOcupadasM= async(profesional_especialidad_id, dia_inicio, dia_fin, horario_inicio, horario_fin, dia_semana ) => {
+
+  try{
+    const connection = await connectDB()
+
+    const sql = `
+    SELECT a.*, ad.dia_semana
+      FROM agenda a
+      JOIN agenda_dias ad ON ad.agenda_id = a.id
+      WHERE a.profesional_especialidad_id = ?
+        AND ad.dia_semana = ?
+        AND a.estado = 'Activo'
+        AND (
+          (a.dia_inicio <= ? AND a.dia_fin >= ?)
+          OR (a.dia_inicio >= ? AND a.dia_inicio <= ?)
+        )
+        AND (
+          (a.horario_inicio < ? AND a.horario_fin > ?)
+          OR (a.horario_inicio < ? AND a.horario_fin > ?)
+          OR (a.horario_inicio >= ? AND a.horario_fin <= ?)
+        )
+    `;
+
+    const [rows] = await connection.query(sql,[
+      profesional_especialidad_id,
+      dia_semana,
+      dia_fin, dia_inicio,
+      dia_inicio, dia_fin,
+      horario_fin, horario_inicio,
+      horario_inicio, horario_fin,
+      horario_inicio, horario_fin
+    ])
+
+    return rows.map(row => row.dia_semana)
+  
+  }catch (error){
+    console.error ('Error al obtener las agendas ocuapadas', error)
+    throw error
+  }
+}
