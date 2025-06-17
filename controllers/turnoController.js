@@ -115,6 +115,10 @@ export const traerTurnosC = async (req, res) => {
       t.fecha = date.toLocaleDateString('es-AR');
     });
 
+    console.log('Filtros aplicados: ', filtros);
+    console.log('Turnos obtenidos: ', turnos);
+    console.log('Sucursales obtenidas: ', sucursales);
+
     res.render('secretaria/secretariaTurnos', { turnos, sucursales });
   } catch (err) {
     console.error('Error al obtener Turnos:', err);

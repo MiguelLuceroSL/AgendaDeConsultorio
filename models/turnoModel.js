@@ -192,6 +192,7 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
     }
 
     const [rows] = await connection.query(sql, params);
+    console.log('Filas obtenidas:', rows);
     callback(null, rows);
   } catch (err) {
     callback(err);
