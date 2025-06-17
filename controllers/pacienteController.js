@@ -1,4 +1,5 @@
 import { crearPacienteS, borrarPacienteS, obtenerPacientesVistaS, pacienteByUserIdS, updateFotoS } from '../services/pacienteService.js';
+import { obtenerProfesionalesVistaS } from '../services/profesionalService.js';
 
 export const crearPaciente = async (req, res) => {
     const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, icon } = req.body;
@@ -50,16 +51,28 @@ export const obtenerPacienteDniC = async (req, res) => {
 };
 
 export const pacienteByUserIdC = async (req, res) => {
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-    console.log('reqqqqqqqqq QQQQQQQQQQQQQQQQQQQQQQQQQQ', req.res.req.user.id)
     const id = req.res.req.user.id;
     try {
-        console.log('entramos al pacienteByUserIdController')
-        console.log('ID CONTROLLER: ', id)
         const paciente = await pacienteByUserIdS(id)
-        console.log('tenemos al paciente!')
-        console.log('paciente: ', paciente);
         res.render('paciente/paciente', { paciente });
+    } catch (error) {
+        console.error('Error al obtener el paciente: ', error);
+        res.status(500).json({ message: 'Hubo un error al obtener el paciente.' });
+    }
+};
+
+export const pacienteByUserIdTurnoC = async (req, res) => {
+    const id = req.res.req.user.id;
+    let idPaciente = 0;
+    try {
+        const profesionales = await obtenerProfesionalesVistaS();
+        const paciente = await pacienteByUserIdS(id)
+        console.log("🚀 ~ pacienteByUserIdTurnoC ~ profesionales:", profesionales)
+        console.log('Profesionales:', profesionales?.length);
+        console.log("🚀 ~ pacienteByUserIdTurnoC ~ paciente:", paciente)
+        console.log('paciente iddddddddddd:', paciente[0].id);
+        idPaciente = paciente[0].id;
+        res.render('paciente/pacienteTurno', { idPaciente, paciente, profesionales });
     } catch (error) {
         console.error('Error al obtener el paciente: ', error);
         res.status(500).json({ message: 'Hubo un error al obtener el paciente.' });

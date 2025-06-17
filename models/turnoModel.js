@@ -1,21 +1,23 @@
 import connectDB from '../config/db.js';
 
-export const crearTurnoM = async(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) => {
-    try{
+export const crearTurnoM = async (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) => {
+    try {
         const connection = await connectDB();
-    const sql = 'INSERT INTO turnos(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) VALUES (?,?,?,?,?,?)'
-    const [result] = await connection.execute(sql, [paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado]);
-    return result;
-  } catch (error) {
-    console.error('Error al crear turno:', error);
-    throw(error);
-  }
+        const sql = 'INSERT INTO turnos(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) VALUES (?,?,?,?,?,?)'
+        console.log('Datos para crear turno:', paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado);
+        console.log('SQL:', sql);
+        const [result] = await connection.execute(sql, [paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado]);
+        return result;
+    } catch (error) {
+        console.error('Error al crear turno:', error);
+        throw (error);
+    }
 }
 
-export const selTurnoM = (nombre_completo,callback)=>{
+export const selTurnoM = (nombre_completo, callback) => {
     const sql = 'SELECT t.detalle_turno, t.fecha, t.hora, t.estado, t.confirmado FROM turnos t JOIN paciente p ON t.paciente_id = p.id WHERE p.nombre_completo = ?;'
-    db.query(sql , [nombre_completo], (err,res) =>{
-        if(err){
+    db.query(sql, [nombre_completo], (err, res) => {
+        if (err) {
             callback(err, null);
             return
         }
@@ -36,32 +38,32 @@ export const borrarTurnoM = (id, callback) => {
     });
 }
 
-export const actuTurnoM =(fecha, hora, estado,id, callback) =>{
-    const sql ='UPDATE turnos SET fecha = ?, hora = ?, estado = ? WHERE id = ?'
+export const actuTurnoM = (fecha, hora, estado, id, callback) => {
+    const sql = 'UPDATE turnos SET fecha = ?, hora = ?, estado = ? WHERE id = ?'
 
-    db.query (sql,[ fecha, hora, estado, id], (err,res) => {
-        if(err){
-            callback(err,null)
+    db.query(sql, [fecha, hora, estado, id], (err, res) => {
+        if (err) {
+            callback(err, null)
             return;
         }
-        callback(null,res)
+        callback(null, res)
     })
 }
 
-export const confTurnoM =(confirmado, id, callback) =>{
-    const sql ='UPDATE turnos SET confirmado = ? WHERE id = ?'
+export const confTurnoM = (confirmado, id, callback) => {
+    const sql = 'UPDATE turnos SET confirmado = ? WHERE id = ?'
 
-    db.query (sql,[confirmado, id], (err,res) => {
-        if(err){
-            callback(err,null)
+    db.query(sql, [confirmado, id], (err, res) => {
+        if (err) {
+            callback(err, null)
             return;
         }
-        callback(null,res)
+        callback(null, res)
     })
 }
 
-export const traerTurnos = async(callback) => {
-    try{
+export const traerTurnos = async (callback) => {
+    try {
         const connection = await connectDB();
         const sql = `
     SELECT DISTINCT
@@ -89,19 +91,19 @@ export const traerTurnos = async(callback) => {
     JOIN
     	sucursal s ON a.sucursal_id = s.id
     `;
-    
-    const [rows] = await connection.query(sql);
 
-    callback(null, rows);
-    }catch(error){
-    console.error('Error al traer turnos:', error);
-    callback(error);
+        const [rows] = await connection.query(sql);
+
+        callback(null, rows);
+    } catch (error) {
+        console.error('Error al traer turnos:', error);
+        callback(error);
     }
-    
+
 };
 
-export const traerTurnoPorIdM = async(id, callback) => {
-    try{
+export const traerTurnoPorIdM = async (id, callback) => {
+    try {
         const connection = await connectDB();
         const sql = `
     SELECT DISTINCT
@@ -133,23 +135,23 @@ export const traerTurnoPorIdM = async(id, callback) => {
     	sucursal s ON a.sucursal_id = s.id
     WHERE t.id = ?
     `;
-    
-    const [rows] = await connection.query(sql, [id]);
 
-    callback(null, rows);
-    }catch(error){
-    console.error('Error al traer turnos:', error);
-    callback(error);
+        const [rows] = await connection.query(sql, [id]);
+
+        callback(null, rows);
+    } catch (error) {
+        console.error('Error al traer turnos:', error);
+        callback(error);
     }
-    
+
 };
 
 
 export const traerTurnosFiltrados = async (filtros, callback) => {
-  try {
-    const connection = await connectDB();
+    try {
+        const connection = await connectDB();
 
-    let sql = `
+        let sql = `
       SELECT DISTINCT
         t.id, 
         p.nombre_completo AS paciente_nombre, 
@@ -176,66 +178,65 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
     	sucursal s ON a.sucursal_id = s.id
     `;
 
-    const params = [];
+        const params = [];
 
-    if (filtros.sucursal) {
-      sql += ' AND s.nombre = ?';
-      params.push(filtros.sucursal);
-    }
-    if (filtros.paciente) {
-      sql += ' AND LOWER(p.nombre_completo) LIKE ?';
-      params.push(`%${filtros.paciente.toLowerCase()}%`);
-    }
-    if (filtros.profesional) {
-      sql += ' AND LOWER(pr.nombre_completo) LIKE ?';
-      params.push(`%${filtros.profesional.toLowerCase()}%`);
-    }
+        if (filtros.sucursal) {
+            sql += ' AND s.nombre = ?';
+            params.push(filtros.sucursal);
+        }
+        if (filtros.paciente) {
+            sql += ' AND LOWER(p.nombre_completo) LIKE ?';
+            params.push(`%${filtros.paciente.toLowerCase()}%`);
+        }
+        if (filtros.profesional) {
+            sql += ' AND LOWER(pr.nombre_completo) LIKE ?';
+            params.push(`%${filtros.profesional.toLowerCase()}%`);
+        }
 
-    const [rows] = await connection.query(sql, params);
-    console.log('Filas obtenidas:', rows);
-    callback(null, rows);
-  } catch (err) {
-    callback(err);
-  }
+        const [rows] = await connection.query(sql, params);
+        callback(null, rows);
+    } catch (err) {
+        callback(err);
+    }
 };
 
 export const obtenerTodasLasSucursales = async () => {
-  try {
-    const connection = await connectDB();
-    const [rows] = await connection.query('SELECT nombre FROM sucursal');
-    return rows;
-  } catch (err) {
-    console.error('Error al obtener sucursales:', err);
-    throw err;
-  }
+    try {
+        const connection = await connectDB();
+        const [rows] = await connection.query('SELECT nombre FROM sucursal');
+        return rows;
+    } catch (err) {
+        console.error('Error al obtener sucursales:', err);
+        throw err;
+    }
 };
 
 
 
 export const verificarTurnoExistenteM = async (profesional_especialidad_id, fecha, hora) => {
-  try {
-    const connection = await connectDB();
-    const sql = 'SELECT * FROM turnos WHERE profesional_especialidad_id = ? AND fecha = ? AND hora = ?';
-    const [results] = await connection.execute(sql, [profesional_especialidad_id, fecha, hora]);
-    return results;
-  } catch (error) {
-    console.error('Error al verificar si existe el turno:', error);
-    throw error;
-  }
+    try {
+        const connection = await connectDB();
+        const sql = 'SELECT * FROM turnos WHERE profesional_especialidad_id = ? AND fecha = ? AND hora = ?';
+        const [results] = await connection.execute(sql, [profesional_especialidad_id, fecha, hora]);
+        return results;
+    } catch (error) {
+        console.error('Error al verificar si existe el turno:', error);
+        throw error;
+    }
 };
 
 export const obtenerTurnosOcupados = async (profesionalId, fecha) => {
-  const connection = await connectDB();
-  const sql = `
+    const connection = await connectDB();
+    const sql = `
     SELECT hora FROM turnos
     WHERE profesional_especialidad_id = ?
       AND fecha = ?
       AND estado IN ('Confirmado', 'Reservada', 'Presente', 'En consulta')
   `;
-  const [rows] = await connection.execute(sql, [profesionalId, fecha]);
-  await connection.end();
+    const [rows] = await connection.execute(sql, [profesionalId, fecha]);
+    await connection.end();
 
-  return rows.map(row => row.hora.slice(0, 5));
+    return rows.map(row => row.hora.slice(0, 5));
 };
 
 /*    SELECT DISTINCT
@@ -259,7 +260,7 @@ export const obtenerTurnosOcupados = async (profesionalId, fecha) => {
     JOIN 
         especialidad e ON pe.especialidad_id = e.id
     JOIN
-    	agenda a ON pe.profesional_id = a.profesional_especialidad_id
+        agenda a ON pe.profesional_id = a.profesional_especialidad_id
     JOIN
-    	sucursal s ON a.sucursal_id = s.id
-    	*/
+        sucursal s ON a.sucursal_id = s.id
+        */

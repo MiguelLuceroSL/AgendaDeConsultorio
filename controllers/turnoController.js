@@ -18,6 +18,20 @@ export const crearTurnoC = async (req, res) => {
     }
 };
 
+export const crearTurnoPacienteC = async (req, res) => {
+    console.log("crear turno paciente, body: ",req.body);
+    const { paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora } = req.body;
+    const estado = "Confirmado"; 
+  
+    try {
+      await crearTurnoS(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado);
+      res.render('paciente/pacienteTurnoSuccess');
+    } catch (err) {
+      console.error('Error al crear turno:', err.message);
+      res.status(500).json({ message: err.message });
+    }
+};
+
 export const selTurnoC = async (req,res) => {
     const {nombre_completo} = req.query
 
@@ -114,10 +128,6 @@ export const traerTurnosC = async (req, res) => {
       const date = new Date(t.fecha);
       t.fecha = date.toLocaleDateString('es-AR');
     });
-
-    console.log('Filtros aplicados: ', filtros);
-    console.log('Turnos obtenidos: ', turnos);
-    console.log('Sucursales obtenidas: ', sucursales);
 
     res.render('secretaria/secretariaTurnos', { turnos, sucursales });
   } catch (err) {

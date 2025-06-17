@@ -1,9 +1,10 @@
 import express from 'express';
-import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC} from '../controllers/turnoController.js';
+import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC, crearTurnoPacienteC} from '../controllers/turnoController.js';
 
 const router = express.Router()
 
 router.post('/crear', crearTurnoC);
+router.post('/crearPaciente', crearTurnoPacienteC);
 router.get('/secretaria/secretariaTurnoSuccess', (req, res) => {
     res.render('secretaria/secretariaTurnoSuccess')
 })

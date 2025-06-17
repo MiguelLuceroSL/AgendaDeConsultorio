@@ -75,7 +75,7 @@ export const obtenerPacienteDniM = async (dni, callback) => {
 export const pacienteByUserIdM = async (usuario_id, callback) => {
   try {
     const db = await connectDB();
-    const sql = `SELECT nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, icon FROM paciente WHERE usuario_id = ?`;
+    const sql = `SELECT id, nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, icon FROM paciente WHERE usuario_id = ?`;
     const [result] = await db.execute(sql, [usuario_id]);
     callback(null, result);
   } catch (err) {

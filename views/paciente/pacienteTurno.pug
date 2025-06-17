@@ -1,12 +1,34 @@
 doctype html
 html
-    head
-        title Vista Paciente
-        link(rel="stylesheet" href="/css/pacienteTurno.css")
-        link(rel="stylesheet" href="/css/footer.css")
-    body
-        include ../includes/headerPaciente
-        h1 Bienvenido, paciente!
-        p Pronto podrás sacar tus propios turnos, por el momento lo hará la secretaria por vos!
-        include ../includes/footer
-        script(src="/js/logout.js")
+  head
+    title Vista Paciente
+    link(rel="stylesheet" href="/css/secretariaGestionTurno.css")
+    link(rel="stylesheet" href="/css/pacienteTurno.css")
+    link(rel="stylesheet" href="/css/footer.css")
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css")
+  body
+    include ../includes/headerPaciente
+    h1 ¡Bienvenido, paciente!
+    form(action="/turnos/crearPaciente" method="POST" class="formTurnos") 
+      h3 Selecciona un Profesional
+      if profesionales && profesionales.length
+        select(name="profesional_especialidad_id" id="profesional" required)
+          option(value="" selected disabled) Selecciona un profesional
+            each profesional in profesionales
+              option(value=profesional.id)= `${profesional.id}  ${profesional.nombre_completo} / ${profesional.especialidad}`
+      else
+        p no se encontraron profesionales
+      input(type="hidden" name="paciente_id" value=idPaciente)
+      label(for="fecha") Selecciona la fecha:
+      input(type="text" name="fecha" id="fecha" required)
+      label(for="horario") Selecciona un horario:
+      select(name="hora" id="horario" required)
+        option(value="" selected disabled) Selecciona un horario
+      label(for="detalle_turno") Detalle del turno:
+      textarea(name="detalle_turno" id="detalle_turno" rows="4" placeholder="Detalles adicionales del turno" required)
+      input(type="hidden" name="estado" value="Confirmado")
+      button(type="submit") Crear Turno
+    include ../includes/footer
+    script(src="/js/logout.js")
+    script(src="/js/horarios.js")
+    script(src="https://cdn.jsdelivr.net/npm/flatpickr")
