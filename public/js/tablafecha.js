@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     language: {
       url: '/js/tablaIdioma.json'
     },
-    order: [[4, 'asc']],
+    order: [[4, 'asc'], [5, 'asc']],
     searching: false,
     columnDefs: [{
       targets: [6,7,8],
