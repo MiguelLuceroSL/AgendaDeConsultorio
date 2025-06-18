@@ -11,3 +11,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }]
   });
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('#listaEsperaTable').DataTable({
+    language: {
+      url: '/js/tablaIdioma.json'
+    },
+    order: [1, 'asc'],
+    searching: false,
+        columnDefs: [{
+      targets: [1],
+      orderable : false
+    }]
+  });
+});
