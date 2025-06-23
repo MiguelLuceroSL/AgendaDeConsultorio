@@ -1,10 +1,15 @@
 import express from 'express';
-import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC, crearTurnoPacienteC} from '../controllers/turnoController.js';
+import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC, crearTurnoPacienteC} 
+from '../controllers/turnoController.js';
+import multer from 'multer';
+import { storage } from '../config/cloudinaryConfig.js';
+
+const upload = multer({ storage });
 
 const router = express.Router()
 
-router.post('/crear', crearTurnoC);
-router.post('/crearPaciente', crearTurnoPacienteC);
+router.post('/crear', upload.single('dni_foto'), crearTurnoC);
+router.post('/crearPaciente', upload.single('dni_foto'), crearTurnoPacienteC);
 router.get('/secretaria/secretariaTurnoSuccess', (req, res) => {
     res.render('secretaria/secretariaTurnoSuccess')
 })

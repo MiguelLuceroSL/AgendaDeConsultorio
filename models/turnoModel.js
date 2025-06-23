@@ -1,12 +1,12 @@
 import connectDB from '../config/db.js';
 
-export const crearTurnoM = async (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) => {
+export const crearTurnoM = async (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl) => {
     try {
         const connection = await connectDB();
-        const sql = 'INSERT INTO turnos(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado) VALUES (?,?,?,?,?,?)'
-        console.log('Datos para crear turno:', paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado);
+        const sql = 'INSERT INTO turnos(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dni_foto_url) VALUES (?,?,?,?,?,?,?)'
+        console.log('Datos para crear turno:', paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl);
         console.log('SQL:', sql);
-        const [result] = await connection.execute(sql, [paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado]);
+        const [result] = await connection.execute(sql, [paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl]);
         return result;
     } catch (error) {
         console.error('Error al crear turno:', error);
@@ -75,7 +75,8 @@ export const traerTurnos = async (callback) => {
         s.nombre AS sucursal,
         t.fecha, 
         t.hora, 
-        t.estado
+        t.estado,
+        t.dni_foto_url
     FROM 
         turnos t
     JOIN 
@@ -118,7 +119,8 @@ export const traerTurnoPorIdM = async (id, callback) => {
         s.nombre AS sucursal,
         t.fecha, 
         t.hora, 
-        t.estado
+        t.estado,
+        t.dni_foto_url
     FROM 
         turnos t
     JOIN 
@@ -161,7 +163,8 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
         s.nombre AS sucursal,
         t.fecha, 
         t.hora, 
-        t.estado
+        t.estado,
+        t.dni_foto_url
     FROM 
         turnos t
     JOIN 
@@ -231,7 +234,7 @@ export const obtenerTurnosOcupados = async (profesionalId, fecha) => {
     SELECT hora FROM turnos
     WHERE profesional_especialidad_id = ?
       AND fecha = ?
-      AND estado IN ('Confirmado', 'Reservada', 'Presente', 'En consulta')
+      AND estado IN ('Confirmado', 'Reservado', 'Presente', 'En consulta')
   `;
     const [rows] = await connection.execute(sql, [profesionalId, fecha]);
     await connection.end();

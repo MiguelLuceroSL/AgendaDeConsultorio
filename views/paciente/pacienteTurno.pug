@@ -9,7 +9,7 @@ html
   body
     include ../includes/headerPaciente
     h1 ¡Bienvenido, paciente!
-    form(action="/turnos/crearPaciente" method="POST" class="formTurnos") 
+    form(action="/turnos/crearPaciente" method="POST" class="formTurnos" enctype="multipart/form-data") 
       h3 Selecciona un Profesional
       if profesionales && profesionales.length
         select(name="profesional_especialidad_id" id="profesional" required)
@@ -26,7 +26,9 @@ html
         option(value="" selected disabled) Selecciona un horario
       label(for="detalle_turno") Detalle del turno:
       textarea(name="detalle_turno" id="detalle_turno" rows="4" placeholder="Detalles adicionales del turno" required)
-      input(type="hidden" name="estado" value="Reservada")
+      input(type="hidden" name="estado" value="Reservado")
+      label(for="dni_foto") Subí tu fotocopia del DNI:
+      input(type="file" name="dni_foto" id="dni_foto" accept="image/*" required)
       button(type="submit") Crear Turno
     include ../includes/footer
     script(src="/js/logout.js")
