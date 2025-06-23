@@ -234,7 +234,7 @@ export const obtenerTurnosOcupados = async (profesionalId, fecha) => {
     SELECT hora FROM turnos
     WHERE profesional_especialidad_id = ?
       AND fecha = ?
-      AND estado IN ('Confirmado', 'Reservado', 'Presente', 'En consulta')
+      AND estado IN ('Confirmado', 'Reservada', 'Presente', 'En consulta')
   `;
     const [rows] = await connection.execute(sql, [profesionalId, fecha]);
     await connection.end();

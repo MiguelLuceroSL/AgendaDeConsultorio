@@ -21,7 +21,7 @@ export const crearTurnoC = async (req, res) => {
 
 export const crearTurnoPacienteC = async (req, res) => {
     const { paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora } = req.body;
-    const estado = "Reservado";
+    const estado = "Reservada";
     const dniFotoUrl = req.file ? req.file.path : null; //obtener la ruta de la foto del DNI si se subió 
   
     try {
