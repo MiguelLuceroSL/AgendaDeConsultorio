@@ -1,6 +1,6 @@
 
-import { crearAgendaS, obtenerAgendaS, actulizarAgendaS, borrarAgendaS,obtenerAgendasActivasS,obtenerSucursalesS, registrarAusenciaS, verificarAusenciaS } from '../services/agendaService.js';
-import{ obtenerSucursales, obtenerAgendasActivasPorProfesional} from '../models/agendaModel.js' 
+import { crearAgendaS, obtenerAgendaS, actulizarAgendaS, borrarAgendaS,obtenerAgendasActivasS,obtenerSucursalesS, registrarAusenciaS, verificarAusenciaS, obtenerAusenciasTotalesS } from '../services/agendaService.js';
+import{ obtenerSucursales, obtenerAgendasActivasPorProfesional, } from '../models/agendaModel.js' 
 import {obtenerProfesionalesVistaM} from "../models/profesionalModel.js";
 
 
@@ -218,5 +218,17 @@ export const formCrearAusenciaC = async (req, res) => {
   } catch (error) {
     console.error("Error al mostrar formulario de ausencia:", error);
     res.status(500).send("Error al cargar el formulario");
+  }
+};
+
+
+export const obtenerAusenciasTotalesC = async (req, res) => {
+  try {
+    const { profesional_especialidad_id } = req.query;
+    const resultado = await obtenerAusenciasTotalesS(profesional_especialidad_id);
+    res.json(resultado);
+  } catch (err) {
+    console.error("Error al obtener ausencias totales:", err);
+    res.status(500).json({ error: "Error al obtener ausencias totales" });
   }
 };

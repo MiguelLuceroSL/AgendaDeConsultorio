@@ -97,6 +97,29 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    async function obtenerAusenciasTotales(profesionalId) {
+  try {
+    const res = await fetch(`/agendas/ausencias/totales?profesional_especialidad_id=${profesionalId}`);
+    const data = await res.json();
+
+    // Generar un array con todas las fechas del rango de cada ausencia total
+    const fechasBloqueadas = [];
+
+    data.forEach(ausencia => {
+      const inicio = new Date(ausencia.fecha_inicio);
+      const fin = new Date(ausencia.fecha_fin);
+      for (let d = new Date(inicio); d <= fin; d.setDate(d.getDate() + 1)) {
+        fechasBloqueadas.push(new Date(d)); // copiar la fecha
+      }
+    });
+
+    return fechasBloqueadas;
+  } catch (err) {
+    console.error("Error obteniendo ausencias totales:", err);
+    return [];
+  }
+}
+
     selectHorario.disabled = false;
     inputFecha.disabled = false;
     inputFecha.value = "";
@@ -125,20 +148,22 @@ document.addEventListener("DOMContentLoaded", () => {
       return diaFin > max ? diaFin : max;
     }, FECHA_MINIMA);
 
-    fp = flatpickr(inputFecha, {
-      dateFormat: "Y-m-d",
-      minDate,
-      maxDate,
-      disable: [
-        function (date) {
-          const dia = normalizarDia(
-            date.toLocaleDateString("es-AR", { weekday: "long" })
-          );
-          // Devuelvo true para deshabilitar los días NO incluidos en el array de días permitidos
-          return !window._diasPermitidos.includes(dia);
-        },
-      ],
-    });
+    const fechasAusencias = await obtenerAusenciasTotales(profesionalId);
+
+fp = flatpickr(inputFecha, {
+  dateFormat: "Y-m-d",
+  minDate,
+  maxDate,
+  disable: [
+    ...fechasAusencias,
+    function (date) {
+      const dia = normalizarDia(
+        date.toLocaleDateString("es-AR", { weekday: "long" })
+      );
+      return !window._diasPermitidos.includes(dia);
+    }
+  ]
+});
   });
 
   // Cuando seleccionan una fecha
