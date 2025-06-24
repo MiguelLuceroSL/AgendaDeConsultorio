@@ -143,3 +143,40 @@ export const obtenerAgendasOcupadasM= async(profesional_especialidad_id, dia_ini
     throw error
   }
 }
+
+export const registrarAusenciaM = async ({ profesional_especialidad_id, fecha_inicio, fecha_fin, hora_inicio, hora_fin, tipo, descripcion }) => {
+  const connection = await connectDB();
+
+  const sql = `
+    INSERT INTO ausencias (profesional_especialidad_id, fecha_inicio, fecha_fin, hora_inicio, hora_fin, tipo, descripcion)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  await connection.execute(sql, [
+    profesional_especialidad_id,
+    fecha_inicio,
+    fecha_fin,
+    hora_inicio ?? null,
+    hora_fin ?? null,
+    tipo,
+    descripcion ?? null
+  ]);
+};
+
+export const verificarAusenciaM = async (profesional_especialidad_id, fecha) => {
+  const connection = await connectDB();
+
+  const sql = `
+      SELECT *
+      FROM ausencias
+      WHERE profesional_especialidad_id = ?
+        AND ? BETWEEN fecha_inicio AND fecha_fin
+  `;
+
+  const [rows] = await connection.execute(sql, [
+    profesional_especialidad_id,
+    fecha,
+  ]);
+
+  return rows;
+};

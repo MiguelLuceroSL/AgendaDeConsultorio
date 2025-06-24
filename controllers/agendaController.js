@@ -1,5 +1,5 @@
 
-import { crearAgendaS, obtenerAgendaS, actulizarAgendaS, borrarAgendaS,obtenerAgendasActivasS,obtenerSucursalesS } from '../services/agendaService.js';
+import { crearAgendaS, obtenerAgendaS, actulizarAgendaS, borrarAgendaS,obtenerAgendasActivasS,obtenerSucursalesS, registrarAusenciaS, verificarAusenciaS } from '../services/agendaService.js';
 import{ obtenerSucursales, obtenerAgendasActivasPorProfesional} from '../models/agendaModel.js' 
 import {obtenerProfesionalesVistaM} from "../models/profesionalModel.js";
 
@@ -185,3 +185,38 @@ export const obtenerAgendasActivasC = async (req, res) => {
   }
 };
 
+export const registrarAusenciaC = async (req, res) => {
+  try {
+    const { profesional_especialidad_id, fecha_inicio, fecha_fin, hora_inicio, hora_fin, tipo, descripcion } = req.body;
+
+    await registrarAusenciaS({ profesional_especialidad_id, fecha_inicio, fecha_fin, hora_inicio, hora_fin, tipo, descripcion });
+
+    res.json({ message: 'Ausencia registrada correctamente' });
+  } catch (err) {
+    console.error('Error al registrar ausencia:', err);
+    res.status(500).json({ error: 'Error al registrar la ausencia' });
+  }
+};
+
+export const verificarAusenciaC = async (req, res) => {
+  try {
+    const { profesional_especialidad_id, fecha} = req.query;
+
+    const resultado = await verificarAusenciaS(profesional_especialidad_id, fecha);
+
+    res.json({ bloqueado: resultado.length > 0, detalle: resultado });
+  } catch (err) {
+    console.error('Error al verificar ausencia:', err);
+    res.status(500).json({ error: 'Error al verificar ausencias' });
+  }
+};
+
+export const formCrearAusenciaC = async (req, res) => {
+  try {
+    const profesionales = await obtenerProfesionalesVistaM(); // ya lo tenés
+    res.render('secretaria/secretariaCrearAusencia', { profesionales });
+  } catch (error) {
+    console.error("Error al mostrar formulario de ausencia:", error);
+    res.status(500).send("Error al cargar el formulario");
+  }
+};

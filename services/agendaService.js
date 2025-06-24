@@ -1,4 +1,4 @@
-import {crearAgendaM, obtenerAgendasM, actulizarAgendaM, borrarAgenda,obtenerAgendasActivasM, obtenerSucursales, obtenerAgendasOcupadasM } from "../models/agendaModel.js"
+import {crearAgendaM, obtenerAgendasM, actulizarAgendaM, borrarAgenda,obtenerAgendasActivasM, obtenerSucursales, obtenerAgendasOcupadasM,registrarAusenciaM, verificarAusenciaM  } from "../models/agendaModel.js"
 
 export const crearAgendaS = async (agendaData, diasSemana) => {
   try{
@@ -89,4 +89,22 @@ export const obtenerAgendasActivasS = async (profesionalId) => {
   }
 
   return agendas;
+};
+
+export const registrarAusenciaS = async (data) => {
+  try {
+    return await registrarAusenciaM(data);
+  } catch (error) {
+    console.error("Error en registrarAusenciaS:", error);
+    throw error;
+  }
+};
+
+export const verificarAusenciaS = async (profesional_especialidad_id, fecha) => {
+  try {
+    return await verificarAusenciaM(profesional_especialidad_id, fecha);
+  } catch (error) {
+    console.error("Error en verificarAusenciaS:", error);
+    throw error;
+  }
 };

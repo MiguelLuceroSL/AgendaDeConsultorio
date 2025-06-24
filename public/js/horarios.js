@@ -56,11 +56,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const minutos = parseInt(duracion.split(":")[1]);
 
     while (inicio < fin) {
-      horarios.push(inicio.toTimeString().slice(0, 5)); //para solo usar la hora
+      const h = inicio.getHours().toString().padStart(2, "0");
+      const m = inicio.getMinutes().toString().padStart(2, "0");
+      horarios.push(`${h}:${m}`); //para solo usar la hora
       inicio.setMinutes(inicio.getMinutes() + minutos); //le sumamos los tiempos de consulta
     }
 
     return horarios;
+  }
+
+  async function obtenerAusencias(profesionalId, fecha) {
+    try {
+      const res = await fetch(
+        `/agendas/ausencias/verificar?profesional_especialidad_id=${profesionalId}&fecha=${fecha}&hora=00:00`
+      );
+      return await res.json();
+    } catch (err) {
+      console.error("Error al obtener ausencias:", err);
+      return { bloqueado: false, detalle: [] };
+    }
   }
 
   // Cuando seleccionan un profesional
@@ -170,6 +184,53 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const ocupados = await obtenerTurnosOcupados(profesionalId, fecha);
+
+    const ausencias = await obtenerAusencias(profesionalId, fecha);
+    console.log("Ausencias recibidas:", ausencias);
+
+    if (ausencias.bloqueado) {
+      const bloqueos = ausencias.detalle;
+
+      const hayBloqueoTotal = bloqueos.some(
+        (b) => !b.hora_inicio && !b.hora_fin
+      );
+      if (hayBloqueoTotal) {
+        console.warn("Bloqueo total detectado para la fecha:", fecha);
+        renderHorarios([]);
+        alert(
+          "El médico no está disponible en esta fecha por una ausencia total."
+        );
+        return;
+      }
+
+      // Logs iniciales
+      console.log("Horarios originales generados:", horariosBase);
+      console.log("Bloqueos parciales recibidos:", bloqueos);
+
+      horariosBase = horariosBase.filter((hora) => {
+        const [h, m] = hora.split(":");
+        const horaDate = new Date(2025, 0, 1, h, m);
+
+        const estaBloqueado = bloqueos.some((b) => {
+          if (!b.hora_inicio || !b.hora_fin) return false;
+          const inicio = new Date(`2025-01-01T${b.hora_inicio}`);
+          const fin = new Date(`2025-01-01T${b.hora_fin}`);
+          const bloqueado = horaDate >= inicio && horaDate < fin;
+
+          if (bloqueado) {
+            console.log(
+              `Eliminando ${hora} por bloqueo entre ${b.hora_inicio} y ${b.hora_fin}`
+            );
+          }
+
+          return bloqueado;
+        });
+
+        return !estaBloqueado;
+      });
+
+      console.log("Horarios luego de aplicar bloqueos:", horariosBase);
+    }
     const disponibles = horariosBase.filter((h) => !ocupados.includes(h));
 
     renderHorarios(disponibles);
