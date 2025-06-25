@@ -198,3 +198,22 @@ export const obtenerAusenciasTotalesM = async (profesional_especialidad_id) => {
     throw error;
   }
 };
+
+export const mostarAusenciasM = async () =>{
+   try {
+    const connection = await connectDB();
+    const sql = `
+      SELECT a.*, p.nombre_completo, e.nombre AS especialidad
+      FROM ausencias a
+      JOIN profesional_especialidad pe ON pe.id = a.profesional_especialidad_id
+      JOIN profesional p ON p.id = pe.profesional_id
+      JOIN especialidad e ON e.id = pe.especialidad_id
+      ORDER BY fecha_inicio DESC
+    `;
+    const [rows] = await connection.execute(sql, []);
+    return rows;
+  } catch (error) {
+    console.error("Error en mostarAusenciasM:", error);
+    throw error;
+  }
+}

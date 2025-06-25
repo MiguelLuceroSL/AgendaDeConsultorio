@@ -1,6 +1,6 @@
 
 import { crearAgendaS, obtenerAgendaS, actulizarAgendaS, borrarAgendaS,obtenerAgendasActivasS,obtenerSucursalesS, registrarAusenciaS, verificarAusenciaS, obtenerAusenciasTotalesS } from '../services/agendaService.js';
-import{ obtenerSucursales, obtenerAgendasActivasPorProfesional, } from '../models/agendaModel.js' 
+import{ obtenerSucursales, obtenerAgendasActivasPorProfesional, mostarAusenciasM } from '../models/agendaModel.js' 
 import {obtenerProfesionalesVistaM} from "../models/profesionalModel.js";
 
 
@@ -213,8 +213,9 @@ export const verificarAusenciaC = async (req, res) => {
 
 export const formCrearAusenciaC = async (req, res) => {
   try {
-    const profesionales = await obtenerProfesionalesVistaM(); // ya lo tenés
-    res.render('secretaria/secretariaCrearAusencia', { profesionales });
+    const profesionales = await obtenerProfesionalesVistaM();
+    const ausencias = await mostarAusenciasM();
+    res.render('secretaria/secretariaCrearAusencia', { profesionales, ausencias });
   } catch (error) {
     console.error("Error al mostrar formulario de ausencia:", error);
     res.status(500).send("Error al cargar el formulario");

@@ -57,6 +57,23 @@ document.addEventListener("DOMContentLoaded", () => {
     return [...dias];
   }
 
+  function verificarRangoYControlarHoras() {
+  const fechaIni = fechaInicioInput.value;
+  const fechaFin = fechaFinInput.value;
+
+  if (fechaIni && fechaFin && fechaIni !== fechaFin) {
+    horaInicioSelect.disabled = true;
+    horaFinSelect.disabled = true;
+    horaInicioSelect.value = "";
+    horaFinSelect.value = "";
+    console.log("Más de un día seleccionado: se desactivan los horarios");
+  } else {
+    horaInicioSelect.disabled = false;
+    horaFinSelect.disabled = false;
+  }
+}
+
+
   function dateInRange(fecha, min, max) {
     const f = new Date(fecha);
     return f >= new Date(min) && f <= new Date(max);
@@ -105,5 +122,8 @@ document.addEventListener("DOMContentLoaded", () => {
       dateFormat: "Y-m-d",
       disable: [disableFunc]
     });
+
+  fechaInicioInput.addEventListener("change", verificarRangoYControlarHoras);
+  fechaFinInput.addEventListener("change", verificarRangoYControlarHoras);
   });
 });

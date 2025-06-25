@@ -26,3 +26,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }]
   });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('#tablaAusencias').DataTable({
+    language: {
+      url: '/js/tablaIdioma.json'
+    },
+    searching: false,
+        columnDefs: [{
+      targets: [5],
+      orderable : false
+    }]
+  });
+});
