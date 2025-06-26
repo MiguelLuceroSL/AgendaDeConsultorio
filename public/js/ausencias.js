@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const profesionalSelect = document.getElementById("profesional_especialidad_id");
+  const profesionalSelect = document.getElementById(
+    "profesional_especialidad_id"
+  );
   const fechaInicioInput = document.getElementById("fecha_inicio");
   const fechaFinInput = document.getElementById("fecha_fin");
   const horaInicioSelect = document.getElementById("hora_inicio");
@@ -8,7 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let agendas = [];
 
   const normalizarDia = (fecha) =>
-    fecha.toLocaleDateString("es-AR", { weekday: "long" })
+    fecha
+      .toLocaleDateString("es-AR", { weekday: "long" })
       .toLowerCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "");
@@ -33,9 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderHorarios(horarios) {
-    horaInicioSelect.innerHTML = "<option value='' disabled selected>Inicio</option>";
+    horaInicioSelect.innerHTML =
+      "<option value='' disabled selected>Inicio</option>";
     horaFinSelect.innerHTML = "<option value='' disabled selected>Fin</option>";
-    horarios.forEach(h => {
+    horarios.forEach((h) => {
       const opt1 = document.createElement("option");
       opt1.value = h;
       opt1.textContent = h;
@@ -48,31 +52,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function filtrarAgendasPorDia(fecha) {
     const dia = normalizarDia(new Date(fecha));
-    return agendas.filter(a => a.dias.includes(dia));
+    return agendas.filter((a) => a.dias.includes(dia));
   }
 
   function diasPermitidos() {
     const dias = new Set();
-    agendas.forEach(a => a.dias.forEach(d => dias.add(d)));
+    agendas.forEach((a) => a.dias.forEach((d) => dias.add(d)));
     return [...dias];
   }
 
   function verificarRangoYControlarHoras() {
-  const fechaIni = fechaInicioInput.value;
-  const fechaFin = fechaFinInput.value;
+    const fechaIni = fechaInicioInput.value;
+    const fechaFin = fechaFinInput.value;
 
-  if (fechaIni && fechaFin && fechaIni !== fechaFin) {
-    horaInicioSelect.disabled = true;
-    horaFinSelect.disabled = true;
-    horaInicioSelect.value = "";
-    horaFinSelect.value = "";
-    console.log("Más de un día seleccionado: se desactivan los horarios");
-  } else {
-    horaInicioSelect.disabled = false;
-    horaFinSelect.disabled = false;
+    if (fechaIni && fechaFin && fechaIni !== fechaFin) {
+      horaInicioSelect.disabled = true;
+      horaFinSelect.disabled = true;
+      horaInicioSelect.value = "";
+      horaFinSelect.value = "";
+      console.log("Más de un día seleccionado: se desactivan los horarios");
+    } else {
+      horaInicioSelect.disabled = false;
+      horaFinSelect.disabled = false;
+    }
   }
-}
-
 
   function dateInRange(fecha, min, max) {
     const f = new Date(fecha);
@@ -92,8 +95,14 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const minDate = agendas.reduce((min, a) => new Date(a.dia_inicio) < min ? new Date(a.dia_inicio) : min, new Date(8640000000000000));
-    const maxDate = agendas.reduce((max, a) => new Date(a.dia_fin) > max ? new Date(a.dia_fin) : max, new Date(-8640000000000000));
+    const minDate = agendas.reduce(
+      (min, a) => (new Date(a.dia_inicio) < min ? new Date(a.dia_inicio) : min),
+      new Date(8640000000000000)
+    );
+    const maxDate = agendas.reduce(
+      (max, a) => (new Date(a.dia_fin) > max ? new Date(a.dia_fin) : max),
+      new Date(-8640000000000000)
+    );
     const diasValidos = diasPermitidos();
 
     const disableFunc = (date) => {
@@ -111,19 +120,52 @@ document.addEventListener("DOMContentLoaded", () => {
       onChange: ([date]) => {
         const agendasDia = filtrarAgendasPorDia(date);
         let horarios = [];
-        agendasDia.forEach(a => {
-          horarios.push(...generarHorarios(a.horario_inicio, a.horario_fin, a.tiempo_consulta));
+        agendasDia.forEach((a) => {
+          horarios.push(
+            ...generarHorarios(
+              a.horario_inicio,
+              a.horario_fin,
+              a.tiempo_consulta
+            )
+          );
         });
         renderHorarios(horarios);
-      }
+      },
     });
 
     fpFin = flatpickr(fechaFinInput, {
       dateFormat: "Y-m-d",
-      disable: [disableFunc]
+      disable: [disableFunc],
     });
 
-  fechaInicioInput.addEventListener("change", verificarRangoYControlarHoras);
-  fechaFinInput.addEventListener("change", verificarRangoYControlarHoras);
+    fechaInicioInput.addEventListener("change", verificarRangoYControlarHoras);
+    fechaFinInput.addEventListener("change", verificarRangoYControlarHoras);
+  });
+
+  document.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("btn-eliminar")) {
+      const id = e.target.dataset.id;
+
+      if (!confirm("¿Estás seguro de que querés eliminar esta ausencia?"))
+        return;
+
+      try {
+        const res = await fetch(`/agendas/ausencias/${id}`, {
+          method: "DELETE",
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert(data.message || "Ausencia eliminada correctamente.");
+          document.querySelector(`tr[data-id="${id}"]`)?.remove();
+        } else {
+          alert(data.error || "Error al eliminar la ausencia.");
+        }
+      } catch (err) {
+        console.error("Error al eliminar:", err);
+        alert("Error de conexión al eliminar la ausencia.");
+      }
+    }
   });
 });

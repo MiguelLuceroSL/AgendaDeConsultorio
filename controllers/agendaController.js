@@ -1,5 +1,5 @@
 
-import { crearAgendaS, obtenerAgendaS, actulizarAgendaS, borrarAgendaS,obtenerAgendasActivasS,obtenerSucursalesS, registrarAusenciaS, verificarAusenciaS, obtenerAusenciasTotalesS } from '../services/agendaService.js';
+import { crearAgendaS, obtenerAgendaS, actulizarAgendaS, borrarAgendaS,obtenerAgendasActivasS,obtenerSucursalesS, registrarAusenciaS, verificarAusenciaS, obtenerAusenciasTotalesS, eliminarAusenciaS } from '../services/agendaService.js';
 import{ obtenerSucursales, obtenerAgendasActivasPorProfesional, mostarAusenciasM } from '../models/agendaModel.js' 
 import {obtenerProfesionalesVistaM} from "../models/profesionalModel.js";
 
@@ -231,5 +231,17 @@ export const obtenerAusenciasTotalesC = async (req, res) => {
   } catch (err) {
     console.error("Error al obtener ausencias totales:", err);
     res.status(500).json({ error: "Error al obtener ausencias totales" });
+  }
+};
+
+
+export const eliminarAusenciaC = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await eliminarAusenciaS(id);
+    res.json({ message: "Ausencia eliminada correctamente" });
+  } catch (error) {
+    console.error("Error al eliminar ausencia:", error);
+    res.status(500).json({ error: "No se pudo eliminar la ausencia" });
   }
 };

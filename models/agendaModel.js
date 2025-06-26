@@ -217,3 +217,17 @@ export const mostarAusenciasM = async () =>{
     throw error;
   }
 }
+
+export const eliminarAusenciaM = async (id) => {
+  try {
+    const connection = await connectDB();
+    const [result] = await connection.execute(
+      `DELETE FROM ausencias WHERE id = ?`,
+      [id]
+    );
+    return result;
+  } catch (error) {
+    console.error("Error en eliminarAusenciaM:", error);
+    throw error;
+  }
+};
