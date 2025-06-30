@@ -1,4 +1,4 @@
-import {crearListaEsperaS, traerListaEsperaS} from '../services/listaEsperaService.js'
+import {crearListaEsperaS, traerListaEsperaS, eliminarEsperaS} from '../services/listaEsperaService.js'
 import {obtenerProfesionalesVistaS} from "../services/profesionalService.js";
 import { obtenerPacientesVistaS } from '../services/pacienteService.js';
 
@@ -37,5 +37,17 @@ export const obtenerProfesionalesEsperaC = async (req, res) => {
     } catch (err) {
       console.error('Error al obtener los profesionales:', err);
       res.status(500).json({ message: 'Hubo un error al obtener los profesionales.' });
+    }
+  };
+
+
+  export const eliminarEsperaC = async (req, res) => {
+    try {
+      const { id } = req.params;
+      await eliminarEsperaS(id);
+      res.json({ message: "Espera eliminada correctamente" });
+    } catch (error) {
+      console.error("Error al eliminar espera:", error);
+      res.status(500).json({ error: "No se pudo eliminar la espera" });
     }
   };

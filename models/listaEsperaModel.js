@@ -38,3 +38,17 @@ export const traerListaEsperaM = async () => {
         throw error;
     }
 };
+
+export const eliminarEsperaM = async (id) => {
+  try {
+    const connection = await connectDB();
+    const [result] = await connection.execute(
+      `DELETE FROM listaespera WHERE id = ?`,
+      [id]
+    );
+    return result;
+  } catch (error) {
+    console.error("Error en eliminarAusenciaM:", error);
+    throw error;
+  }
+};
