@@ -6,7 +6,7 @@
         return;
 
       try {
-        const res = await fetch(`/secretaria/ausencias/${id}`, {
+        const res = await fetch(`/secretaria/espera/${id}`, {
           method: "DELETE",
         });
 
