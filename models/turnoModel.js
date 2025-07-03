@@ -242,6 +242,21 @@ export const obtenerTurnosOcupados = async (profesionalId, fecha) => {
     return rows.map(row => row.hora.slice(0, 5));
 };
 
+export const actuEstadoTurnoM = async (estado, id, callback) => {
+    try {
+        console.log("Actualizando estado del turno en model:", estado, "para el ID:", id);
+        const connection = await connectDB();
+        const sql = 'UPDATE turnos SET estado = ? WHERE id = ?';
+        const [result] = await connection.execute(sql, [estado, id]);
+        await connection.end();
+        console.log("Estado del turno actualizado correctamente en model");
+        callback(null, result);
+    } catch (error) {
+        console.error('Error al actualizar el estado del turno:', error);
+        callback(error);
+    }
+};
+
 /*    SELECT DISTINCT
         t.id, 
         p.nombre_completo AS paciente_nombre, 
