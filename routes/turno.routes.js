@@ -36,6 +36,15 @@ router.get('/editarTurno/:id', traerTurnoPorId2C);
 
 router.post('/editar/:id', editarEstadoTurnoC);
 
+router.get('/trasladar/:id', (req, res) => {
+  const turnoId = req.params.id;
+
+  // Aquí puedes agregar la lógica para trasladar el turno
+  // Por ejemplo, buscar el turno por ID y mostrar un formulario para cambiar su fecha/hora
+
+  res.render('secretaria/secretariaTrasladar', { turnoId });
+});
+
 /*router.get('/secretaria/home', (req, res) => {
   res.redirect('/turnos/listarTurnos');
 });*/
