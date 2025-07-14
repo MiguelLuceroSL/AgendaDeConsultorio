@@ -194,6 +194,24 @@ export const traerTurnoPorId2C = async (req, res) => {
   }
 };
 
+export const obtenerTurnoYMedicosC = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const turno = await traerTurnoPorIdS(id);
+    const profesionales = await obtenerProfesionalesVistaS();
+    console.log('Turno:', turno);
+    console.log('Profesionales:', profesionales);
+    if (!turno) {
+      return res.status(404).render('error', { message: 'Turno no encontrado' });
+    }
+
+    res.render('secretaria/secretariaTrasladar', { turno, profesionales });
+  } catch (error) {
+    console.error('Error al preparar traslado del turno:', error);
+    res.status(500).send('Error al preparar traslado');
+  }
+};
+
 export const editarEstadoTurnoC = async (req, res) => {
   const { id } = req.params;
   const { estado } = req.body;
