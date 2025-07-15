@@ -50,6 +50,32 @@ export const actuTurnoM = (fecha, hora, estado, id, callback) => {
     })
 }
 
+export const actualizarTurnoTrasladoM = async (fecha, hora, estado, turnoId, profesional_especialidad_id, detalle_turno, callback) => {
+
+    try {
+        const connection = await connectDB();
+        const sql = `UPDATE turnos SET fecha = ?, hora = ?, estado = ?, profesional_especialidad_id = ?, detalle_turno = ? WHERE id = ?`;
+        const [rows] = await connection.query(sql, [fecha, hora, estado, profesional_especialidad_id, detalle_turno, turnoId]);
+        callback(null, rows);
+        return rows;
+    } catch (error) {
+        console.error('Error al actualizar turno:', error);
+        callback(error);
+    }
+}
+
+export const actualizarTurnoTrasladM = (fecha, hora, estado, turnoId, profesional_especialidad_id, detalle_turno, callback) => {
+    const sql = 'UPDATE turnos SET fecha = ?, hora = ?, estado = ?, profesional_especialidad_id = ?, detalle_turno = ? WHERE id = ?'
+
+    db.query(sql, [fecha, hora, estado, profesional_especialidad_id, detalle_turno, turnoId], (err, res) => {
+        if (err) {
+            callback(err, null)
+            return;
+        }
+        callback(null, res)
+    })
+}
+
 export const confTurnoM = (confirmado, id, callback) => {
     const sql = 'UPDATE turnos SET confirmado = ? WHERE id = ?'
 

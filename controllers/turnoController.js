@@ -1,4 +1,4 @@
-import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS, getTurnosOcupadosService, traerTurnosFiltradosS, traerTurnoPorIdS, actualizarEstadoTurnoS } from '../services/turnoService.js';
+import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS, getTurnosOcupadosService, traerTurnosFiltradosS, traerTurnoPorIdS, actualizarEstadoTurnoS, actualizarTurnoTrasladoS } from '../services/turnoService.js';
 import { obtenerProfesionalesS, obtenerProfesionalesVistaS } from "../services/profesionalService.js";
 import { obtenerPacientesVistaS } from '../services/pacienteService.js';
 import { obtenerTodasLasSucursales } from '../models/turnoModel.js';
@@ -68,6 +68,19 @@ export const actualizarTurnoC = async (req, res) => {
   } catch (err) {
     console.error('Error al actualizar turno: ', err)
     res.status(500).json({ message: 'Hubo un error al actualizar el turno' })
+  }
+}
+
+export const actualizarTurnoTrasladoC = async (req, res) => {
+  const turnoId = req.params.id;
+  const { profesional_especialidad_id, fecha, hora, detalle_turno, estado } = req.body;
+
+  try {
+    await actualizarTurnoTrasladoS(fecha, hora, estado, turnoId, profesional_especialidad_id, detalle_turno)
+    res.redirect(`/turnos/listarTurnos`);
+  } catch (err) {
+    console.error('Error al trasladar turno: ', err)
+    res.status(500).json({ message: 'Hubo un error al trasladar el turno' })
   }
 }
 

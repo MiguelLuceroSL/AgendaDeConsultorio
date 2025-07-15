@@ -1,5 +1,5 @@
 import express from 'express';
-import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC, crearTurnoPacienteC, traerTurnoPorId2C, editarEstadoTurnoC, obtenerTurnoYMedicosC} 
+import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC, crearTurnoPacienteC, traerTurnoPorId2C, editarEstadoTurnoC, obtenerTurnoYMedicosC, actualizarTurnoTrasladoC} 
 from '../controllers/turnoController.js';
 import multer from 'multer';
 import { storage } from '../config/cloudinaryConfig.js';
@@ -38,20 +38,7 @@ router.post('/editar/:id', editarEstadoTurnoC);
 
 router.get('/trasladar/:id', obtenerTurnoYMedicosC);
 
-router.post('/trasladar', (req, res) => {
-  //const turnoId = req.params.id;
-  //const { medico, horario } = req.body;
-
-  //console.log(`Trasladar turno con ID: ${turnoId}`);
-  //console.log(`Nuevo médico: ${medico}`);
-  //console.log(`Nuevo horario: ${horario}`);
-
-  // Aquí puedes agregar la lógica para trasladar el turno
-  // Por ejemplo, buscar el turno por ID y actualizar su médico y horario
-  console.log('REQ DEL POST TRASLADAR', req);
-  console.log('REQ BODY DEL POST TRASLADAR', req.body);
-  res.redirect('/turnos/listarTurnos');
-});
+router.post('/trasladar/:id', actualizarTurnoTrasladoC);
 
 /*router.get('/secretaria/home', (req, res) => {
   res.redirect('/turnos/listarTurnos');
