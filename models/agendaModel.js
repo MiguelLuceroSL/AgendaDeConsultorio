@@ -188,8 +188,6 @@ export const obtenerAusenciasTotalesM = async (profesional_especialidad_id) => {
       SELECT fecha_inicio, fecha_fin
       FROM ausencias
       WHERE profesional_especialidad_id = ?
-        AND hora_inicio IS NULL
-        AND hora_fin IS NULL
     `;
     const [rows] = await connection.execute(sql, [profesional_especialidad_id]);
     return rows;
