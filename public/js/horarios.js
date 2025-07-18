@@ -37,17 +37,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function obtenerTurnosOcupados(profesionalId, fecha) {
-    try {
-      const res = await fetch(
-        `/turnos/horarios/ocupados?profesionalId=${profesionalId}&fecha=${fecha}`
-      );
-      return await res.json();
-    } catch (err) {
-      console.error("Error al obtener turnos ocupados:", err);
-      return [];
-    }
+ async function obtenerHorariosPorEstado(profesionalId, fecha) {
+  try {
+    const res = await fetch(
+      `/turnos/horarios/estado?profesionalId=${profesionalId}&fecha=${fecha}`
+    );
+    return await res.json();
+  } catch (err) {
+    console.error("Error al obtener horarios por estado:", err);
+    return { confirmados: [], reservados: [] };
   }
+}
+
+  async function verificarSobreturno(profesionalId, fecha, hora) {
+  const res = await fetch(`/turnos/sobreturnos/verificar?profesionalId=${profesionalId}&fecha=${fecha}&hora=${hora}`);
+  const data = await res.json();
+  return data.cantidad;
+}
 
   function generarHorarios(horaInicio, horaFin, duracion) {
     const horarios = [];
@@ -208,8 +214,6 @@ fp = flatpickr(inputFecha, {
       horariosBase.push(...franjas); //se juntam todas las franjas horarias en un solo array
     }
 
-    const ocupados = await obtenerTurnosOcupados(profesionalId, fecha);
-
     const ausencias = await obtenerAusencias(profesionalId, fecha);
     console.log("Ausencias recibidas:", ausencias);
 
@@ -256,8 +260,40 @@ fp = flatpickr(inputFecha, {
 
       console.log("Horarios luego de aplicar bloqueos:", horariosBase);
     }
-    const disponibles = horariosBase.filter((h) => !ocupados.includes(h));
 
-    renderHorarios(disponibles);
+  const { confirmados, reservados } = await obtenerHorariosPorEstado(profesionalId, fecha);
+
+for (const hora of horariosBase) {
+  if (confirmados.includes(hora)) {
+    continue; // si está confirmado, no lo muestra
+  }
+
+  const option = document.createElement("option");
+  option.value = hora;
+  option.textContent = hora;
+
+  if (reservados.includes(hora)) {
+    const cantidadSobreturnos = await verificarSobreturno(profesionalId, fecha, hora);
+    const agenda = agendasDelDia.find(a => a.max_sobreturnos !== null);
+
+    if (!agenda || cantidadSobreturnos >= agenda.max_sobreturnos) {
+      continue;
+    } else {
+      option.style.backgroundColor = "gold";
+      option.textContent += " (Sobreturno)";
+      option.setAttribute("data-sobreturno", "true");
+    }
+  }
+
+  selectHorario.appendChild(option);
+}
   });
+
+
+  selectHorario.addEventListener("change", () => {
+  const selectedOption = selectHorario.options[selectHorario.selectedIndex];
+  if (selectedOption && selectedOption.dataset.sobreturno === "true") {
+    alert("Este horario ya está reservado. Estás creando un sobreturno.");
+  }
+});
 });

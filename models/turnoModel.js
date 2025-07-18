@@ -283,28 +283,29 @@ export const actuEstadoTurnoM = async (estado, id, callback) => {
     }
 };
 
-/*    SELECT DISTINCT
-        t.id, 
-        p.nombre_completo AS paciente_nombre, 
-        pr.nombre_completo AS nombre_medico,
-        e.nombre AS especialidad,
-        t.detalle_turno,
-        s.nombre AS sucursal,
-        t.fecha, 
-        t.hora, 
-        t.estado
-    FROM 
-        turnos t
-    JOIN 
-        paciente p ON t.paciente_id = p.id
-    JOIN 
-        profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
-    JOIN 
-        profesional pr ON pe.profesional_id = pr.id
-    JOIN 
-        especialidad e ON pe.especialidad_id = e.id
-    JOIN
-        agenda a ON pe.profesional_id = a.profesional_especialidad_id
-    JOIN
-        sucursal s ON a.sucursal_id = s.id
-        */
+
+export const obtenerHorariosPorEstadoM = async (profesionalId, fecha) => {
+  try {
+    const connection = await connectDB();
+    const [rows] = await connection.execute(
+      `SELECT hora, estado FROM turnos WHERE profesional_especialidad_id = ? AND fecha = ?`,
+      [profesionalId, fecha]
+    );
+    return rows;
+  } catch (error) {
+    console.error("Error en obtenerHorariosPorEstadoM:", error);
+    throw error;
+  }
+};
+
+export const verificarSobreturnosM = async (profesionalId, fecha, hora) => {
+  const connection = await connectDB();
+  const [rows] = await connection.execute(`
+    SELECT COUNT(*) AS cantidad
+    FROM turnos t
+    JOIN profesional_especialidad pe ON pe.id = t.profesional_especialidad_id
+    WHERE pe.id = ? AND t.fecha = ? AND t.hora = ? AND t.estado = 'Reservada'
+  `, [profesionalId, fecha, hora]);
+  return rows[0].cantidad;
+};
+

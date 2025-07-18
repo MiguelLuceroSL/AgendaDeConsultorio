@@ -1,4 +1,4 @@
-import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS, getTurnosOcupadosService, traerTurnosFiltradosS, traerTurnoPorIdS, actualizarEstadoTurnoS, actualizarTurnoTrasladoS } from '../services/turnoService.js';
+import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS, getTurnosOcupadosService, traerTurnosFiltradosS, traerTurnoPorIdS, actualizarEstadoTurnoS, actualizarTurnoTrasladoS, verificarSobreturnosS, obtenerHorariosPorEstadoS } from '../services/turnoService.js';
 import { obtenerProfesionalesS, obtenerProfesionalesVistaS } from "../services/profesionalService.js";
 import { obtenerPacientesVistaS } from '../services/pacienteService.js';
 import { obtenerTodasLasSucursales } from '../models/turnoModel.js';
@@ -240,6 +240,38 @@ export const editarEstadoTurnoC = async (req, res) => {
   } catch (err) {
     console.error('Error al actualizar estado del turno: ', err);
     res.status(500).send('Hubo un error al actualizar el estado del turno');
+  }
+};
+
+export const obtenerHorariosPorEstadoC = async (req, res) => {
+  try {
+    const { profesionalId, fecha } = req.query;
+    const horarios = await obtenerHorariosPorEstadoS(profesionalId, fecha);
+
+     const normalizar = (hora) => hora.slice(0, 5);
+
+    const confirmados = horarios
+      .filter((t) => t.estado === "Confirmado")
+      .map((t) => normalizar(t.hora));
+    const reservados = horarios
+      .filter((t) => t.estado === "Reservada")
+      .map((t) => normalizar(t.hora));
+
+    res.json({ confirmados, reservados });
+  } catch (error) {
+    console.error("Error en obtenerHorariosPorEstadoC:", error);
+    res.status(500).json({ error: "Error al obtener horarios" });
+  }
+};
+
+export const verificarSobreturnosC = async (req, res) => {
+  try {
+    const { profesionalId, fecha, hora } = req.query;
+    const cantidad = await verificarSobreturnosS(profesionalId, fecha, hora);
+    res.json({ cantidad });
+  } catch (err) {
+    console.error("Error al verificar sobreturnos:", err);
+    res.status(500).json({ error: "Error interno al contar sobreturnos." });
   }
 };
 

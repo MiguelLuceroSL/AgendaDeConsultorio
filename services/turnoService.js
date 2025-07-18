@@ -1,12 +1,12 @@
-import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM, obtenerTurnosOcupados, traerTurnosFiltrados, traerTurnoPorIdM, actuEstadoTurnoM, actualizarTurnoTrasladoM } from '../models/turnoModel.js';
+import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM, obtenerTurnosOcupados, traerTurnosFiltrados, traerTurnoPorIdM, actuEstadoTurnoM, actualizarTurnoTrasladoM, verificarSobreturnosM, obtenerHorariosPorEstadoM } from '../models/turnoModel.js';
 
 export const crearTurnoS = async (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl) => {
     try {
         // Verificacion por si ya existe un turno para ese profesional en esa fecha y hora
-        const turnoExistente = await verificarTurnoExistenteM(profesional_especialidad_id, fecha, hora);
+        /*const turnoExistente = await verificarTurnoExistenteM(profesional_especialidad_id, fecha, hora);
         if (turnoExistente.length > 0) {
             throw new Error('Ya existe un turno para este profesional en esa fecha y hora.');
-        }
+        }*/
 
         // Si no existe, procedemos a crear el turno
         console.log('Creando turno...');
@@ -106,6 +106,10 @@ export const traerTurnoPorIdS = (id) => {
 };
 
 
+export const obtenerHorariosPorEstadoS = async (profesionalId, fecha) => {
+  return await obtenerHorariosPorEstadoM(profesionalId, fecha);
+};
+
 export const getTurnosOcupadosService = async (profesionalId, fecha) => {
     if (!profesionalId || !fecha) {
         throw new Error('Faltan parámetros');
@@ -122,4 +126,8 @@ export const actualizarEstadoTurnoS = (estado, id) => {
             resolve(result);
         });
     });
+};
+
+export const verificarSobreturnosS = async (profesionalId, fecha, hora) => {
+  return await verificarSobreturnosM(profesionalId, fecha, hora);
 };
