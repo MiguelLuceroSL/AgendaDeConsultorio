@@ -1,6 +1,7 @@
 import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM, obtenerTurnosOcupados, traerTurnosFiltrados, traerTurnoPorIdM, actuEstadoTurnoM, actualizarTurnoTrasladoM, verificarSobreturnosM, obtenerHorariosPorEstadoM } from '../models/turnoModel.js';
 
 export const crearTurnoS = async (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl) => {
+    console.log('Creando turno servicio ...');
     try {
         // Verificacion por si ya existe un turno para ese profesional en esa fecha y hora
         /*const turnoExistente = await verificarTurnoExistenteM(profesional_especialidad_id, fecha, hora);
