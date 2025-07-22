@@ -156,9 +156,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const fechasAusencias = await obtenerAusenciasTotales(profesionalId);
 
+const hoy = new Date();
+hoy.setHours(0, 0, 0, 0);
+const minFechaTurno = new Date(hoy);
+minFechaTurno.setDate(minFechaTurno.getDate());
+
 fp = flatpickr(inputFecha, {
   dateFormat: "Y-m-d",
-  minDate,
+  minDate: minFechaTurno,
   maxDate,
   disable: [
     ...fechasAusencias,
