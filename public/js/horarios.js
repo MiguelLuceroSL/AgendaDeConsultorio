@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const hoy = new Date();
 hoy.setHours(0, 0, 0, 0);
 const minFechaTurno = new Date(hoy);
-minFechaTurno.setDate(minFechaTurno.getDate());
+minFechaTurno.setDate(minFechaTurno.getDate() + 1);
 
 fp = flatpickr(inputFecha, {
   dateFormat: "Y-m-d",

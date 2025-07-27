@@ -12,14 +12,14 @@ export const crearTurnoS = async (paciente_id, profesional_especialidad_id, deta
         // Si no existe, procedemos a crear el turno
         const hoy = new Date();
         hoy.setHours(0, 0, 0, 0);
-        const fechaTurno = new Date(fecha); // asumimos que 'fecha' viene del body
+        const fechaTurno = new Date(fecha);
         fechaTurno.setHours(0, 0, 0, 0);
         console.log('Creando turno...');
         
         if (fechaTurno <= hoy) {
             throw new Error('No se pueden sacar turnos para hoy o fechas pasadas');
         }
-        const resultado = await crearTurnoM(paciente_id, profesional_especialidad_id, detalle_turno, fechaTurno, hora, estado, dniFotoUrl);
+        const resultado = await crearTurnoM(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl);
         console.log('Turno creado exitosamente:', resultado);
         return resultado;
     } catch (error) {
