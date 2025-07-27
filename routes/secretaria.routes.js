@@ -1,12 +1,12 @@
 import express from 'express';
 import { authRequired } from '../middlewares/validateToken.js';
 import verifyRol from '../middlewares/verifyRol.js';
-import { obtenerProfesionalesVistaC } from '../controllers/turnoController.js';
+import { obtenerProfesionalesVistaC, traerTurnosC } from '../controllers/turnoController.js';
 import { crearListaEsperaC, listarListaEsperaC , obtenerProfesionalesEsperaC, eliminarEsperaC} from '../controllers/listaEsperaController.js';
 const router = express.Router();
 
 router.get('/home', authRequired, verifyRol('secretaria'), (req, res) => {
-  res.render('secretaria/secretariaPanel');
+  traerTurnosC(req, res);
 });
 
 /*router.get('/gestionTurno', authRequired, verifyRol('admin'), (req, res) => {
