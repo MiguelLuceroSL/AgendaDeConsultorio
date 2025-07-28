@@ -2,25 +2,26 @@ doctype html
 html
     head
         title Cargar Médico
+        link(rel="stylesheet", href="/css/headerAdmin.css")
         link(rel="stylesheet", href="/css/styleGeneral1.css")
         link(rel="stylesheet", href="/css/adminCargarProfesional.css")
         link(rel="stylesheet" href="/css/footer.css")
     body
         include ../includes/headerAdmin
-        main 
-            h1 Cargar Médicos
-            section(class="sectionCrud")
-                article(class="articleCrud") 
-                    a(href="http://localhost:3000/admin/createProfesional", rel="noopener noreferrer"): img(src="/img/create.png", alt="logoCreate" class="logoCreate")
-                    span Cargar un médico
-                article(class="articleCrud") 
-                    a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer"): img(src="/img/read.png", alt="logoRead" class="logoRead")
-                    span Lista de médicos
-                article(class="articleCrud") 
-                    a(href="http://localhost:3000/admin/updateProfesional", rel="noopener noreferrer"): img(src="/img/update.png", alt="logoUpdate" class="logoUpdate")
-                    span Editar datos de un médico
-                article(class="articleCrud")
-                    a(href="http://localhost:3000/admin/deleteProfesional", rel="noopener noreferrer"): img(src="/img/inactivar.png", alt="logoDelete" class="logoDelete")
-                    span Activar / Inactivar un médico
+        main(class="mainAdminCargarProfesional") 
+            h1(class="h1AdminCargarProfesional")  Cargar Médicos
+            section(class="sectionAdminCargarProfesional") 
+                article(class="articleAdminCargarProfesional") 
+                    a(href="http://localhost:3000/admin/createProfesional", rel="noopener noreferrer" class="aAdminCargarProfesional"): img(src="/img/create.png", alt="logoCreate" class="logoCreate" class="imgAdminCargarProfesional")
+                    span(class="spanAdminCargarProfesional") Cargar un médico
+                article(class="articleAdminCargarProfesional") 
+                    a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer" class="aAdminCargarProfesional"): img(src="/img/read.png", alt="logoRead" class="logoRead" class="imgAdminCargarProfesional")
+                    span(class="spanAdminCargarProfesional") Lista de médicos
+                article(class="articleAdminCargarProfesional") 
+                    a(href="http://localhost:3000/admin/updateProfesional", rel="noopener noreferrer" class="aAdminCargarProfesional"): img(src="/img/update.png", alt="logoUpdate" class="logoUpdate" class="imgAdminCargarProfesional")
+                    span(class="spanAdminCargarProfesional") Editar datos de un médico
+                article(class="articleAdminCargarProfesional")
+                    a(href="http://localhost:3000/admin/deleteProfesional", rel="noopener noreferrer" class="aAdminCargarProfesional"): img(src="/img/inactivar.png", alt="logoDelete" class="logoDelete" class="imgAdminCargarProfesional")
+                    span(class="spanAdminCargarProfesional") Activar / Inactivar un médico
         include ../includes/footer
         script(src="/js/logout.js")

@@ -1,19 +1,91 @@
-.sectionCrud{
-    display: flex;
-    flex-direction: row;
-}
+/* adminCargarProfesional.css */
 
-.logoDelete{
-    width: 225px;
-    height: 225px;
-}
-
-.articleCrud{
+.mainAdminCargarProfesional {
+    max-width: 900px;
+    margin: 40px auto 60px auto;
+    padding: 32px 24px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.aLink{
-    font-weight: bold;
+.h1AdminCargarProfesional {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2d3a4a;
+    margin-bottom: 36px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.sectionAdminCargarProfesional {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: center;
+    width: 100%;
+}
+
+.articleAdminCargarProfesional {
+    background: #f7fafd;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(44, 62, 80, 0.07);
+    padding: 28px 22px;
+    min-width: 180px;
+    max-width: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.articleAdminCargarProfesional:hover {
+    box-shadow: 0 6px 24px rgba(44, 62, 80, 0.13);
+    transform: translateY(-4px) scale(1.03);
+}
+
+.aAdminCargarProfesional {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    text-decoration: none;
+}
+
+.imgAdminCargarProfesional {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: #eaf3fa;
+    box-shadow: 0 1px 6px rgba(44, 62, 80, 0.09);
+    transition: background 0.2s;
+}
+
+.articleAdminCargarProfesional:hover .imgAdminCargarProfesional {
+    background: #d1e6f7;
+}
+
+.spanAdminCargarProfesional {
+    font-size: 1.08rem;
+    color: #2d3a4a;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .sectionAdminCargarProfesional {
+        flex-direction: column;
+        gap: 24px;
+        align-items: center;
+    }
+    .mainAdminCargarProfesional {
+        padding: 18px 8px;
+    }
 }

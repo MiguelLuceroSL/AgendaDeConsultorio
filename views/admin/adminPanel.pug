@@ -2,11 +2,21 @@ doctype html
 html
     head
         title Agenda de Consultorios
+        link(rel="stylesheet", href="/css/headerAdmin.css")
         link(rel="stylesheet", href="/css/styleGeneral1.css")
+        link(rel="stylesheet", href="/css/adminPanel.css")
         link(rel="stylesheet", href="/css/footer.css")
     body
         include ../includes/headerAdmin
-        main 
-            h1 Administrador 
+        main(class="mainAdminPanel") 
+            h1(class="h1AdminPanel") Administrador
+            section(class="sectionAdminPanel")
+                h2(class="h2AdminPanel") Panel de gestión
+                p(class="pAdminPanel") Desde aquí podés realizar tareas administrativas clave, como:
+                ul(class="ulAdminPanel")
+                    li(class="liAdminPanel") Cargar, editar y gestionar médicos
+                    li(class="liAdminPanel") Activar o inhabilitar profesionales
+                    li(class="liAdminPanel") Crear cuentas para secretarias
+                p(class="pAdminPanel") Utilizá el menú superior para acceder a cada sección.
         include ../includes/footer
         script(src="/js/logout.js")

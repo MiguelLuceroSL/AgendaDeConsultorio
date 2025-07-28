@@ -1,8 +1,8 @@
-header
-            a(href="http://localhost:3000/admin/home", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
-            nav 
-                ul(class="ulHeader")
-                    li: a(href="/admin/home") Inicio
-                    li: a(href="/admin/cargarProfesional") Médicos
-                    li: a(href="/admin/registerSecretaria") Registrar secretaria
-                    li: a(href="javascript:void(0);" id="logoutButton") Cerrar Sesión
+header(class="headerAdmin")
+            a(href="http://localhost:3000/admin/home", rel="noopener noreferrer" class="aLogoHeaderAdmin"): img(src="/img/agenda.png", alt="" class="logoHeaderAdmin")
+            nav(class="navHeaderAdmin") 
+                ul(class="ulHeaderAdmin")
+                    li(class="liHeaderAdmin"): a(href="/admin/home" class="linkHeaderAdmin") Inicio
+                    li(class="liHeaderAdmin"): a(href="/admin/cargarProfesional" class="linkHeaderAdmin") Médicos
+                    li(class="liHeaderAdmin"): a(href="/admin/registerSecretaria" class="linkHeaderAdmin") Registrar secretaria
+                    li(class="liHeaderAdmin"): a(href="javascript:void(0);" id="logoutButton" class="linkHeaderAdmin") Cerrar Sesión

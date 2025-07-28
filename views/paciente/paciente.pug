@@ -2,13 +2,20 @@ doctype html
 html
   head
     title Vista Paciente
+    link(rel="stylesheet" href="/css/headerPaciente.css")
     link(rel="stylesheet" href="/css/paciente.css")
     link(rel="stylesheet" href="/css/footer.css")
   body
     include ../includes/headerPaciente
-    h1 Bienvenido, #{paciente[0].nombre_completo}!
-    section
-      article
-        
+    main(class="mainPaciente")
+      h1 Bienvenido, #{paciente[0].nombre_completo}!
+      section
+        article(class="datosPaciente")
+          h2 Tu espacio personal de salud
+          p(class="descripcion") Desde aquí podés:
+          ul
+            li Solicitar tus turnos médicos
+            li Actualizar tus datos personales
+          p Si tenés alguna duda, no dudes en comunicarte con la secretaría.
     include ../includes/footer
     script(src="/js/logout.js")

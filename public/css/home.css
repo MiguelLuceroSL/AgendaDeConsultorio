@@ -143,3 +143,100 @@ a:hover {
   width: 80px;
   height: 80px;
 }
+
+@media (max-width: 1024px) {
+  main,
+  .footer {
+    width: 95vw;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .carrouselImg {
+    width: 90vw;
+    max-width: 500px;
+    height: auto;
+  }
+  .logoHeader,
+  nav ul {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 10px;
+  }
+  .logoHeader {
+    padding-left: 10px;
+    margin-bottom: 10px;
+  }
+  nav ul {
+    padding-right: 10px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  main {
+    width: 98vw;
+    padding: 0 5px;
+  }
+  .sectionCarrousel {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .carrouselImg {
+    width: 98vw;
+    max-width: 350px;
+    height: auto;
+  }
+  .btn1, .btn2 {
+    width: 36px;
+    height: 34px;
+  }
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    position: static;
+    width: 98vw;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .sectionFooter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .logoFooter {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+  h1 {
+    padding: 10px;
+    font-size: 1.2em;
+  }
+  .carrouselImg {
+    width: 95vw;
+    max-width: 220px;
+    height: auto;
+  }
+  .btn1, .btn2 {
+    width: 28px;
+    height: 26px;
+  }
+  .logoFooter {
+    width: 40px;
+    height: 40px;
+  }
+  .footer {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}

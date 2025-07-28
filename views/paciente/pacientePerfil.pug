@@ -2,35 +2,37 @@ doctype html
 html
   head
     title Vista Paciente
-    link(rel="stylesheet" href="/css/paciente.css")
+    link(rel="stylesheet" href="/css/headerPaciente.css")
+    link(rel="stylesheet" href="/css/pacientePerfil.css")
     link(rel="stylesheet" href="/css/footer.css")
   body
     include ../includes/headerPaciente
-    h1.h1Perfil Datos Personales
-    section.sectionPrincipal
-      img(src=`/img/icon/${paciente[0].icon}.jpg`, alt="icon" class="icon" id="icon")
-      span.nombre=paciente[0].nombre_completo
-      section.sectionPerfil
-        article.article1
-          fieldset.divisor
-            label.lbPerfil: u Correo electrónico:
-            span.spanPerfil=paciente[0].email
-          fieldset.divisor
-            label.lbPerfil: u DNI:
-            span.spanPerfil=paciente[0].dni
-          fieldset.divisor
-            label.lbPerfil: u Mutual:
-            span.spanPerfil=paciente[0].obra_social
-        article.article1
-          fieldset.divisor
-            label.lbPerfil: u Dirección:
-            span.spanPerfil=paciente[0].direccion
-          fieldset.divisor
-            label.lbPerfil: u Teléfono:
-            span.spanPerfil=paciente[0].telefono
-          fieldset.divisor
-            label.lbPerfil: u Fecha de nacimiento:
-            span.spanPerfil=formattedDate
-      li.botonEditar: a.aEditar(href="/pacientes/editar") Editar datos
+    main(class="mainPacientePerfil")
+      h1.h1Perfil Datos Personales
+      section.sectionPrincipal
+        img(src=`/img/icon/${paciente[0].icon}.jpg`, alt="icon" class="icon" id="icon")
+        span.nombre=paciente[0].nombre_completo
+        section.sectionPerfil
+          article.article1
+            fieldset.divisor
+              label.lbPerfil: u Correo electrónico:
+              span.spanPerfil=paciente[0].email
+            fieldset.divisor
+              label.lbPerfil: u DNI:
+              span.spanPerfil=paciente[0].dni
+            fieldset.divisor
+              label.lbPerfil: u Mutual:
+              span.spanPerfil=paciente[0].obra_social
+          article.article1
+            fieldset.divisor
+              label.lbPerfil: u Dirección:
+              span.spanPerfil=paciente[0].direccion
+            fieldset.divisor
+              label.lbPerfil: u Teléfono:
+              span.spanPerfil=paciente[0].telefono
+            fieldset.divisor
+              label.lbPerfil: u Fecha de nacimiento:
+              span.spanPerfil=formattedDate
+        li.botonEditar: a.aEditar(href="/pacientes/editar") Editar datos
     include ../includes/footer
     script(src="/js/logout.js")

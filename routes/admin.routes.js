@@ -35,11 +35,13 @@ router.get('/updateProfesional', authRequired, verifyRol('admin'), async (req, r
 });
 
 router.post('/actualizarEspecialidad', authRequired, verifyRol('admin'), actualizarEspecialidadC);
+
 router.get('/adminUpdateEspecialidadSuccess', authRequired, verifyRol('admin'), (req, res) => {
   res.render('admin/adminUpdateEspecialidadSuccess')
 })
 
 router.post('/actualizarMatricula', authRequired, verifyRol('admin'), actualizarMatriculaC);
+
 router.get('/adminUpdateMatriculaSuccess', authRequired, verifyRol('admin'), (req, res) => {
   res.render('admin/adminUpdateMatriculaSuccess')
 })

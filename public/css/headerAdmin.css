@@ -1,0 +1,88 @@
+.headerAdmin {
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    z-index: 1000;
+}
+
+.logoHeaderAdmin {
+    width: 100px;
+    height: 100px;
+}
+
+.aLogoHeaderAdmin {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.navHeaderAdmin {
+    display: flex;
+    align-items: center;
+}
+
+.ulHeaderAdmin {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.liHeaderAdmin {
+    display: flex;
+    align-items: center;
+}
+
+.linkHeaderAdmin {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    font-size: 16px;
+    transition: color 0.2s;
+}
+
+.linkHeaderAdmin:hover {
+    color: #3498db;
+}
+
+@media (max-width: 768px) {
+    .headerAdmin {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px 10px;
+    }
+
+    .logoHeaderAdmin {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 10px;
+    }
+
+    .ulHeaderAdmin {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .linkHeaderAdmin {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .headerAdmin {
+        padding: 8px 5px;
+    }
+
+    .logoHeaderAdmin {
+        width: 50px;
+        height: 50px;
+    }
+
+    .linkHeaderAdmin {
+        font-size: 14px;
+    }
+}

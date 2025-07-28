@@ -1,4 +1,4 @@
-html{
+html {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -11,8 +11,15 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
+.mainLogin {
+    min-height: 60vh;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-.seccion{
+.seccion {
     width: 60vw;
     height: 500px;
     display: flex;
@@ -22,7 +29,7 @@ body {
     gap: 60px;
 }
 
-.seccionSecre{
+.seccionSecre {
     width: 60vw;
     height: 500px;
     display: flex;
@@ -32,7 +39,7 @@ body {
     gap: 10px;
 }
 
-.articuloLogin{
+.articuloLogin {
     height: 100%;
     width: 400px;
     display: flex;
@@ -45,37 +52,40 @@ body {
     border-radius: 20px;
 }
 
-.articuloLogin{
+.articuloLogin {
     background-color: #D4F6FF;
 }
 
-.formLogin{
+.formLogin {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
 }
 
-.articuloLogin{
+.articuloLogin {
     border: 1px solid rgb(65, 65, 65);
 }
 
-.spanLogin{
+.spanLogin {
     font-size: 30px;
     padding: 20px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-.emailLogin, .pwLogin{
+.emailLogin,
+.pwLogin {
     width: 20px;
     border: none;
 }
 
-.lbEmailLogin, .lbPwLogin{
+.lbEmailLogin,
+.lbPwLogin {
     font-size: 18px;
 }
 
-.inputEmailLogin, .inputPwLogin{
+.inputEmailLogin,
+.inputPwLogin {
     border: 1px solid black;
     margin-top: 10px;
     height: 35px;
@@ -83,31 +93,106 @@ body {
     font-size: 14px;
 }
 
-.pwOlvidada{
+.pwOlvidada {
     color: black;
 }
 
-.botonLogin{
+.botonLogin {
     background-color: #FFDDAE;
     border: none;
-    padding: 15px 32px; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block; 
-    font-size: 16px; 
-    margin: 4px 2px; 
-    cursor: pointer; 
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
     border-radius: 5px;
     -webkit-box-shadow: 0 10px 6px -6px #1b1a1a;
     -moz-box-shadow: 0 10px 6px -6px #242222;
     box-shadow: 0 10px 6px -6px #2b2a2a;
 }
 
-.botonLogin:hover{
+.botonLogin:hover {
     background-color: #f3c88d;
 }
 
-.pError{
-    color: red; 
+.pError {
+    color: red;
     font-size: 0.9em;
+}
+
+@media (max-width: 900px) {
+    .seccion,
+    .seccionSecre {
+        width: 90vw;
+        height: auto;
+        flex-direction: column;
+        gap: 30px;
+        padding: 20px 0;
+    }
+
+    .articuloLogin {
+        width: 90vw;
+        max-width: 350px;
+        min-width: 220px;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    .inputEmailLogin,
+    .inputPwLogin {
+        width: 90vw;
+        max-width: 250px;
+    }
+
+    .spanLogin {
+        font-size: 24px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    html {
+        height: auto;
+        min-height: 100vh;
+        padding: 10px 0;
+    }
+
+    .mainLogin {
+        min-height: auto;
+        padding: 10px 0;
+    }
+
+    .seccion,
+    .seccionSecre {
+        width: 100vw;
+        gap: 15px;
+        padding: 0;
+    }
+
+    .articuloLogin {
+        width: 98vw;
+        max-width: 98vw;
+        min-width: 180px;
+        border-radius: 10px;
+        padding: 10px 0;
+    }
+
+    .inputEmailLogin,
+    .inputPwLogin {
+        width: 90vw;
+        max-width: 180px;
+        font-size: 12px;
+    }
+
+    .spanLogin {
+        font-size: 18px;
+        padding: 5px;
+    }
+
+    .botonLogin {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
 }

@@ -2,11 +2,12 @@ doctype html
 html
     head
         title Cargar Médico
+        link(rel="stylesheet", href="/css/headerAdmin.css")
         link(rel="stylesheet", href="/css/styleGeneral1.css")
         link(rel="stylesheet", href="/css/footer.css")
     body
         include ../includes/headerAdmin
-        main 
-            h1 Cargar Agenda
+        main(class="mainAdminCargarAgenda") 
+            h1(class="h1AdminCargarAgenda") Cargar Agenda
         include ../includes/footer
         script(src="/js/logout.js")

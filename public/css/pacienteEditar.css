@@ -1,0 +1,194 @@
+body {
+    background-color: #fbfbfb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tituloEditar {
+    text-align: center;
+    color: #2c3e50;
+    margin: 40px 0 30px 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.sectionPrincipalEditar {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    padding: 35px 45px;
+    max-width: 700px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.formPerfilEditar {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    align-items: center;
+}
+
+.campoPerfilEditar {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 100%;
+    max-width: 420px;
+}
+
+.campoImg {
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.iconEdit {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+    border: 3px solid #3498db;
+    background: #eaf6fb;
+}
+
+.botonCambiarFoto {
+    display: inline-block;
+    background-color: #eaf6fb;
+    color: #3498db;
+    padding: 7px 18px;
+    font-size: 1rem;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s, color 0.2s;
+    border: 1px solid #3498db;
+    margin-bottom: 8px;
+}
+
+.botonCambiarFoto:hover {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.lbPerfil {
+    font-weight: 600;
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 2px;
+}
+
+.inputPerfil {
+    font-size: 1.08rem;
+    color: #2c3e50;
+    background: #f4f8fb;
+    padding: 7px 12px;
+    border-radius: 7px;
+    border: 1px solid #e1e8ed;
+    font-weight: 500;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.inputPerfil:focus {
+    border-color: #3498db;
+}
+
+.inputPerfil[disabled] {
+    background: #f4f8fb;
+    color: #aaa;
+    border: 1px solid #e1e8ed;
+    cursor: not-allowed;
+}
+
+.botonEditarFoto {
+    background-color: #3498db;
+    color: white;
+    padding: 13px 32px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.08);
+    margin-top: 18px;
+}
+
+.botonEditarFoto:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.fechaNacimiento {
+    font-size: 1.08rem;
+    color: #2c3e50;
+    background: #f4f8fb;
+    padding: 7px 12px;
+    border-radius: 7px;
+    border: 1px solid #e1e8ed;
+    font-weight: 500;
+    word-break: break-word;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+@media (max-width: 900px) {
+    .sectionPrincipalEditar {
+        max-width: 95%;
+        padding: 25px 20px;
+    }
+    .formPerfilEditar {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .tituloEditar {
+        font-size: 1.5rem;
+        margin: 22px 0 18px 0;
+    }
+    .sectionPrincipalEditar {
+        padding: 15px 5px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    }
+    .campoPerfilEditar {
+        max-width: 100%;
+        gap: 5px;
+    }
+    .iconEdit {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 8px;
+    }
+    .botonEditarFoto {
+        padding: 10px 18px;
+        font-size: 1rem;
+        border-radius: 6px;
+        margin-top: 12px;
+    }
+}
+
+@media (max-width: 400px) {
+    .sectionPrincipalEditar {
+        padding: 7px 2px;
+    }
+    .tituloEditar {
+        font-size: 1.1rem;
+    }
+    .iconEdit {
+        width: 60px;
+        height: 60px;
+    }
+}

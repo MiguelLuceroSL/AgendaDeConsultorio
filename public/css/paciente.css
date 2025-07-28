@@ -1,14 +1,65 @@
 body {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    background-color: #FBFBFB;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    width: 100vw;
+    background-color: #fbfbfb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.mainPaciente {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+section {
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.datosPaciente {
+    background-color: #D4F6FF;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    color: #34495e;
+}
+
+p {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 20px;
+}
+
+.descripcion {
+    font-size: 1.1rem;
+    color: #414141;
+    margin-bottom: 15px;
 }
 
 header {
@@ -29,10 +80,10 @@ li {
     list-style-type: none;
 }
 
-.campoImg{
+.campoImg {
     display: flex;
     justify-content: center;
-    
+
 }
 
 .icon {
@@ -52,7 +103,7 @@ li {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-.sectionPrincipal{
+.sectionPrincipal {
     width: 80vw;
     height: 500px;
     display: flex;
@@ -90,7 +141,7 @@ li {
 }
 
 .botonEditar {
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     height: 45px;
     width: 100px;
     background-color: #007bff;
@@ -108,21 +159,21 @@ li {
     background-color: #0056b3;
 }
 
-.aEditar{
+.aEditar {
     color: white !important;
 }
 
-.aEditar:hover{
+.aEditar:hover {
     color: white !important;
 }
 
-.formPerfilEditar{
+.formPerfilEditar {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.campoPerfilEditar{
+.campoPerfilEditar {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -132,17 +183,22 @@ li {
 
 .formPerfilFoto {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columnas iguales */
-    gap: 16px; /* Espaciado entre los elementos */
-    margin: 20px auto; /* Centrar el formulario */
-    max-width: 800px; /* Ancho máximo para el formulario */
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 columnas iguales */
+    gap: 16px;
+    /* Espaciado entre los elementos */
+    margin: 20px auto;
+    /* Centrar el formulario */
+    max-width: 800px;
+    /* Ancho máximo para el formulario */
 }
 
 .campoPerfilFoto {
-    text-align: center; /* Centrar contenido dentro del campo */
+    text-align: center;
+    /* Centrar contenido dentro del campo */
 }
 
-.articleFoto{
+.articleFoto {
     display: flex;
     flex-direction: column-reverse;
 }
@@ -157,14 +213,19 @@ li {
 }
 
 .iconEdit:hover {
-    transform: scale(1.1); /* Ampliar ligeramente al pasar el cursor */
-    border-color: #007bff; /* Cambiar color del borde */
+    transform: scale(1.1);
+    /* Ampliar ligeramente al pasar el cursor */
+    border-color: #007bff;
+    /* Cambiar color del borde */
 }
 
 .botonEditarFoto {
-    grid-column: span 4; /* El botón ocupa las 4 columnas */
-    justify-self: center; /* Centra el botón horizontalmente */
-    margin-top: 20px; /* Espacio superior */
+    grid-column: span 4;
+    /* El botón ocupa las 4 columnas */
+    justify-self: center;
+    /* Centra el botón horizontalmente */
+    margin-top: 20px;
+    /* Espacio superior */
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
@@ -179,8 +240,10 @@ li {
 }
 
 .botonCambiarFoto {
-    justify-self: center; /* Centra el botón horizontalmente */
-    margin-top: 20px; /* Espacio superior */
+    justify-self: center;
+    /* Centra el botón horizontalmente */
+    margin-top: 20px;
+    /* Espacio superior */
     padding: 10px 20px;
     background-color: #007bff;
     color: white;

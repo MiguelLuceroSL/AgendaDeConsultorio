@@ -2,34 +2,35 @@ doctype html
 html
   head
     title Vista Paciente
-    link(rel="stylesheet" href="/css/secretariaGestionTurno.css")
     link(rel="stylesheet" href="/css/pacienteTurno.css")
+    link(rel="stylesheet" href="/css/headerPaciente.css")
     link(rel="stylesheet" href="/css/footer.css")
     link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css")
   body
     include ../includes/headerPaciente
-    h1 ¡Bienvenido, paciente!
-    form(action="/turnos/crearPaciente" method="POST" class="formTurnos" enctype="multipart/form-data") 
-      h3 Selecciona un Profesional
-      if profesionales && profesionales.length
-        select(name="profesional_especialidad_id" id="profesional" required)
-          option(value="" selected disabled) Selecciona un profesional
-            each profesional in profesionales
-              option(value=profesional.id)= `${profesional.id}  ${profesional.nombre_completo} / ${profesional.especialidad}`
-      else
-        p no se encontraron profesionales
-      input(type="hidden" name="paciente_id" value=idPaciente)
-      label(for="fecha") Selecciona la fecha:
-      input(type="text" name="fecha" id="fecha" required)
-      label(for="horario") Selecciona un horario:
-      select(name="hora" id="horario" required)
-        option(value="" selected disabled) Selecciona un horario
-      label(for="detalle_turno") Detalle del turno:
-      textarea(name="detalle_turno" id="detalle_turno" rows="4" placeholder="Detalles adicionales del turno" required)
-      input(type="hidden" name="estado" value="Reservada")
-      label(for="dni_foto") Subí tu fotocopia del DNI:
-      input(type="file" name="dni_foto" id="dni_foto" accept="image/*" required)
-      button(type="submit") Crear Turno
+    main(class="mainPacienteTurno")
+      h1 ¡Reserva tu turno ahora!
+      form(action="/turnos/crearPaciente" method="POST" class="formTurnos" enctype="multipart/form-data") 
+        h3 Selecciona un Profesional
+        if profesionales && profesionales.length
+          select(name="profesional_especialidad_id" id="profesional" required)
+            option(value="" selected disabled) Selecciona un profesional
+              each profesional in profesionales
+                option(value=profesional.id)= `${profesional.id}  ${profesional.nombre_completo} / ${profesional.especialidad}`
+        else
+          p no se encontraron profesionales
+        input(type="hidden" name="paciente_id" value=idPaciente)
+        label(for="fecha") Selecciona la fecha:
+        input(type="text" name="fecha" id="fecha" required)
+        label(for="horario") Selecciona un horario:
+        select(name="hora" id="horario" required)
+          option(value="" selected disabled) Selecciona un horario
+        label(for="detalle_turno") Detalle del turno:
+        textarea(name="detalle_turno" id="detalle_turno" rows="4" placeholder="Detalles adicionales del turno" required)
+        input(type="hidden" name="estado" value="Reservada")
+        label(for="dni_foto") Subí tu fotocopia del DNI:
+        input(type="file" name="dni_foto" id="dni_foto" accept="image/*" required)
+        button(type="submit") Crear Turno
     include ../includes/footer
     script(src="/js/logout.js")
     script(src="/js/horarios.js")

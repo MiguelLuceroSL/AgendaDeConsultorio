@@ -1,30 +1,156 @@
 body {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    background-color: #FBFBFB;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    width: 100vw;
+    background-color: #fbfbfb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
+}
 
-header{
-    width: 80vw;
+.mainPacienteTurno {
+    flex: 1;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
 }
 
-.ulHeader{
-    display: flex;
-    flex-direction: row;
-    gap: 50px;
+.mainPacienteTurno h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
 }
 
-li{
-    list-style-type: none;
+.formTurnos {
+    width: 20vw;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.formTurnos h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: #34495e;
+}
+
+.formTurnos label {
+    display: block;
+    margin: 15px 0 5px;
+    font-weight: 600;
+    color: #555;
+}
+
+.formTurnos select,
+.formTurnos input[type="text"],
+.formTurnos textarea {
+    width: 80%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    text-align: center;
+}
+
+.formTurnos input[type="file"] {
+    margin-top: 8px;
+    margin-bottom: 18px;
+    font-size: 1rem;
+}
+
+.formTurnos select:focus,
+.formTurnos input[type="text"]:focus,
+.formTurnos textarea:focus,
+.formTurnos input[type="file"]:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+.formTurnos button {
+    display: block;
+    margin: 30px auto 0;
+    background-color: #3498db;
+    color: white;
+    padding: 14px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.formTurnos button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.formTurnos p {
+    color: #c0392b;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 900px) {
+    .formTurnos {
+        max-width: 95%;
+        padding: 25px 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .mainPacienteTurno h1 {
+        font-size: 1.5rem;
+        margin-bottom: 18px;
+    }
+    .formTurnos {
+        padding: 15px 5px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+    }
+    .formTurnos h3 {
+        font-size: 1rem;
+        margin-top: 15px;
+        margin-bottom: 7px;
+    }
+    .formTurnos label {
+        margin: 10px 0 3px;
+        font-size: 0.98rem;
+    }
+    .formTurnos select,
+    .formTurnos input[type="text"],
+    .formTurnos textarea {
+        padding: 9px 10px;
+        font-size: 0.98rem;
+        border-radius: 6px;
+    }
+    .formTurnos input[type="file"] {
+        font-size: 0.98rem;
+    }
+    .formTurnos button {
+        padding: 10px 18px;
+        font-size: 1rem;
+        border-radius: 6px;
+        margin-top: 18px;
+    }
+}
+
+@media (max-width: 400px) {
+    .formTurnos {
+        padding: 7px 2px;
+    }
+    .mainPacienteTurno h1 {
+        font-size: 1.1rem;
+    }
 }

@@ -2,12 +2,13 @@ doctype html
 html
   head
     title Vista Paciente
-    link(rel="stylesheet" href="/css/paciente.css")
+    link(rel="stylesheet" href="/css/headerPaciente.css")
+    link(rel="stylesheet" href="/css/pacienteEditar.css")
     link(rel="stylesheet" href="/css/footer.css")
   body
     include ../includes/headerPaciente
-    h1 Datos Personales
-    section
+    h1(class="tituloEditar") Datos Personales
+    section(class="sectionPrincipalEditar")
       article
         form.formPerfilEditar(action="/pacientes/perfil", method="POST")
           fieldset.campoPerfilEditar(class="campoImg")
@@ -68,7 +69,7 @@ html
             )
           fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilFechaNacimiento") Fecha de nacimiento:
-            span=formattedDate
+            span(class="fechaNacimiento")=formattedDate
             input.inputPerfil(
               type="date", 
               id="perfilFechaNacimiento", 

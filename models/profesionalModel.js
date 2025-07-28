@@ -5,26 +5,21 @@ import connectDB from '../config/db.js';
   db.query(sql, [nombre_completo], callback);
 };*/
 
-export const profesionalCrearM = (nombre_completo, especialidad, matricula, callback) => {
-  //inserta al profesional
-  const sqlProfecional = "INSERT INTO profesional (nombre_completo) VALUES (?)"
-  db.query(sqlProfecional, [nombre_completo], (error, result) => {
-    if (error) {
-      callback(error, null)//maneja el error
-      return //termina la ejecucion
-    }
+export const profesionalCrearM = async (nombre_completo, especialidad, matricula, callback) => {
+  try {
+    const connection = await connectDB();
 
-    const profesionalId = result.insertId //obtiene la Id del profesional insertado
-    //inserta la especialidad del profesional
-    const sqlEspecialidad = "INSERT INTO profesional_especialidad (profesional_id, especialidad_id, matricula) VALUES (?, (SELECT id FROM especialidad WHERE nombre = ?), ?)"
-    db.query(sqlEspecialidad, [profesionalId, especialidad, matricula], (error, result) => {
-      if (error) {
-        callback(error, null)//maneja el error
-        return //termina la ejecucion
-      }
-      callback(null, result) //operacion exitosa
-    })
-  })
+    const sqlProfesional = "INSERT INTO profesional (nombre_completo) VALUES (?)";
+    const [profResult] = await connection.query(sqlProfesional, [nombre_completo]);
+    const profesionalId = profResult.insertId;
+
+    const sqlEspecialidad = "INSERT INTO profesional_especialidad (profesional_id, especialidad_id, matricula) VALUES (?, (SELECT id FROM especialidad WHERE nombre = ?), ?)";
+    const [espResult] = await connection.query(sqlEspecialidad, [profesionalId, especialidad, matricula]);
+
+    callback(null, espResult);
+  } catch (error) {
+    callback(error, null);
+  }
 };
 
 export const profesionalBorrarM = (id, callback) => {
@@ -97,14 +92,28 @@ export const obtenerProfesionalesVistaM = async() => {
 
 
 
-export const actualizarEspecialidadM = (matricula, especialidad, callback) => {
-  const sql = `UPDATE profesional_especialidad SET especialidad_id=? WHERE matricula=?;`;
-  db.query(sql, [especialidad, matricula], callback);
+export const actualizarEspecialidadM = async (matricula, especialidad, callback) => {
+  try {
+    const connection = await connectDB();
+    const sql = `UPDATE profesional_especialidad SET especialidad_id=? WHERE matricula = ?;`;
+    const [result] = await connection.query(sql, [especialidad, matricula]);
+    callback(null, result);
+  } catch (error) {
+    callback(error, null);
+  }
 };
 
-export const actualizarMatriculaM = (matricula, nueva_matricula, callback) => {
-  const sql = `UPDATE profesional_especialidad SET matricula=? WHERE matricula=?;`;
-  db.query(sql, [nueva_matricula, matricula], callback);
+export const actualizarMatriculaM = async (matricula, nueva_matricula, callback) => {
+  try {
+    const connection = await connectDB();
+    console.log("WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
+    console.log('nueva matricula', nueva_matricula, ' - matricula', matricula);
+    const sql = `UPDATE profesional_especialidad SET matricula=? WHERE matricula=?;`;
+    const [result] = await connection.query(sql, [nueva_matricula, matricula]);
+    callback(null, result);
+  } catch (error) {
+    callback(error, null);
+  }
 };
 
 export const actualizarNombreCompletoM = (nuevo_nombre_completo, profesional_id, callback) => {

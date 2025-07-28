@@ -7,18 +7,19 @@ html
   body
     header 
       a(href="http://localhost:3000/", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
-    section.seccion
-      article.articuloLogin
-        form.formLogin(id="loginForm")
-          span.spanLogin INICIAR SESIÓN
-          fieldset.emailLogin
-            label.lbEmailLogin(for="loginEmail") Correo electrónico:
-            input.inputEmailLogin(type="email", id="loginEmail", name="email", required, placeholder="Correo electrónico")
-          fieldset.pwLogin
-            label.lbPwLogin(for="loginPassword") Contraseña:
-            input.inputPwLogin(type="password", id="loginPassword", name="password", required, placeholder="Contraseña")
-          a(href="/pwOlvidada" class="pwOlvidada") ¿Olvidaste tu contraseña? 
-          button.botonLogin(type="submit") Iniciar Sesión
-          p(class="pError" id="error-message")
+    main.mainLogin
+      section.seccion
+        article.articuloLogin
+          form.formLogin(id="loginForm")
+            span.spanLogin INICIAR SESIÓN
+            fieldset.emailLogin
+              label.lbEmailLogin(for="loginEmail") Correo electrónico:
+              input.inputEmailLogin(type="email", id="loginEmail", name="email", required, placeholder="Correo electrónico")
+            fieldset.pwLogin
+              label.lbPwLogin(for="loginPassword") Contraseña:
+              input.inputPwLogin(type="password", id="loginPassword", name="password", required, placeholder="Contraseña")
+            a(href="/pwOlvidada" class="pwOlvidada") ¿Olvidaste tu contraseña? 
+            button.botonLogin(type="submit") Iniciar Sesión
+            p(class="pError" id="error-message")
     include includes/footer
     script(type="module" src="/js/login.js")

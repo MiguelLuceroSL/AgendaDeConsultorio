@@ -1,3 +1,102 @@
-.claseFalse{
-    display: none;
+/* adminCreateProfesional.css */
+
+/* Main container styling */
+.mainAdminCreateProfesional {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 70vh;
+    background: #f7f9fa;
+    padding: 40px 0;
+}
+
+/* Form styling */
+.formCreate {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+/* Title styling */
+.spanCreate {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3a4b;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Fieldset styling */
+.formCreate fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Label styling */
+.lbNombreCompleto,
+.lbMatricula,
+.lbEspecialidad {
+    font-size: 1rem;
+    color: #34495e;
+    margin-bottom: 2px;
+}
+
+/* Input styling */
+.inputNombreCompleto,
+.inputMatricula {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f9fafb;
+    transition: border-color 0.2s;
+}
+
+.inputNombreCompleto:focus,
+.inputMatricula:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+/* Select styling */
+.selectEspecialidad {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f9fafb;
+    transition: border-color 0.2s;
+}
+
+.selectEspecialidad:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+/* Button styling */
+.botonCreate {
+    margin-top: 18px;
+    padding: 12px 0;
+    background: #3498db;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.botonCreate:hover {
+    background: #217dbb;
 }

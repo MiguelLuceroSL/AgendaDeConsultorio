@@ -29,11 +29,11 @@ body {
 .formRegistro {
     height: 40vh;
     display: flex;
-    flex-wrap: wrap; /* Permite que los elementos se ajusten en filas */
-    gap: 20px; /* Espacio entre los campos */
-    justify-content: space-between; /* Espaciado entre columnas */
-    width: 1000px; /* Ancho máximo del formulario */
-    margin: auto; /* Centra el formulario */
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    width: 1000px;
+    margin: auto;
     -webkit-box-shadow: 0 10px 6px -6px #777;
     -moz-box-shadow: 0 10px 6px -6px #777;
     box-shadow: 0 10px 6px -6px #777;
@@ -43,15 +43,15 @@ body {
     padding: 50px;
   }
   
-  /* Cada fieldset ocupará el 48% del ancho */
+  /*cada fieldset ocupará el 48% del ancho*/
   form.formRegistro fieldset {
-    flex: 1 1 28%; /* Base 48%, crece si hay espacio */
+    flex: 1 1 28%; /*base 48% y crece si hay espacio*/
     display: flex;
     flex-direction: column;
     border: none;
   }
   
-  /* Asegúrate de que los labels y los inputs sean visibles */
+  /*para que los labels y los inputs sean visibles*/
   form.formRegistro label {
     margin-bottom: 5px;
     font-weight: bold;
@@ -63,9 +63,9 @@ body {
     border-radius: 5px;
   }
   
-  /* Botón de registro centrado */
+
   .botonRegistro {
-    flex: 1 1 40%; /* Ocupa toda la fila */
+    flex: 1 1 40%; /*ocupa toda la fila*/
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
@@ -77,4 +77,75 @@ body {
   
   .botonRegistro:hover {
     background-color: #0056b3;
+  }
+
+  @media (max-width: 1200px) {
+    .formRegistro {
+      width: 90vw;
+      padding: 30px;
+    }
+    .seccion {
+      width: 90vw;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .formRegistro {
+      width: 98vw;
+      padding: 15px;
+      height: auto;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .seccion {
+      width: 98vw;
+      flex-direction: column;
+      margin-top: 30px;
+      margin-bottom: 40px;
+    }
+    .spanRegistro {
+      font-size: 22px;
+      padding: 10px;
+    }
+    form.formRegistro fieldset {
+      flex: 1 1 100%;
+      margin-bottom: 10px;
+    }
+    .botonRegistro {
+      flex: 1 1 100%;
+      margin-top: 10px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    html {
+      height: auto;
+      min-height: 100vh;
+    }
+    .formRegistro {
+      width: 100vw;
+      padding: 5px;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .seccion {
+      width: 100vw;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .spanRegistro {
+      font-size: 18px;
+      padding: 5px;
+    }
+    form.formRegistro label {
+      font-size: 14px;
+    }
+    form.formRegistro input {
+      font-size: 14px;
+      padding: 8px;
+    }
+    .botonRegistro {
+      font-size: 16px;
+      padding: 8px 10px;
+    }
   }

@@ -1,4 +1,4 @@
-import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS, actualizarNombreCompletoS, obtenerProfesionalesVistaS} from "../services/profesionalService.js";
+import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS, actualizarNombreCompletoS, obtenerProfesionalesVistaS, actualizarMatriculaS} from "../services/profesionalService.js";
 
 
 export const crearProfesionalC = async (req, res) => {
@@ -54,9 +54,11 @@ export const actualizarEspecialidadC = async (req, res) => {
 };
 
 export const actualizarMatriculaC = async (req, res) => {
-  const { profesional_id, matricula } = req.body;
+  const {matricula, nueva_matricula } = req.body;
   try {
-    await actualizarEspecialidadS(profesional_id, matricula);
+    console.log("matricula controller: ", matricula);
+    console.log("nueva_matricula controller: ", nueva_matricula);
+    await actualizarMatriculaS(matricula, nueva_matricula);
     console.log("Matricula actualizada exitosamente.");
     res.redirect('adminUpdateMatriculaSuccess');
   } catch (err) {

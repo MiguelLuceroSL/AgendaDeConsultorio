@@ -2,29 +2,29 @@ doctype html
 html
     head
         title Cargar Médico
+        link(rel="stylesheet", href="/css/headerAdmin.css")
         link(rel="stylesheet", href="/css/styleGeneral1.css")
-        link(rel="stylesheet", href="/css/adminCargarProfesional.css")
-        link(rel="stylesheet", href="/css/adminFormCargar.css")
+        link(rel="stylesheet" href="/css/adminCreateProfesional.css")
         link(rel="stylesheet" href="/css/footer.css")
     body
         include ../includes/headerAdmin
-        main
-            form.formCreate(action="/profesional/crear", method="POST")
-                span.spanCreate Cargar un médico
-                fieldset.nombreCompleto 
-                    label.lbNombreCompleto(for="nombre_completo") Nombre completo: 
-                    input.inputNombreCompleto(type="text", id="nombre_completo", name="nombre_completo", required, placeholder="Nombre completo")
-                fieldset.matricula
-                    label.lbMatricula(for="matricula") Matricula: 
-                    input.inputMatricula(type="text", id="matricula", name="matricula", required, placeholder="Matrícula")
-                fieldset.especialidad 
-                    label.lbEspecialidad(for="especialidad") Especialidad: 
-                    select.selectEspecialidad(name="especialidad")
+        main(class="mainAdminCreateProfesional")
+            form(action="/profesional/crear", method="POST" class="formCreate")
+                span(class="spanCreate") Cargar un médico
+                fieldset(class="nombreCompleto") 
+                    label(for="nombre_completo" class="lbNombreCompleto") Nombre completo: 
+                    input(type="text", id="nombre_completo", name="nombre_completo", required, placeholder="Nombre completo" class="inputNombreCompleto")
+                fieldset(class="matricula")
+                    label(for="matricula" class="lbMatricula") Matricula: 
+                    input(type="text", id="matricula", name="matricula", required, placeholder="Matrícula" class="inputMatricula")
+                fieldset(class="especialidad")
+                    label(for="especialidad" class="lbEspecialidad") Especialidad: 
+                    select(name="especialidad" class="selectEspecialidad")
                         option(value="cardiologia") Cardiología
                         option(value="pediatria") Pediatria
                         option(value="kinesiologia") Kinesiología
                         option(value="psicologia") Psicología
                         option(value="odontologia") Odontología
-                button.botonCreate(type="submit") Cargar médico
+                button(type="submit" class="botonCreate") Cargar médico
         include ../includes/footer
         script(src="/js/logout.js")

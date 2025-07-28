@@ -2,12 +2,13 @@ doctype html
 html
     head
         title Vista Paciente
-        link(rel="stylesheet" href="/css/paciente.css")
+        link(rel="stylesheet" href="/css/headerPaciente.css")
+        link(rel="stylesheet" href="/css/pacienteFoto.css")
         link(rel="stylesheet" href="/css/footer.css")
     body
         include ../includes/headerPaciente
         h1 ¡Elige tu foto de perfil!
-        section
+        section.sectionFoto
             form.formPerfilFoto(action="/pacientes/foto" method="POST")
                 each num in Array.from({ length: 16 }, (_, i) => i + 1)
                     fieldset.campoPerfilFoto
