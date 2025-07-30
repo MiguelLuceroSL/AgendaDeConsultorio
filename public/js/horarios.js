@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .trim();
   }
 
-  function renderHorarios(horarios) {
+  /*function renderHorarios(horarios) {
     selectHorario.innerHTML =
       "<option disabled selected>Selecciona un horario</option>";
     horarios.forEach((hora) => {
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
       option.textContent = hora;
       selectHorario.appendChild(option);
     });
-  }
+  }*/
 
   async function obtenerAgendas(profesionalId) {
     try {
@@ -49,10 +49,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 }
 
-  async function verificarSobreturno(profesionalId, fecha, hora) {
-  const res = await fetch(`/turnos/sobreturnos/verificar?profesionalId=${profesionalId}&fecha=${fecha}&hora=${hora}`);
-  const data = await res.json();
-  return data.cantidad;
+  async function verificarSobreturno(profesionalId, fecha) {
+    const res = await fetch(`/turnos/sobreturnos/verificar?profesionalId=${profesionalId}&fecha=${fecha}`);
+    const data = await res.json();
+    return data.cantidad;
 }
 
   function generarHorarios(horaInicio, horaFin, duracion) {
@@ -82,6 +82,61 @@ document.addEventListener("DOMContentLoaded", () => {
       return { bloqueado: false, detalle: [] };
     }
   }
+
+    async function cargarHorariosConEstados(profesionalId, fecha, horariosBase, agendasDelDia) {
+  try {
+    const res = await fetch(`/turnos/horarios/estado?profesionalId=${profesionalId}&fecha=${fecha}`);
+    const estados = await res.json();
+
+    // Combinar confirmados y reservados en un solo array para buscar estado por hora
+    const estadosConfirmados = estados.confirmados || [];
+const estadosReservados = estados.reservados || [];
+
+selectHorario.innerHTML = "<option disabled selected>Selecciona un horario</option>";
+
+const cantidadSobreturnos = await verificarSobreturno(profesionalId, fecha);
+const agenda = agendasDelDia.find(a => typeof a.max_sobreturnos === "number");
+const maxAlcanzado = agenda && cantidadSobreturnos >= agenda.max_sobreturnos;
+
+for (const hora of horariosBase) {
+  const estado =
+    estadosConfirmados.includes(hora)
+      ? "Confirmado"
+      : estadosReservados.includes(hora)
+        ? "Reservada"
+        : null;
+
+  if (["Confirmado", "No disponible", "Presente", "En consulta", "Atendido"].includes(estado)) {
+    continue;
+  }
+
+  const option = document.createElement("option");
+  option.value = hora;
+  option.textContent = hora;
+
+  if (estado === "Reservada") {
+    option.setAttribute("data-sobreturno", "true");
+
+    if (maxAlcanzado) {
+      option.disabled = true;
+      option.textContent += " (Máximo sobreturnos)";
+      option.setAttribute("data-max-alcanzado", "true");
+      option.setAttribute("data-bloqueado", "true");
+    } else {
+      option.style.backgroundColor = "gold";
+      option.textContent += " (Sobreturno)";
+      option.setAttribute("data-max-alcanzado", "false");
+    }
+  }
+
+  selectHorario.appendChild(option);
+}
+  } catch (error) {
+    console.error("Error al cargar estados de turnos:", error);
+    // En caso de error, mostrar horarios sin estados especiales
+    selectHorario.innerHTML = "<option disabled selected>Error al cargar horarios</option>";
+  }
+}
 
   // Cuando seleccionan un profesional
   selectProfesional.addEventListener("change", async () => {
@@ -156,10 +211,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const fechasAusencias = await obtenerAusenciasTotales(profesionalId);
 
-const hoy = new Date();
-hoy.setHours(0, 0, 0, 0);
-const minFechaTurno = new Date(hoy);
-minFechaTurno.setDate(minFechaTurno.getDate() + 1);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const minFechaTurno = new Date(hoy);
+    minFechaTurno.setDate(minFechaTurno.getDate() + 1)
 
 fp = flatpickr(inputFecha, {
   dateFormat: "Y-m-d",
@@ -178,127 +233,104 @@ fp = flatpickr(inputFecha, {
   });
 
   // Cuando seleccionan una fecha
-  inputFecha.addEventListener("change", async () => {
-    const profesionalId = selectProfesional.value;
-    const fecha = inputFecha.value;
-    const agendas = window._agendas;
-    if (!fecha || agendas.length === 0) return;
+inputFecha.addEventListener("change", async () => {
+  const profesionalId = selectProfesional.value;
+  const fecha = inputFecha.value;
+  const agendas = window._agendas;
+  if (!fecha || agendas.length === 0) return;
 
-    const [ano, mes, dia] = fecha.split("-");
-    const fechaObj = new Date(ano, mes - 1, dia, 12);
-    const diaSemana = normalizarDia(
-      fechaObj.toLocaleDateString("es-AR", { weekday: "long" })
+  const [ano, mes, dia] = fecha.split("-");
+  const fechaObj = new Date(ano, mes - 1, dia, 12);
+  const diaSemana = normalizarDia(
+    fechaObj.toLocaleDateString("es-AR", { weekday: "long" })
+  );
+
+  const fechaStr = fechaObj.toISOString().slice(0, 10);
+
+  console.log("Día mapeado:", diaSemana);
+  console.log("Agendas:", agendas);
+  console.log("Fecha seleccionada:", fechaStr);
+
+  const agendasDelDia = agendas.filter((agenda) => {
+    const inicioStr = new Date(agenda.dia_inicio).toISOString().slice(0, 10);
+    const finStr = new Date(agenda.dia_fin).toISOString().slice(0, 10);
+
+    return (
+      agenda.dias.includes(diaSemana) &&
+      fechaStr >= inicioStr &&
+      fechaStr <= finStr
     );
-
-    const fechaStr = fechaObj.toISOString().slice(0, 10);
-
-    console.log("Día mapeado:", diaSemana);
-    console.log("Agendas:", agendas);
-    console.log("Fecha seleccionada:", fechaStr);
-
-    const agendasDelDia = agendas.filter((agenda) => {
-      const inicioStr = new Date(agenda.dia_inicio).toISOString().slice(0, 10);
-      const finStr = new Date(agenda.dia_fin).toISOString().slice(0, 10);
-
-      return (
-        agenda.dias.includes(diaSemana) &&
-        fechaStr >= inicioStr &&
-        fechaStr <= finStr
-      );
-    });
-
-    console.log("Agendas que coinciden con el día y fecha:", agendasDelDia);
-
-    let horariosBase = [];
-    for (const agenda of agendasDelDia) {
-      const franjas = generarHorarios(
-        agenda.horario_inicio,
-        agenda.horario_fin,
-        agenda.tiempo_consulta
-      );
-      horariosBase.push(...franjas); //se juntam todas las franjas horarias en un solo array
-    }
-
-    const ausencias = await obtenerAusencias(profesionalId, fecha);
-    console.log("Ausencias recibidas:", ausencias);
-
-    if (ausencias.bloqueado) {
-      const bloqueos = ausencias.detalle;
-
-      const hayBloqueoTotal = bloqueos.some(
-        (b) => !b.hora_inicio && !b.hora_fin
-      );
-      if (hayBloqueoTotal) {
-        console.warn("Bloqueo total detectado para la fecha:", fecha);
-        renderHorarios([]);
-        alert(
-          "El médico no está disponible en esta fecha por una ausencia total."
-        );
-        return;
-      }
-
-      // Logs iniciales
-      console.log("Horarios originales generados:", horariosBase);
-      console.log("Bloqueos parciales recibidos:", bloqueos);
-
-      horariosBase = horariosBase.filter((hora) => {
-        const [h, m] = hora.split(":");
-        const horaDate = new Date(2025, 0, 1, h, m);
-
-        const estaBloqueado = bloqueos.some((b) => {
-          if (!b.hora_inicio || !b.hora_fin) return false;
-          const inicio = new Date(`2025-01-01T${b.hora_inicio}`);
-          const fin = new Date(`2025-01-01T${b.hora_fin}`);
-          const bloqueado = horaDate >= inicio && horaDate < fin;
-
-          if (bloqueado) {
-            console.log(
-              `Eliminando ${hora} por bloqueo entre ${b.hora_inicio} y ${b.hora_fin}`
-            );
-          }
-
-          return bloqueado;
-        });
-
-        return !estaBloqueado;
-      });
-
-      console.log("Horarios luego de aplicar bloqueos:", horariosBase);
-    }
-
-  const { confirmados, reservados } = await obtenerHorariosPorEstado(profesionalId, fecha);
-
-for (const hora of horariosBase) {
-  if (confirmados.includes(hora)) {
-    continue; // si está confirmado, no lo muestra
-  }
-
-  const option = document.createElement("option");
-  option.value = hora;
-  option.textContent = hora;
-
-  if (reservados.includes(hora)) {
-    const cantidadSobreturnos = await verificarSobreturno(profesionalId, fecha, hora);
-    const agenda = agendasDelDia.find(a => a.max_sobreturnos !== null);
-
-    if (!agenda || cantidadSobreturnos >= agenda.max_sobreturnos) {
-      continue;
-    } else {
-      option.style.backgroundColor = "gold";
-      option.textContent += " (Sobreturno)";
-      option.setAttribute("data-sobreturno", "true");
-    }
-  }
-
-  selectHorario.appendChild(option);
-}
   });
 
+  console.log("Agendas que coinciden con el día y fecha:", agendasDelDia);
 
-  selectHorario.addEventListener("change", () => {
-  const selectedOption = selectHorario.options[selectHorario.selectedIndex];
-  if (selectedOption && selectedOption.dataset.sobreturno === "true") {
-    alert("Este horario ya está reservado. Estás creando un sobreturno.");
+  let horariosBase = [];
+  for (const agenda of agendasDelDia) {
+    const franjas = generarHorarios(
+      agenda.horario_inicio,
+      agenda.horario_fin,
+      agenda.tiempo_consulta
+    );
+    horariosBase.push(...franjas);
   }
+
+  const ausencias = await obtenerAusencias(profesionalId, fecha);
+  console.log("Ausencias recibidas:", ausencias);
+
+  if (ausencias.bloqueado) {
+    const bloqueos = ausencias.detalle;
+
+    const hayBloqueoTotal = bloqueos.some(
+      (b) => !b.hora_inicio && !b.hora_fin
+    );
+    if (hayBloqueoTotal) {
+      console.warn("Bloqueo total detectado para la fecha:", fecha);
+      renderHorarios([]);
+      alert(
+        "El médico no está disponible en esta fecha por una ausencia total."
+      );
+      return;
+    }
+
+    horariosBase = horariosBase.filter((hora) => {
+      const [h, m] = hora.split(":");
+      const horaDate = new Date(2025, 0, 1, h, m);
+
+      const estaBloqueado = bloqueos.some((b) => {
+        if (!b.hora_inicio || !b.hora_fin) return false;
+        const inicio = new Date(`2025-01-01T${b.hora_inicio}`);
+        const fin = new Date(`2025-01-01T${b.hora_fin}`);
+        return horaDate >= inicio && horaDate < fin;
+      });
+
+      return !estaBloqueado;
+    });
+
+    console.log("Horarios luego de aplicar bloqueos:", horariosBase);
+  }
+
+  // Acá es donde llamamos a la función que carga los horarios con sus estados!
+  await cargarHorariosConEstados(profesionalId, fecha, horariosBase, agendasDelDia);
+});
+
+
+selectHorario.addEventListener("change", () => {
+  const option = selectHorario.options[selectHorario.selectedIndex];
+  const esSobreturno = option.dataset.sobreturno === "true";
+  const maxAlcanzado = option.dataset.maxAlcanzado === "true";
+  const esSobreturnoInput = document.getElementById("es_sobreturno");
+
+
+if (esSobreturno && !maxAlcanzado) {
+  alert("Esta creando un sobreturno.");
+  esSobreturnoInput.value = 1;
+} else {
+    esSobreturnoInput.value = 0;
+  }
+
+  console.log("option.dataset:", option.dataset);
+  console.log("esSobreturno:", esSobreturno);
+  console.log("maxAlcanzado:", maxAlcanzado);
+  console.log("Valor seteado en hidden:", esSobreturnoInput.value);
 });
 });

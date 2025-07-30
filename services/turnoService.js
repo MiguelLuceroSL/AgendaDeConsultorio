@@ -1,30 +1,59 @@
-import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM, obtenerTurnosOcupados, traerTurnosFiltrados, traerTurnoPorIdM, actuEstadoTurnoM, actualizarTurnoTrasladoM, verificarSobreturnosM, obtenerHorariosPorEstadoM } from '../models/turnoModel.js';
+import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM, obtenerTurnosOcupados, traerTurnosFiltrados, traerTurnoPorIdM, actuEstadoTurnoM, actualizarTurnoTrasladoM, verificarSobreturnosM, obtenerHorariosPorEstadoM, obtenerCantidadSobreturnos } from '../models/turnoModel.js';
 
-export const crearTurnoS = async (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl) => {
-    console.log('Creando turno servicio ...');
-    try {
-        // Verificacion por si ya existe un turno para ese profesional en esa fecha y hora
-        /*const turnoExistente = await verificarTurnoExistenteM(profesional_especialidad_id, fecha, hora);
-        if (turnoExistente.length > 0) {
-            throw new Error('Ya existe un turno para este profesional en esa fecha y hora.');
-        }*/
+export const crearTurnoS = async (
+  paciente_id,
+  profesional_especialidad_id,
+  detalle_turno,
+  fecha,
+  hora,
+  estado,
+  dniFotoUrl,
+  es_sobreturno
+) => {
+  console.log('Creando turno servicio ...');
+  try {
+    // Validar que no se saquen turnos para fechas pasadas o el mismo día
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
 
-        // Si no existe, procedemos a crear el turno
-        const hoy = new Date();
-        hoy.setHours(0, 0, 0, 0);
-        const fechaTurno = new Date(fecha);
-        fechaTurno.setHours(0, 0, 0, 0);
-        console.log('Creando turno...');
-        
-        if (fechaTurno <= hoy) {
-            throw new Error('No se pueden sacar turnos para hoy o fechas pasadas');
-        }
-        const resultado = await crearTurnoM(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl);
-        console.log('Turno creado exitosamente:', resultado);
-        return resultado;
-    } catch (error) {
-        throw error;
+    const fechaTurno = new Date(fecha);
+    fechaTurno.setHours(0, 0, 0, 0);
+
+    if (fechaTurno <= hoy) {
+      throw new Error('No se pueden sacar turnos para hoy o fechas pasadas');
     }
+
+    // Validar límite de sobreturnos si corresponde
+    if (estado === "Reservada" && es_sobreturno === 1) {
+      const cantidadSobreturnos = await contarSobreturnosM(profesional_especialidad_id, fecha, hora);
+      const agenda = await obtenerAgendaPorFechaYProfesionalM(profesional_especialidad_id, fecha);
+      if (agenda && cantidadSobreturnos >= agenda.max_sobreturnos) {
+        throw new Error("Se alcanzó el máximo de sobreturnos para este horario.");
+      }
+    }
+
+    // Crear turno
+    console.log('Creando turno...');
+    const resultado = await crearTurnoM(
+      paciente_id,
+      profesional_especialidad_id,
+      detalle_turno,
+      fecha,
+      hora,
+      estado,
+      dniFotoUrl,
+      es_sobreturno
+    );
+    console.log('Turno creado exitosamente:', resultado);
+    return resultado;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const obtenerEstadosTurnoPorHorarioS = async (profesionalId, fecha) => {
+  return await obtenerEstadosTurnoPorHorarioM(profesionalId, fecha);
 };
 
 export const selTurnoS = (nombre_completo) => {
@@ -139,4 +168,9 @@ export const actualizarEstadoTurnoS = (estado, id) => {
 
 export const verificarSobreturnosS = async (profesionalId, fecha, hora) => {
   return await verificarSobreturnosM(profesionalId, fecha, hora);
+};
+
+
+export const verificarCantidadSobreturnos = async (profesionalId, fecha) => {
+  return await obtenerCantidadSobreturnos(profesionalId, fecha);
 };

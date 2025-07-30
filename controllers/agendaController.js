@@ -7,7 +7,8 @@ import {obtenerProfesionalesVistaM} from "../models/profesionalModel.js";
 
 export const crearAgendaC = async (req, res) => {
   try {
-    const { profesional_especialidad_id, sucursal_id, dia_inicio, dia_fin, tiempo_consulta, dias } = req.body;
+    const { profesional_especialidad_id, sucursal_id, dia_inicio, dia_fin, tiempo_consulta, dias, max_sobreturnos } = req.body;
+
 
     console.log("🚀 ~ crearAgendaC ~ req.body:", req.body);
 
@@ -76,7 +77,8 @@ export const crearAgendaC = async (req, res) => {
                 horario_fin: franja.fin,
                 tiempo_consulta,
                 dia_inicio,
-                dia_fin
+                dia_fin,
+                max_sobreturnos
               },
               [dia] // lista de días asociados a esa franja
             );

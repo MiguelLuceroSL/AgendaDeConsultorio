@@ -1,18 +1,29 @@
 import connectDB from '../config/db.js';
 
-export const crearTurnoM = async (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl) => {
+export const crearTurnoM = async (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno) => {
     try {
         const connection = await connectDB();
-        const sql = 'INSERT INTO turnos(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dni_foto_url) VALUES (?,?,?,?,?,?,?)'
-        console.log('Datos para crear turno:', paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl);
+        const sql = 'INSERT INTO turnos(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dni_foto_url, es_sobreturno) VALUES (?,?,?,?,?,?,?,?)'
+        console.log('Datos para crear turno:', paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno);
         console.log('SQL:', sql);
-        const [result] = await connection.execute(sql, [paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl]);
+        const [result] = await connection.execute(sql, [paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno ? 1 : 0]);
         return result;
     } catch (error) {
         console.error('Error al crear turno:', error);
         throw (error);
     }
 }
+
+export const obtenerEstadosTurnoPorHorarioM = async (profesionalId, fecha) => {
+  const connection = await connectDB();
+  const [rows] = await connection.execute(`
+    SELECT hora, estado
+    FROM turnos
+    WHERE profesional_especialidad_id = ? AND fecha = ?
+  `, [profesionalId, fecha]);
+
+  return rows;
+};
 
 export const selTurnoM = (nombre_completo, callback) => {
     const sql = 'SELECT t.detalle_turno, t.fecha, t.hora, t.estado, t.confirmado FROM turnos t JOIN paciente p ON t.paciente_id = p.id WHERE p.nombre_completo = ?;'
@@ -304,8 +315,51 @@ export const verificarSobreturnosM = async (profesionalId, fecha, hora) => {
     SELECT COUNT(*) AS cantidad
     FROM turnos t
     JOIN profesional_especialidad pe ON pe.id = t.profesional_especialidad_id
-    WHERE pe.id = ? AND t.fecha = ? AND t.hora = ? AND t.estado = 'Reservada'
+    WHERE pe.id = ? AND t.fecha = ? AND t.hora = ? AND t.estado = 'Reservada' AND t.es_sobreturno = 1
   `, [profesionalId, fecha, hora]);
   return rows[0].cantidad;
+};
+
+
+export const contarSobreturnosM = async (profesional_especialidad_id, fecha, hora) => {
+  const connection = await connectDB();
+  const [rows] = await connection.execute(
+    `SELECT COUNT(*) AS cantidad 
+     FROM turnos 
+     WHERE profesional_especialidad_id = ? AND fecha = ? AND hora = ? AND es_sobreturno = 1`,
+    [profesional_especialidad_id, fecha, hora]
+  );
+  return rows[0].cantidad;
+};
+
+export const obtenerAgendaPorFechaYProfesionalM = async (profesional_especialidad_id, fecha) => {
+  const connection = await connectDB();
+  const [rows] = await connection.execute(
+    `SELECT a.max_sobreturnos
+     FROM agenda a
+     JOIN agenda_dias ad ON a.id = ad.agenda_id
+     WHERE a.profesional_especialidad_id = ?
+       AND ? BETWEEN a.dia_inicio AND a.dia_fin
+       AND FIND_IN_SET(DAYOFWEEK(?), ad.dia_semana)`,
+    [profesional_especialidad_id, fecha, fecha]
+  );
+
+  return rows[0];
+};
+
+export const obtenerCantidadSobreturnos = async (profesionalId, fecha) => {
+  const connection = await connectDB();
+
+
+  const sql = `
+    SELECT COUNT(*) AS cantidad
+    FROM turnos
+    WHERE profesional_especialidad_id = ? 
+      AND fecha = ? 
+      AND es_sobreturno = 1
+  `;
+
+  const [rows] = await connection.execute(sql, [profesionalId, fecha]);
+  return rows[0];
 };
 

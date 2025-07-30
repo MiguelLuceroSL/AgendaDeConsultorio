@@ -68,6 +68,7 @@ form.addEventListener('submit', async (e) => {
   const dia_inicio = form.dia_inicio.value;
   const dia_fin = form.dia_fin.value;
   const tiempo_consulta = form.tiempo_consulta.value;
+  const max_sobreturnos = parseInt(form.max_sobreturnos.value || "0");
 
   
    const diasMapping = {
@@ -106,6 +107,7 @@ form.addEventListener('submit', async (e) => {
     dia_inicio,
     dia_fin,
     tiempo_consulta,
+    max_sobreturnos,
     dias
   };
 

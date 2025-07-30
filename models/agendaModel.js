@@ -13,8 +13,9 @@ export const crearAgendaM = async (agendaData, diasSemana) => {
         tiempo_consulta,
         dia_inicio,
         dia_fin,
-        estado
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        estado,
+        max_sobreturnos
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const [result] = await connection.execute(sqlAgenda, [
       agendaData.profesional_especialidad_id,
@@ -24,7 +25,8 @@ export const crearAgendaM = async (agendaData, diasSemana) => {
       agendaData.tiempo_consulta,
       agendaData.dia_inicio,
       agendaData.dia_fin,
-      'Activo'
+      'Activo',
+      agendaData.max_sobreturnos
     ]);
     console.log("🚀 ~ crearAgendaM ~ result:", result)
 
@@ -82,7 +84,7 @@ export const obtenerAgendasActivasPorProfesional = async (profesionalId) => {
   try {
     const connection = await connectDB();
     const [agendas] = await connection.query(
-      `SELECT a.id, a.horario_inicio, a.horario_fin, a.tiempo_consulta, a.dia_inicio, a.dia_fin
+      `SELECT a.id, a.horario_inicio, a.horario_fin, a.tiempo_consulta, a.dia_inicio, a.dia_fin, a.max_sobreturnos
        FROM agenda a
        WHERE a.profesional_especialidad_id = ?`,
       [profesionalId]

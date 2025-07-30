@@ -1,5 +1,5 @@
 import express from 'express';
-import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC, crearTurnoPacienteC, traerTurnoPorId2C, editarEstadoTurnoC, obtenerTurnoYMedicosC, actualizarTurnoTrasladoC, verificarSobreturnosC, obtenerHorariosPorEstadoC} 
+import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC, crearTurnoPacienteC, traerTurnoPorId2C, editarEstadoTurnoC, obtenerTurnoYMedicosC, actualizarTurnoTrasladoC, verificarSobreturnos, obtenerHorariosPorEstadoC} 
 from '../controllers/turnoController.js';
 import multer from 'multer';
 import { storage } from '../config/cloudinaryConfig.js';
@@ -42,7 +42,7 @@ router.post('/trasladar/:id', actualizarTurnoTrasladoC);
 
 router.get("/horarios/estado", obtenerHorariosPorEstadoC);
 
-router.get('/sobreturnos/verificar', verificarSobreturnosC);
+router.get('/sobreturnos/verificar', verificarSobreturnos);
 
 /*router.get('/secretaria/home', (req, res) => {
   res.redirect('/turnos/listarTurnos');

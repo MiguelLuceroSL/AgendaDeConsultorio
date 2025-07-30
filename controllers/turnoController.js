@@ -1,4 +1,4 @@
-import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS, getTurnosOcupadosService, traerTurnosFiltradosS, traerTurnoPorIdS, actualizarEstadoTurnoS, actualizarTurnoTrasladoS, verificarSobreturnosS, obtenerHorariosPorEstadoS } from '../services/turnoService.js';
+import { crearTurnoS, selTurnoS, borrarTurnoS, actualizarTurnoS, confTurnoS, traerTurnosS, getTurnosOcupadosService, traerTurnosFiltradosS, traerTurnoPorIdS, actualizarEstadoTurnoS, actualizarTurnoTrasladoS, verificarSobreturnosS, obtenerHorariosPorEstadoS, obtenerEstadosTurnoPorHorarioS, verificarCantidadSobreturnos } from '../services/turnoService.js';
 import { obtenerProfesionalesS, obtenerProfesionalesVistaS } from "../services/profesionalService.js";
 import { obtenerPacientesVistaS } from '../services/pacienteService.js';
 import { obtenerTodasLasSucursales } from '../models/turnoModel.js';
@@ -6,12 +6,17 @@ import { obtenerTodasLasSucursales } from '../models/turnoModel.js';
 
 export const crearTurnoC = async (req, res) => {
   console.log(req.body);
-  const { paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora } = req.body;
-  const estado = "Confirmado";
+  let { paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, es_sobreturno } = req.body;
+  console.log('Raw es_sobreturno:', req.body.es_sobreturno, typeof req.body.es_sobreturno);
+  es_sobreturno = Number(req.body.es_sobreturno) === 1 ? 1 : 0;
+  console.log('Parsed es_sobreturno:', es_sobreturno);
+  console.log("🚀 ~ crearTurnoC ~ es_sobreturno:", es_sobreturno)
+  const estado ="Confirmado";
+  console.log("🚀 ~ crearTurnoC ~ estado:", estado)
   const dniFotoUrl = req.file ? req.file.path : null; //obtener la ruta de la foto del DNI si se subió 
 
   try {
-    await crearTurnoS(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl);
+    await crearTurnoS(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno);
     res.redirect('secretaria/secretariaTurnoSuccess');
   } catch (err) {
     console.error('Error al crear turno:', err.message);
@@ -247,15 +252,32 @@ export const obtenerHorariosPorEstadoC = async (req, res) => {
   try {
     const { profesionalId, fecha } = req.query;
     const horarios = await obtenerHorariosPorEstadoS(profesionalId, fecha);
+    console.log("Horarios recibidos:", horarios);
 
-     const normalizar = (hora) => hora.slice(0, 5);
+     const normalizar = (hora) => {
+      if (!hora) return null;
+      return hora.slice(0, 5);
+}
+    console.log("horarios formateados", normalizar)
+
+     const estadosOcultos = [
+      "Confirmado",
+      "No disponible",
+      "Presente",
+      "En consulta",
+      "Atendido"
+     ]
+     
 
     const confirmados = horarios
-      .filter((t) => t.estado === "Confirmado")
-      .map((t) => normalizar(t.hora));
+      .filter((t) => estadosOcultos.includes(t.estado))
+      .map((t) => normalizar(t.hora))
+      .filter((h) => h);
+      
     const reservados = horarios
       .filter((t) => t.estado === "Reservada")
-      .map((t) => normalizar(t.hora));
+      .map((t) => normalizar(t.hora))
+      .filter((h) => h);
 
     res.json({ confirmados, reservados });
   } catch (error) {
@@ -265,13 +287,39 @@ export const obtenerHorariosPorEstadoC = async (req, res) => {
 };
 
 export const verificarSobreturnosC = async (req, res) => {
+  const { profesionalId, fecha, hora } = req.query;
   try {
-    const { profesionalId, fecha, hora } = req.query;
     const cantidad = await verificarSobreturnosS(profesionalId, fecha, hora);
     res.json({ cantidad });
   } catch (err) {
-    console.error("Error al verificar sobreturnos:", err);
-    res.status(500).json({ error: "Error interno al contar sobreturnos." });
+    res.status(500).json({ error: 'Error al verificar sobreturnos' });
+  }
+};
+
+export const obtenerEstadosTurnoPorHorarioC = async (req, res) => {
+  const { profesionalId, fecha } = req.query;
+  try {
+    const estados = await obtenerEstadosTurnoPorHorarioS(profesionalId, fecha);
+    res.json(estados);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener los estados' });
+  }
+};
+
+export const verificarSobreturnos = async (req, res) => {
+  try {
+    const { profesionalId, fecha } = req.query;
+
+    if (!profesionalId || !fecha) {
+      return res.status(400).json({ error: "Faltan parámetros" });
+    }
+
+    const cantidad = await verificarCantidadSobreturnos(profesionalId, fecha);
+    res.json({ cantidad: cantidad.cantidad });
+
+  } catch (error) {
+    console.error("Error al verificar sobreturnos:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
