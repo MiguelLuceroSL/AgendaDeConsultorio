@@ -5,32 +5,34 @@ html
         link(rel="stylesheet", href="/css/headerAdmin.css")
         link(rel="stylesheet", href="/css/styleGeneral1.css")
         link(rel="stylesheet" href="/css/adminCargarProfesional.css")
+        link(rel="stylesheet" href="/css/adminUpdateProfesional.css")
         link(rel="stylesheet" href="/css/footer.css")
     body
         include ../includes/headerAdmin
-        main
-            h1 ¡¡¡Se actualizo el nombre correctamente!!!
-            p Buscar la ID o Matrícula en este 
-                a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
-            h2 Actualizar especialidad de un médico
-            form(action="/admin/actualizarEspecialidad" method="POST")
-                input(type="text" name="matricula" placeholder="Matrícula del médico" required)
-                select(name="especialidad" required)
-                    option(value="1") Cardiología
-                    option(value="2") Pediatría
-                    option(value="3") Kinesiología
-                    option(value="4") Psicología
-                    option(value="5") Odontología
-                button(type="submit") Actualizar
-            h2 Actualizar matrícula de un médico
-            form(action="/admin/actualizarMatricula" method="POST")
-                input(type="text" name="matricula" placeholder="Matrícula actual" required)
-                input(type="text" name="nueva_matricula" placeholder="Nueva matrícula" required)
-                button(type="submit") Actualizar
-            h2 Actualizar nombre completo de un médico
-            form(action="/admin/actualizarNombreCompleto" method="POST")
-                input(type="text" name="profesional_id" placeholder="ID del médico" required)
-                input(type="text" name="nuevo_nombre_completo" placeholder="Nuevo nombre completo" required)
-                button(type="submit") Actualizar
+        main(class="mainAdmin")
+            section(class="sectionAdmin")
+                h1(class="tituloVario") ¡¡¡Se actualizo el nombre exitosamente!!!
+                p(class="buscarId") Buscar la ID o Matrícula en este
+                    a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
+                h2(class="tituloActualizar") Actualizar especialidad de un médico
+                form(action="/admin/actualizarEspecialidad" method="POST" class="formActualizar")
+                    input(type="text" name="matricula" placeholder="Matrícula del médico" required class="inputMatricula")
+                    select(name="especialidad" required class="selectEspecialidad")
+                        option(value="1") Cardiología
+                        option(value="2") Pediatría
+                        option(value="3") Kinesiología
+                        option(value="4") Psicología
+                        option(value="5") Odontología
+                    button(type="submit" class="botonActualizar") Actualizar
+                h2(class="tituloActualizar") Actualizar matrícula de un médico
+                form(action="/admin/actualizarMatricula" method="POST" class="formActualizar")
+                    input(type="text" name="matricula" placeholder="Matrícula actual" required class="inputMatricula")
+                    input(type="text" name="nueva_matricula" placeholder="Nueva matrícula" required class="inputMatricula")
+                    button(type="submit" class="botonActualizar") Actualizar
+                h2(class="tituloActualizar") Actualizar nombre completo de un médico
+                form(action="/admin/actualizarNombreCompleto" method="POST" class="formActualizar")
+                    input(type="text" name="profesional_id" placeholder="ID del médico" required class="inputMatricula")
+                    input(type="text" name="nuevo_nombre_completo" placeholder="Nuevo nombre completo" required class="inputMatricula")
+                    button(type="submit" class="botonActualizar") Actualizar
         include ../includes/footer
         script(src="/js/logout.js")

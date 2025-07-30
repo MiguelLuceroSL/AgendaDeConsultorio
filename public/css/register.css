@@ -120,3 +120,43 @@ viejo
 .botonRegistro:hover{
     background-color: #f3c88d;
 }
+
+@media (max-width: 900px) {
+    .seccion {
+        width: 90vw;
+        flex-direction: column;
+    }
+    .articuloRegistro {
+        max-width: 95vw;
+    }
+    .campoRegistro {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .seccion {
+        width: 100vw;
+        padding: 10px;
+    }
+    .articuloRegistro {
+        max-width: 100vw;
+        padding: 10px;
+    }
+    .spanRegistro {
+        font-size: 22px;
+        padding: 10px;
+    }
+    .formRegistro {
+        gap: 10px;
+        height: auto;
+    }
+    .inputRegistro {
+        font-size: 12px;
+        height: 28px;
+    }
+    .botonRegistro {
+        font-size: 14px;
+        padding: 8px 0;
+    }
+}

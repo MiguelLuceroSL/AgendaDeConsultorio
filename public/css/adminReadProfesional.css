@@ -1,0 +1,218 @@
+/* adminReadProfesional.css */
+
+/* General Styles */
+.mainAdminReadProfesional {
+    max-width: 1100px;
+    min-height: 50vh;
+    margin: 40px auto 60px auto;
+    padding: 24px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.readContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mainTitle {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 28px;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.filterForm {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    justify-content: center;
+}
+
+.filterLabel {
+    font-size: 1.1rem;
+    color: #34495e;
+}
+
+.filterSelect {
+    padding: 7px 14px;
+    border-radius: 6px;
+    border: 1px solid #bfc9d1;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: border 0.2s;
+}
+
+.filterSelect:focus {
+    border: 1.5px solid #2980b9;
+    outline: none;
+}
+
+.filterButton {
+    padding: 7px 22px;
+    background: #2980b9;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.filterButton:hover {
+    background: #1a5e8a;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 18px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+}
+
+thead {
+    background: #2980b9;
+    color: #fff;
+}
+
+th,
+td {
+    padding: 12px 10px;
+    text-align: left;
+    font-size: 1rem;
+}
+
+tbody tr:nth-child(even) {
+    background: #f1f7fa;
+}
+
+tbody tr:hover {
+    background: #eaf3fa;
+}
+
+.noResults {
+    text-align: center;
+    color: #b94a48;
+    font-size: 1.15rem;
+    margin-top: 30px;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .mainAdminReadProfesional {
+        padding: 12px;
+        max-width: 98vw;
+    }
+
+    .mainTitle {
+        font-size: 1.7rem;
+    }
+
+    th,
+    td {
+        font-size: 0.97rem;
+        padding: 10px 6px;
+    }
+}
+
+@media (max-width: 650px) {
+    .mainAdminReadProfesional {
+        padding: 6px;
+        margin: 18px 0 30px 0;
+    }
+
+    .mainTitle {
+        font-size: 1.3rem;
+        margin-bottom: 18px;
+    }
+
+    .filterForm {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+        width: 100%;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tbody tr {
+        margin-bottom: 18px;
+        background: #f9f9f9;
+        border-radius: 6px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        padding: 8px 0;
+    }
+
+    td {
+        position: relative;
+        padding-left: 48%;
+        font-size: 0.98rem;
+        border: none;
+        border-bottom: 1px solid #e1e1e1;
+        min-height: 36px;
+    }
+
+    td:before {
+        position: absolute;
+        left: 12px;
+        top: 12px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: 600;
+        color: #2980b9;
+        font-size: 0.97rem;
+    }
+
+    td:nth-of-type(1):before {
+        content: "Id";
+    }
+
+    td:nth-of-type(2):before {
+        content: "Nombre Completo";
+    }
+
+    td:nth-of-type(3):before {
+        content: "Especialidad";
+    }
+
+    td:nth-of-type(4):before {
+        content: "Matrícula";
+    }
+
+    td:nth-of-type(5):before {
+        content: "Estado";
+    }
+}
+
+@media (max-width: 400px) {
+    .mainTitle {
+        font-size: 1.05rem;
+    }
+
+    .filterButton,
+    .filterSelect {
+        font-size: 0.93rem;
+        padding: 6px 10px;
+    }
+}

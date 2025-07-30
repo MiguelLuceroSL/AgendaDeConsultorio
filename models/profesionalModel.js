@@ -22,22 +22,24 @@ export const profesionalCrearM = async (nombre_completo, especialidad, matricula
   }
 };
 
-export const profesionalBorrarM = (id, callback) => {
-  const sqlPrimera = 'SELECT estado FROM profesional WHERE id=?';
-  db.query(sqlPrimera, [id], ((error, result) => {
-    if (error) {
-      return callback(error);
+export const profesionalBorrarM = async (id, callback) => {
+  try {
+    const connection = await connectDB();
+    const sqlPrimera = 'SELECT estado FROM profesional WHERE id=?';
+    const [result] = await connection.query(sqlPrimera, [id]);
+    if (!result || result.length === 0) {
+      return callback(new Error('Profesional no encontrado'));
     }
-    console.log('resultttttttttttttttado ', result.estado)
-    const estado = result.estado;
+    let estado = result[0].estado;
+    console.log("estadoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO:", estado);
+    estado === 1 ? estado = 0 : estado = 1;
     const sql = 'UPDATE profesional SET estado=? WHERE id=?';
-    db.query(sql, [estado, id], (error, result) => {
-      if (error) {
-        return callback(error)
-      }
-      callback(null, result)
-    });
-  }))
+    console.log("estado cambiado a:", estado);
+    const [updateResult] = await connection.query(sql, [estado, id]);
+    callback(null, updateResult);
+  } catch (error) {
+    callback(error);
+  }
 };
 
 
@@ -116,7 +118,13 @@ export const actualizarMatriculaM = async (matricula, nueva_matricula, callback)
   }
 };
 
-export const actualizarNombreCompletoM = (nuevo_nombre_completo, profesional_id, callback) => {
-  const sql = `UPDATE profesional SET nombre_completo=? WHERE id=?;`;
-  db.query(sql, [nuevo_nombre_completo, profesional_id], callback);
+export const actualizarNombreCompletoM = async (nuevo_nombre_completo, profesional_id, callback) => {
+  try {
+    const connection = await connectDB();
+    const sql = `UPDATE profesional SET nombre_completo=? WHERE id=?;`;
+    const [result] = await connection.query(sql, [nuevo_nombre_completo, profesional_id]);
+    callback(null, result);
+  } catch (error) {
+    callback(error, null);
+  }
 };

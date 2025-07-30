@@ -6,10 +6,13 @@ html
         link(rel="stylesheet", href="/css/styleGeneral1.css")
         link(rel="stylesheet", href="/css/adminCargarProfesional.css")
         link(rel="stylesheet", href="/css/adminCreateProfesional.css")
+        link(rel="stylesheet" href="/css/adminCreateSuccess.css")
         link(rel="stylesheet" href="/css/footer.css")
     body
         include ../includes/headerAdmin
-        main
-            h1 ¡Médico cargado exitosamente!
+        main(class="mainAdminCreateSuccess")
+            section(class="successContainer")
+                h1(class="successMessage") ¡Médico cargado exitosamente!
+                a(href="/admin" class="button") Volver al inicio
         include ../includes/footer
         script(src="/js/logout.js")

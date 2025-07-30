@@ -1,0 +1,114 @@
+/* adminUpdateProfesional.css */
+
+/* General layout */
+.mainAdmin {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: #f7f9fa;
+    padding: 40px 0;
+}
+
+.sectionAdmin {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 32px 40px;
+    max-width: 480px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.tituloVario {
+    font-size: 1.5rem;
+    color: #1976d2;
+    margin-bottom: 16px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.buscarId {
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+.aLink {
+    color: #1976d2;
+    text-decoration: underline;
+    margin-left: 6px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+.aLink:hover {
+    color: #0d47a1;
+}
+
+.tituloActualizar {
+    font-size: 1.25rem;
+    color: #1976d2;
+    margin-bottom: 12px;
+    margin-top: 0;
+    font-weight: 600;
+}
+
+.formActualizar {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.inputMatricula,
+.selectEspecialidad {
+    padding: 10px 12px;
+    border: 1px solid #bdbdbd;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #fafbfc;
+    transition: border-color 0.2s;
+}
+.inputMatricula:focus,
+.selectEspecialidad:focus {
+    border-color: #1976d2;
+    outline: none;
+}
+
+.botonActualizar {
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.botonActualizar:hover {
+    background: #125ea7;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .mainAdmin {
+        padding: 16px 0;
+    }
+    .sectionAdmin {
+        padding: 18px 8px;
+        max-width: 100%;
+        gap: 20px;
+    }
+    .tituloActualizar {
+        font-size: 1.1rem;
+    }
+    .inputMatricula,
+    .selectEspecialidad,
+    .botonActualizar {
+        font-size: 0.98rem;
+        padding: 9px 8px;
+    }
+}

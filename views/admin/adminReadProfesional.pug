@@ -6,41 +6,43 @@ html
         link(rel="stylesheet", href="/css/styleGeneral1.css")
         link(rel="stylesheet" href="/css/adminCargarProfesional.css")
         link(rel="stylesheet" href="/css/adminRead.css")
+        link(rel="stylesheet" href="/css/adminReadProfesional.css")
         link(rel="stylesheet" href="/css/footer.css")
     body
         include ../includes/headerAdmin
-        main 
-            h1 Listado de Profesionales
-            form(action="/profesional/listar" method="get")
-                label(for="especialidad") Filtrar por Especialidad:
-                select(name="especialidad")
-                    option(value="") Todas
-                    option(value="Cardiologia" selected=(especialidad === 'Cardiologia')) Cardiología
-                    option(value="Pediatria" selected=(especialidad === 'Pediatria')) Pediatría
-                    option(value="Kinesiologia" selected=(especialidad === 'Kinesiologia')) Kinesiología
-                    option(value="Psicologia" selected=(especialidad === 'Psicologia')) Psicología
-                    option(value="Odontologia" selected=(especialidad === 'Odontologia')) Odontología
-                button(type="submit") Filtrar
+        main(class="mainAdminReadProfesional")
+            section(class="readContainer")
+                h1(class="mainTitle") Listado de Profesionales
+                form(action="/profesional/listar" method="get" class="filterForm")
+                    label(for="especialidad" class="filterLabel") Filtrar por Especialidad:
+                    select(name="especialidad" class="filterSelect")
+                        option(value="") Todas
+                        option(value="Cardiologia" selected=(especialidad === 'Cardiologia')) Cardiología
+                        option(value="Pediatria" selected=(especialidad === 'Pediatria')) Pediatría
+                        option(value="Kinesiologia" selected=(especialidad === 'Kinesiologia')) Kinesiología
+                        option(value="Psicologia" selected=(especialidad === 'Psicologia')) Psicología
+                        option(value="Odontologia" selected=(especialidad === 'Odontologia')) Odontología
+                    button(type="submit" class="filterButton") Filtrar
 
-            if profesionales && profesionales.length
-                table
-                    thead
-                        tr
-                            th Id
-                            th Nombre Completo
-                            th Especialidad
-                            th Matrícula
-                            th Estado
-                    tbody
-                        each profesional in profesionales
+                if profesionales && profesionales.length
+                    table
+                        thead
                             tr
-                                td= profesional.id
-                                td= profesional.nombre_completo
-                                td= profesional.especialidad
-                                td= profesional.matricula
-                                td= profesional.estado === 1 ? 'Activo' : 'Inactivo'
-            else
-                p No se encontraron profesionales para la especialidad seleccionada.
+                                th Id
+                                th Nombre Completo
+                                th Especialidad
+                                th Matrícula
+                                th Estado
+                        tbody
+                            each profesional in profesionales
+                                tr
+                                    td= profesional.id
+                                    td= profesional.nombre_completo
+                                    td= profesional.especialidad
+                                    td= profesional.matricula
+                                    td= profesional.estado === 1 ? 'Activo' : 'Inactivo'
+                else
+                    p(class="noResults") No se encontraron profesionales para la especialidad seleccionada.
         include ../includes/footer
         script(src="/js/logout.js")
         script(src="/js/profesionales.js")

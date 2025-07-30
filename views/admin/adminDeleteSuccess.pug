@@ -5,16 +5,18 @@ html
         link(rel="stylesheet", href="/css/headerAdmin.css")
         link(rel="stylesheet", href="/css/styleGeneral1.css")
         link(rel="stylesheet", href="/css/adminCargarProfesional.css")
+        link(rel="stylesheet" href="/css/adminDeleteProfesional.css")
         link(rel="stylesheet" href="/css/footer.css")
     body
         include ../includes/headerAdmin
-        main 
-            h1 ¡¡¡Se cambió el estado exitosamente!!!
-            p Buscar la ID o Matrícula en este 
-                a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
-            h1 Activar / Inactivar un Médico
-            form(action="/admin/cambiarEstado" method="POST")
-                input(type="text" name="id" placeholder="ID del médico" required)
-                button(type="submit") Cambiar de estado
+        main(class="mainAdminDeleteProfesional") 
+            section(class="deleteContainer")
+                h1(class="mainTitle") ¡¡Estado del medico cambiado exitosamente!!
+                p(class="searchInfo") Buscar la ID o Matrícula en este 
+                    a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
+                h1(class="mainTitle") Activar / Inactivar un Médico
+                form(action="/admin/cambiarEstado" method="POST" class="formChangeState")
+                    input(type="text" name="id" placeholder="ID del médico" required class="inputId")
+                    button(type="submit" class="button") Cambiar de estado
         include ../includes/footer
         script(src="/js/logout.js")

@@ -256,3 +256,69 @@ li {
 .botonCambiarFoto:hover {
     background-color: #0056b3;
 }
+
+/* Media Queries */
+@media (max-width: 1024px) {
+    .sectionPrincipal,
+    section,
+    header {
+        width: 95vw;
+    }
+    .sectionPerfil {
+        width: 90vw;
+    }
+}
+
+@media (max-width: 768px) {
+    .sectionPrincipal,
+    section,
+    header {
+        width: 100vw;
+        border-radius: 20px;
+    }
+    .sectionPerfil {
+        width: 98vw;
+        flex-direction: column;
+        height: auto;
+        gap: 20px;
+    }
+    .divisor {
+        width: 90vw;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .formPerfilFoto {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .sectionPrincipal,
+    section,
+    header {
+        width: 100vw;
+        padding: 0 5px;
+        border-radius: 10px;
+    }
+    .sectionPerfil {
+        width: 100vw;
+        flex-direction: column;
+        height: auto;
+        gap: 10px;
+    }
+    .formPerfilFoto {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .botonEditarFoto,
+    .botonCambiarFoto {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+    .icon,
+    .iconEdit {
+        width: 80px;
+        height: 80px;
+    }
+}

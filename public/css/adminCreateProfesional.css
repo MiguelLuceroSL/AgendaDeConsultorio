@@ -5,7 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    min-height: 70vh;
+    min-height: 80vh;
     background: #f7f9fa;
     padding: 40px 0;
 }
@@ -99,4 +99,23 @@
 
 .botonCreate:hover {
     background: #217dbb;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .mainAdminCreateProfesional {
+        padding: 20px 0;
+    }
+    .formCreate {
+        padding: 20px 10px;
+        max-width: 100%;
+        gap: 16px;
+    }
+    .spanCreate {
+        font-size: 1.2rem;
+    }
+    .botonCreate {
+        font-size: 1rem;
+        padding: 10px 0;
+    }
 }
