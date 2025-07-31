@@ -146,22 +146,19 @@ export const obtenerAgendasOcupadasM= async(profesional_especialidad_id, dia_ini
   }
 }
 
-export const registrarAusenciaM = async ({ profesional_especialidad_id, fecha_inicio, fecha_fin, hora_inicio, hora_fin, tipo, descripcion }) => {
+export const registrarAusenciaM = async ({ profesional_especialidad_id, fecha_inicio, fecha_fin, tipo}) => {
   const connection = await connectDB();
 
   const sql = `
-    INSERT INTO ausencias (profesional_especialidad_id, fecha_inicio, fecha_fin, hora_inicio, hora_fin, tipo, descripcion)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO ausencias (profesional_especialidad_id, fecha_inicio, fecha_fin, tipo)
+    VALUES (?, ?, ?, ?)
   `;
 
   await connection.execute(sql, [
     profesional_especialidad_id,
     fecha_inicio,
     fecha_fin,
-    hora_inicio ?? null,
-    hora_fin ?? null,
-    tipo,
-    descripcion ?? null
+    tipo
   ]);
 };
 

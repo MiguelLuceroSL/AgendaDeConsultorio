@@ -189,9 +189,9 @@ export const obtenerAgendasActivasC = async (req, res) => {
 
 export const registrarAusenciaC = async (req, res) => {
   try {
-    const { profesional_especialidad_id, fecha_inicio, fecha_fin, hora_inicio, hora_fin, tipo, descripcion } = req.body;
+    const { profesional_especialidad_id, fecha_inicio, fecha_fin, tipo } = req.body;
 
-    await registrarAusenciaS({ profesional_especialidad_id, fecha_inicio, fecha_fin, hora_inicio, hora_fin, tipo, descripcion });
+    await registrarAusenciaS({ profesional_especialidad_id, fecha_inicio, fecha_fin, tipo });
 
     res.json({ message: 'Ausencia registrada correctamente' });
   } catch (err) {

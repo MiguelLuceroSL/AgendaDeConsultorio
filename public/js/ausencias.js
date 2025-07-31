@@ -1,11 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const profesionalSelect = document.getElementById(
-    "profesional_especialidad_id"
-  );
+  const profesionalSelect = document.getElementById("profesional_especialidad_id");
   const fechaInicioInput = document.getElementById("fecha_inicio");
   const fechaFinInput = document.getElementById("fecha_fin");
-  const horaInicioSelect = document.getElementById("hora_inicio");
-  const horaFinSelect = document.getElementById("hora_fin");
+
+
+  form.addEventListener("submit", (e) => {
+  const fechaInicio = fechaInicioInput.value.trim();
+  const fechaFin = fechaFinInput.value.trim();
+
+  if (!fechaInicio || !fechaFin) {
+    e.preventDefault();
+    alert("Debes completar tanto la fecha de inicio como la fecha de fin.");
+  }
+});
 
   let agendas = [];
 
@@ -21,63 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return await res.json();
   }
 
-  function generarHorarios(horaInicio, horaFin, duracion) {
-    const horarios = [];
-    let inicio = new Date(`2025-01-01T${horaInicio}`);
-    const fin = new Date(`2025-01-01T${horaFin}`);
-    const minutos = parseInt(duracion.split(":")[1]);
-
-    while (inicio < fin) {
-      horarios.push(inicio.toTimeString().slice(0, 5));
-      inicio.setMinutes(inicio.getMinutes() + minutos);
-    }
-
-    return horarios;
-  }
-
-  function renderHorarios(horarios) {
-    horaInicioSelect.innerHTML =
-      "<option value='' disabled selected>Inicio</option>";
-    horaFinSelect.innerHTML = "<option value='' disabled selected>Fin</option>";
-    horarios.forEach((h) => {
-      const opt1 = document.createElement("option");
-      opt1.value = h;
-      opt1.textContent = h;
-      horaInicioSelect.appendChild(opt1);
-
-      const opt2 = opt1.cloneNode(true);
-      horaFinSelect.appendChild(opt2);
-    });
-  }
-
-  function filtrarAgendasPorDia(fecha) {
-    const dia = normalizarDia(new Date(fecha));
-    return agendas.filter((a) => a.dias.includes(dia));
-  }
-
   function diasPermitidos() {
     const dias = new Set();
     agendas.forEach((a) => a.dias.forEach((d) => dias.add(d)));
     return [...dias];
   }
 
-  function verificarRangoYControlarHoras() {
-    const fechaIni = fechaInicioInput.value;
-    const fechaFin = fechaFinInput.value;
-
-    if (fechaIni && fechaFin && fechaIni !== fechaFin) {
-      horaInicioSelect.disabled = true;
-      horaFinSelect.disabled = true;
-      horaInicioSelect.value = "";
-      horaFinSelect.value = "";
-      console.log("Más de un día seleccionado: se desactivan los horarios");
-    } else {
-      horaInicioSelect.disabled = false;
-      horaFinSelect.disabled = false;
-    }
-  }
-
-  function dateInRange(fecha, min, max) {
+  function rangoDias(fecha, min, max) {
     const f = new Date(fecha);
     return f >= new Date(min) && f <= new Date(max);
   }
@@ -107,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const disableFunc = (date) => {
       const dia = normalizarDia(date);
-      const enRango = dateInRange(date, minDate, maxDate);
+      const enRango = rangoDias(date, minDate, maxDate);
       return !diasValidos.includes(dia) || !enRango;
     };
 
@@ -117,29 +74,12 @@ document.addEventListener("DOMContentLoaded", () => {
     fpInicio = flatpickr(fechaInicioInput, {
       dateFormat: "Y-m-d",
       disable: [disableFunc],
-      onChange: ([date]) => {
-        const agendasDia = filtrarAgendasPorDia(date);
-        let horarios = [];
-        agendasDia.forEach((a) => {
-          horarios.push(
-            ...generarHorarios(
-              a.horario_inicio,
-              a.horario_fin,
-              a.tiempo_consulta
-            )
-          );
-        });
-        renderHorarios(horarios);
-      },
     });
 
     fpFin = flatpickr(fechaFinInput, {
       dateFormat: "Y-m-d",
       disable: [disableFunc],
     });
-
-    fechaInicioInput.addEventListener("change", verificarRangoYControlarHoras);
-    fechaFinInput.addEventListener("change", verificarRangoYControlarHoras);
   });
 
   document.addEventListener("click", async (e) => {

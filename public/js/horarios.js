@@ -16,17 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .trim();
   }
 
-  /*function renderHorarios(horarios) {
-    selectHorario.innerHTML =
-      "<option disabled selected>Selecciona un horario</option>";
-    horarios.forEach((hora) => {
-      const option = document.createElement("option");
-      option.value = hora;
-      option.textContent = hora;
-      selectHorario.appendChild(option);
-    });
-  }*/
-
   async function obtenerAgendas(profesionalId) {
     try {
       const res = await fetch(`/agendas/agendas/${profesionalId}`);
@@ -74,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function obtenerAusencias(profesionalId, fecha) {
     try {
       const res = await fetch(
-        `/agendas/ausencias/verificar?profesional_especialidad_id=${profesionalId}&fecha=${fecha}&hora=00:00`
+        `/agendas/ausencias/verificar?profesional_especialidad_id=${profesionalId}&fecha=${fecha}`
       );
       return await res.json();
     } catch (err) {
@@ -277,37 +266,6 @@ inputFecha.addEventListener("change", async () => {
   const ausencias = await obtenerAusencias(profesionalId, fecha);
   console.log("Ausencias recibidas:", ausencias);
 
-  if (ausencias.bloqueado) {
-    const bloqueos = ausencias.detalle;
-
-    const hayBloqueoTotal = bloqueos.some(
-      (b) => !b.hora_inicio && !b.hora_fin
-    );
-    if (hayBloqueoTotal) {
-      console.warn("Bloqueo total detectado para la fecha:", fecha);
-      renderHorarios([]);
-      alert(
-        "El médico no está disponible en esta fecha por una ausencia total."
-      );
-      return;
-    }
-
-    horariosBase = horariosBase.filter((hora) => {
-      const [h, m] = hora.split(":");
-      const horaDate = new Date(2025, 0, 1, h, m);
-
-      const estaBloqueado = bloqueos.some((b) => {
-        if (!b.hora_inicio || !b.hora_fin) return false;
-        const inicio = new Date(`2025-01-01T${b.hora_inicio}`);
-        const fin = new Date(`2025-01-01T${b.hora_fin}`);
-        return horaDate >= inicio && horaDate < fin;
-      });
-
-      return !estaBloqueado;
-    });
-
-    console.log("Horarios luego de aplicar bloqueos:", horariosBase);
-  }
 
   // Acá es donde llamamos a la función que carga los horarios con sus estados!
   await cargarHorariosConEstados(profesionalId, fecha, horariosBase, agendasDelDia);
