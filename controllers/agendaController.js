@@ -187,13 +187,16 @@ export const obtenerAgendasActivasC = async (req, res) => {
   }
 };
 
+/*a*/
 export const registrarAusenciaC = async (req, res) => {
   try {
     const { profesional_especialidad_id, fecha_inicio, fecha_fin, tipo } = req.body;
 
     await registrarAusenciaS({ profesional_especialidad_id, fecha_inicio, fecha_fin, tipo });
 
-    res.json({ message: 'Ausencia registrada correctamente' });
+    const profesionales = await obtenerProfesionalesVistaM();
+    const ausencias = await mostarAusenciasM();
+    res.render('secretaria/secretariaCrearAusenciaSuccess', { profesionales, ausencias });
   } catch (err) {
     console.error('Error al registrar ausencia:', err);
     res.status(500).json({ error: 'Error al registrar la ausencia' });
@@ -236,7 +239,7 @@ export const obtenerAusenciasTotalesC = async (req, res) => {
   }
 };
 
-
+/*b*/
 export const eliminarAusenciaC = async (req, res) => {
   try {
     const { id } = req.params;
