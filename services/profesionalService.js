@@ -1,8 +1,8 @@
-import { profesionalCrearM, profesionalBorrarM, obtenerProfesionalesM, actualizarEspecialidadM, obtenerProfesionalesVistaM, actualizarNombreCompletoM, actualizarMatriculaM } from '../models/profesionalModel.js';
+import { profesionalCrearM, profesionalBorrarM, obtenerProfesionalesM, actualizarEspecialidadM, obtenerProfesionalesVistaM, actualizarNombreCompletoM, actualizarMatriculaM, cargarProfesionalEspecialidadM, obtenerIdPorDniM, obtenerEspecialidadPorNombreM } from '../models/profesionalModel.js';
 
-export const crearProfesionalS = (nombre_completo, especialidad, matricula) => {
+export const crearProfesionalS = (dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula) => {
   return new Promise((resolve, reject) => {
-    profesionalCrearM(nombre_completo, especialidad, matricula, (err, result) => {
+    profesionalCrearM(dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula, (err, result) => {
       if (err) {
         return reject(err); //rechazamos la promesa
       }
@@ -50,6 +50,39 @@ export const actualizarEspecialidadS = (matricula, especialidad) => {
           }
           resolve(result);
       });
+  });
+};
+
+export const cargarProfesionalEspecialidadS = (profesional_id, especialidad_id, matricula) => {
+  return new Promise((resolve, reject) => {
+    cargarProfesionalEspecialidadM(profesional_id, especialidad_id, matricula, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+export const obtenerIdPorDniS = (dni) => {
+  return new Promise((resolve, reject) => {
+    obtenerIdPorDniM(dni, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+export const obtenerEspecialidadPorNombreS = (nombre) => {
+  return new Promise((resolve, reject) => {
+    obtenerEspecialidadPorNombreM(nombre, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(result);
+    });
   });
 };
 

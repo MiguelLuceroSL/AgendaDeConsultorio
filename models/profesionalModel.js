@@ -5,12 +5,12 @@ import connectDB from '../config/db.js';
   db.query(sql, [nombre_completo], callback);
 };*/
 
-export const profesionalCrearM = async (nombre_completo, especialidad, matricula, callback) => {
+export const profesionalCrearM = async (dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula, callback) => {
   try {
     const connection = await connectDB();
 
-    const sqlProfesional = "INSERT INTO profesional (nombre_completo) VALUES (?)";
-    const [profResult] = await connection.query(sqlProfesional, [nombre_completo]);
+    const sqlProfesional = "INSERT INTO profesional (dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    const [profResult] = await connection.query(sqlProfesional, [dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal]);
     const profesionalId = profResult.insertId;
 
     const sqlEspecialidad = "INSERT INTO profesional_especialidad (profesional_id, especialidad_id, matricula) VALUES (?, (SELECT id FROM especialidad WHERE nombre = ?), ?)";
@@ -19,6 +19,39 @@ export const profesionalCrearM = async (nombre_completo, especialidad, matricula
     callback(null, espResult);
   } catch (error) {
     callback(error, null);
+  }
+};
+
+export const cargarProfesionalEspecialidadM = async (profesional_id, especialidad_id, matricula, callback) => {
+  try {
+    const connection = await connectDB();
+    const sql = "INSERT INTO profesional_especialidad (profesional_id, especialidad_id, matricula) VALUES (?, ?, ?)";
+    await connection.query(sql, [profesional_id, especialidad_id, matricula]);
+    callback(null);
+  } catch (error) {
+    callback(error, null);
+  }
+}
+
+export const obtenerIdPorDniM = async (dni, callback) => {
+  try {
+    const connection = await connectDB();
+    const sql = 'SELECT id FROM profesional WHERE dni = ?';
+    const [result] = await connection.query(sql, [dni]);
+    callback(null, result);
+  } catch (error) {
+    callback(error, null);
+  }
+};
+
+export const obtenerEspecialidadPorNombreM = async (especialidad, callback) => {
+  try {
+    const connection = await connectDB();
+    const sql = 'SELECT id FROM especialidad WHERE nombre = ?';
+    const [result] = await connection.query(sql, [especialidad]);
+    callback(null, result);
+  } catch (error) {
+    callback(error);
   }
 };
 

@@ -1,15 +1,35 @@
-import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS, actualizarNombreCompletoS, obtenerProfesionalesVistaS, actualizarMatriculaS} from "../services/profesionalService.js";
+import e from "express";
+import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS, actualizarNombreCompletoS, obtenerProfesionalesVistaS, actualizarMatriculaS, cargarProfesionalEspecialidadS, obtenerIdPorDniS, obtenerEspecialidadPorNombreS} from "../services/profesionalService.js";
 
+
+/*export const crearProfesionalC = async (req, res) => {
+  const { dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula } = req.body;
+  
+  try {
+    const idObtenido = await obtenerIdPorDniS(dni);
+    const especialidadObtenida = await obtenerEspecialidadPorNombreS(especialidad);
+    if (idObtenido && idObtenido.length > 0) {
+      await cargarProfesionalEspecialidadS(idObtenido[0].id, especialidadObtenida[0].id, matricula);
+      console.log("Profesional ya existente, se agregó la especialidad.");
+      return res.render('admin/adminCreateSuccess', {message: 'Médico ya existente, se agregó la especialidad seleccionada al DNI ingresado'});
+    } else {
+      await crearProfesionalS(dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula);
+      console.log("Profesional creado exitosamente.");
+      res.render('admin/adminCreateSuccess', {message: 'Médico creado con éxito'});
+    }
+  } catch (err) {
+    console.error("Error al crear el profesional:", err);
+    return res.status(500).send("Hubo un error al crear el profesional o cargarle una especialidad.");
+  }
+};*/
 
 export const crearProfesionalC = async (req, res) => {
-  const { nombre_completo, especialidad, matricula } = req.body;
-
+  const { dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula } = req.body;
   
-
   try {
-    await crearProfesionalS(nombre_completo, especialidad, matricula);
-    console.log("Profesional creado exitosamente.");
-    res.render('admin/adminCreateSuccess', {message: 'Médico creado con éxito'});
+      await crearProfesionalS(dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula);
+      console.log("Profesional creado exitosamente.");
+      res.render('admin/adminCreateSuccess', {message: 'Médico creado con éxito'});
   } catch (err) {
     console.error("Error al crear el profesional:", err);
     return res.status(500).send("Hubo un error al crear el profesional.");

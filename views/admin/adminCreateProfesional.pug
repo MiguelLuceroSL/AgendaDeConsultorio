@@ -11,9 +11,28 @@ html
         main(class="mainAdminCreateProfesional")
             form(action="/profesional/crear", method="POST" class="formCreate")
                 span(class="spanCreate") Cargar un médico
-                fieldset(class="nombreCompleto") 
-                    label(for="nombre_completo" class="lbNombreCompleto") Nombre completo: 
-                    input(type="text", id="nombre_completo", name="nombre_completo", required, placeholder="Nombre completo" class="inputNombreCompleto")
+                p(class="infoCreate") Si el médico ya existe, se le agregará la especialidad seleccionada sin importar los demás datos.
+                fieldset(class="dni") 
+                    label(for="dni" class="lbDNI") DNI: 
+                    input(type="text", id="dni", name="dni", required, placeholder="DNI" class="inputDNI")
+                fieldset(class="nombre") 
+                    label(for="nombre" class="lbNombre") Nombre: 
+                    input(type="text", id="nombre", name="nombre", required, placeholder="Nombre" class="inputNombre")
+                fieldset(class="apellido") 
+                    label(for="apellido" class="lbApellido") Apellido: 
+                    input(type="text", id="apellido", name="apellido", required, placeholder="Apellido" class="inputApellido")
+                fieldset(class="fecha_nacimiento") 
+                    label(for="fecha_nacimiento" class="lbFechaNacimiento") Fecha de Nacimiento: 
+                    input(type="date", id="fecha_nacimiento", name="fecha_nacimiento", required class="inputFechaNacimiento")
+                fieldset(class="telefono") 
+                    label(for="telefono" class="lbTelefono") Teléfono: 
+                    input(type="text", id="telefono", name="telefono", required, placeholder="Teléfono" class="inputTelefono")
+                fieldset(class="email") 
+                    label(for="email" class="lbEmail") Email: 
+                    input(type="email", id="email", name="email", required, placeholder="Email" class="inputEmail")
+                fieldset(class="domicilio_personal") 
+                    label(for="domicilio_personal" class="lbDomicilioPersonal") Domicilio Personal: 
+                    input(type="text", id="domicilio_personal", name="domicilio_personal", required, placeholder="Domicilio Personal" class="inputDomicilioPersonal")
                 fieldset(class="matricula")
                     label(for="matricula" class="lbMatricula") Matricula: 
                     input(type="text", id="matricula", name="matricula", required, placeholder="Matrícula" class="inputMatricula")
