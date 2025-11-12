@@ -106,7 +106,7 @@ export const traerTurnos = async (callback) => {
     SELECT DISTINCT
         t.id, 
         p.nombre_completo AS paciente_nombre,
-        pr.nombre_completo AS nombre_medico,
+        CONCAT(pr.apellido, ', ', pr.nombre) AS nombre_medico,
         e.nombre AS especialidad,
         t.detalle_turno,
         s.nombre AS sucursal,
@@ -128,6 +128,7 @@ export const traerTurnos = async (callback) => {
     	agenda a ON a.profesional_especialidad_id = pe.id
     JOIN
     	sucursal s ON a.sucursal_id = s.id
+    ORDER BY t.fecha DESC, t.hora DESC, pr.apellido, pr.nombre
     `;
 
         const [rows] = await connection.query(sql);
@@ -150,7 +151,7 @@ export const traerTurnoPorIdM = async (id, callback) => {
         p.dni,
         p.obra_social,
         p.telefono,
-        pr.nombre_completo AS nombre_medico,
+        CONCAT(pr.apellido, ', ', pr.nombre) AS nombre_medico,
         e.nombre AS especialidad,
         t.detalle_turno,
         s.nombre AS sucursal,
@@ -194,7 +195,7 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
       SELECT DISTINCT
         t.id, 
         p.nombre_completo AS paciente_nombre, 
-        pr.nombre_completo AS nombre_medico,
+        CONCAT(pr.apellido, ', ', pr.nombre) AS nombre_medico,
         e.nombre AS especialidad,
         t.detalle_turno,
         s.nombre AS sucursal,
@@ -229,9 +230,12 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
             params.push(`%${filtros.paciente.toLowerCase()}%`);
         }
         if (filtros.profesional) {
-            sql += ' AND LOWER(pr.nombre_completo) LIKE ?';
+            sql += ' AND (LOWER(pr.apellido) LIKE ? OR LOWER(pr.nombre) LIKE ?)';
+            params.push(`%${filtros.profesional.toLowerCase()}%`);
             params.push(`%${filtros.profesional.toLowerCase()}%`);
         }
+
+        sql += ' ORDER BY t.fecha DESC, t.hora DESC, pr.apellido, pr.nombre';
 
         const [rows] = await connection.query(sql, params);
         callback(null, rows);

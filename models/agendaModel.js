@@ -1,8 +1,95 @@
 import connectDB from '../config/db.js';
 
+export const validarConflictoHorariosM = async (profesionalId, sucursalId, horarioInicio, horarioFin, diasSemana, agendaIdExcluir = null) => {
+  const connection = await connectDB();
+  try {
+    // Obtener todas las especialidades del profesional
+    const [especialidades] = await connection.query(
+      'SELECT id FROM profesional_especialidad WHERE profesional_id = ?',
+      [profesionalId]
+    );
+
+    if (especialidades.length === 0) {
+      return { conflicto: false, mensaje: '' };
+    }
+
+    const especialidadIds = especialidades.map(e => e.id);
+
+    // Verificar conflictos de horarios en la misma sucursal y días
+    for (const dia of diasSemana) {
+      const sql = `
+        SELECT 
+          a.id,
+          a.horario_inicio,
+          a.horario_fin,
+          e.nombre AS especialidad,
+          s.nombre AS sucursal
+        FROM agenda a
+        JOIN profesional_especialidad pe ON a.profesional_especialidad_id = pe.id
+        JOIN especialidad e ON pe.especialidad_id = e.id
+        JOIN sucursal s ON a.sucursal_id = s.id
+        JOIN agenda_dias ad ON ad.agenda_id = a.id
+        WHERE pe.id IN (?)
+          AND ad.dia_semana = ?
+          AND a.estado = 'Activo'
+          ${agendaIdExcluir ? 'AND a.id != ?' : ''}
+          AND (
+            (? >= a.horario_inicio AND ? < a.horario_fin) OR
+            (? > a.horario_inicio AND ? <= a.horario_fin) OR
+            (? <= a.horario_inicio AND ? >= a.horario_fin)
+          )
+      `;
+
+      const params = agendaIdExcluir 
+        ? [especialidadIds, dia, agendaIdExcluir, horarioInicio, horarioInicio, horarioFin, horarioFin, horarioInicio, horarioFin]
+        : [especialidadIds, dia, horarioInicio, horarioInicio, horarioFin, horarioFin, horarioInicio, horarioFin];
+
+      const [conflictos] = await connection.query(sql, params);
+
+      if (conflictos.length > 0) {
+        const c = conflictos[0];
+        return {
+          conflicto: true,
+          mensaje: `El profesional ya tiene una agenda para ${dia} de ${c.horario_inicio.substring(0, 5)} a ${c.horario_fin.substring(0, 5)} en ${c.sucursal} (${c.especialidad}). Los horarios se solapan.`
+        };
+      }
+    }
+
+    return { conflicto: false, mensaje: '' };
+  } catch (error) {
+    console.error('Error al validar conflictos de horarios:', error);
+    throw error;
+  }
+};
+
 export const crearAgendaM = async (agendaData, diasSemana) => {
   const connection = await connectDB();
   try {
+    // Obtener el profesional_id desde profesional_especialidad
+    const [profEsp] = await connection.query(
+      'SELECT profesional_id FROM profesional_especialidad WHERE id = ?',
+      [agendaData.profesional_especialidad_id]
+    );
+
+    if (!profEsp || profEsp.length === 0) {
+      throw new Error('No se encontró la especialidad del profesional');
+    }
+
+    const profesionalId = profEsp[0].profesional_id;
+
+    // Validar conflictos de horarios
+    const validacion = await validarConflictoHorariosM(
+      profesionalId,
+      agendaData.sucursal_id,
+      agendaData.horario_inicio,
+      agendaData.horario_fin,
+      diasSemana
+    );
+
+    if (validacion.conflicto) {
+      throw new Error(validacion.mensaje);
+    }
+
     // Insert de la agenda
     const sqlAgenda = `
       INSERT INTO agenda (
@@ -200,12 +287,12 @@ export const mostarAusenciasM = async () =>{
    try {
     const connection = await connectDB();
     const sql = `
-      SELECT a.*, p.nombre_completo, e.nombre AS especialidad
+      SELECT a.*, CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, e.nombre AS especialidad
       FROM ausencias a
       JOIN profesional_especialidad pe ON pe.id = a.profesional_especialidad_id
       JOIN profesional p ON p.id = pe.profesional_id
       JOIN especialidad e ON e.id = pe.especialidad_id
-      ORDER BY fecha_inicio DESC
+      ORDER BY p.apellido, p.nombre, fecha_inicio DESC
     `;
     const [rows] = await connection.execute(sql, []);
     return rows;
@@ -213,7 +300,7 @@ export const mostarAusenciasM = async () =>{
     console.error("Error en mostarAusenciasM:", error);
     throw error;
   }
-}
+};
 
 export const eliminarAusenciaM = async (id) => {
   try {

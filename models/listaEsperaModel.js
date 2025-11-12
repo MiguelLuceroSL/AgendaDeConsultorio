@@ -23,13 +23,14 @@ export const traerListaEsperaM = async () => {
                 p.nombre_completo,
                 p.telefono,
                 le.fecha_registro,
-                pr.nombre_completo AS nombre_medico,
+                CONCAT(pr.apellido, ', ', pr.nombre) AS nombre_medico,
                 e.nombre AS especialidad
             FROM listaespera le
             JOIN paciente p ON le.paciente_id = p.id
             JOIN profesional_especialidad pe ON le.profesional_especialidad_id = pe.id
             JOIN profesional pr ON pe.profesional_id = pr.id
             JOIN especialidad e ON pe.especialidad_id = e.id
+            ORDER BY pr.apellido, pr.nombre, le.fecha_registro
         `;
         const [rows] = await connection.execute(sql);
         return rows;

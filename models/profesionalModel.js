@@ -9,10 +9,34 @@ export const profesionalCrearM = async (dni, nombre, apellido, fecha_nacimiento,
   try {
     const connection = await connectDB();
 
-    const sqlProfesional = "INSERT INTO profesional (dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    const [profResult] = await connection.query(sqlProfesional, [dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal]);
-    const profesionalId = profResult.insertId;
+    // Verificar si el profesional ya existe
+    const [existingProf] = await connection.query('SELECT id FROM profesional WHERE dni = ?', [dni]);
+    
+    let profesionalId;
+    
+    if (existingProf && existingProf.length > 0) {
+      // El profesional ya existe, usar su ID
+      profesionalId = existingProf[0].id;
+      console.log(`Profesional con DNI ${dni} ya existe. Agregando nueva especialidad.`);
+      
+      // Verificar si ya tiene esta especialidad
+      const [existingEsp] = await connection.query(
+        'SELECT id FROM profesional_especialidad WHERE profesional_id = ? AND especialidad_id = (SELECT id FROM especialidad WHERE nombre = ?)',
+        [profesionalId, especialidad]
+      );
+      
+      if (existingEsp && existingEsp.length > 0) {
+        return callback(new Error(`El profesional ya tiene la especialidad ${especialidad} registrada`), null);
+      }
+    } else {
+      // El profesional no existe, crearlo
+      const sqlProfesional = "INSERT INTO profesional (dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal) VALUES (?, ?, ?, ?, ?, ?, ?)";
+      const [profResult] = await connection.query(sqlProfesional, [dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal]);
+      profesionalId = profResult.insertId;
+      console.log(`Nuevo profesional creado con ID ${profesionalId}`);
+    }
 
+    // Agregar la especialidad
     const sqlEspecialidad = "INSERT INTO profesional_especialidad (profesional_id, especialidad_id, matricula) VALUES (?, (SELECT id FROM especialidad WHERE nombre = ?), ?)";
     const [espResult] = await connection.query(sqlEspecialidad, [profesionalId, especialidad, matricula]);
 
@@ -87,11 +111,12 @@ export const obtenerProfesionalesM = async (especialidad, callback) => {
     const connection = await connectDB();
 
     const sql = `
-      SELECT p.id, p.nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
+      SELECT p.id, CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
       FROM profesional_especialidad pe
       JOIN profesional p ON pe.profesional_id = p.id
       JOIN especialidad e ON pe.especialidad_id = e.id
-      ${especialidad ? 'WHERE e.nombre = ?' : ''};
+      ${especialidad ? 'WHERE e.nombre = ?' : ''}
+      ORDER BY p.apellido, p.nombre;
     `;
 
     const params = especialidad ? [especialidad] : [];
@@ -111,10 +136,11 @@ export const obtenerProfesionalesVistaM = async() => {
   try{
         const connection = await connectDB();
   const sql = `
-    SELECT pe.id ,p.nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
+    SELECT pe.id, CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
     FROM profesional_especialidad pe
     JOIN profesional p ON pe.profesional_id = p.id
     JOIN especialidad e ON pe.especialidad_id = e.id
+    ORDER BY p.apellido, p.nombre;
   `;
      const [rows] = await connection.query(sql);
 

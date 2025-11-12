@@ -75,3 +75,12 @@ export const updateFotoS = (dni, icon) => {
         });
     });
 };
+
+export const buscarPacientesS = async (texto) => {
+    try {
+        return await buscarPacientesM(texto);
+    } catch (error) {
+        console.error('Error en servicio buscarPacientesS:', error);
+        throw error;
+    }
+};

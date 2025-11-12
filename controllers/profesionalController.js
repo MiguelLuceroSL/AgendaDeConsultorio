@@ -1,5 +1,5 @@
 import e from "express";
-import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS, actualizarNombreCompletoS, obtenerProfesionalesVistaS, actualizarMatriculaS, cargarProfesionalEspecialidadS, obtenerIdPorDniS, obtenerEspecialidadPorNombreS} from "../services/profesionalService.js";
+import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS, obtenerProfesionalesVistaS, actualizarMatriculaS, cargarProfesionalEspecialidadS, obtenerIdPorDniS, obtenerEspecialidadPorNombreS} from "../services/profesionalService.js";
 
 
 /*export const crearProfesionalC = async (req, res) => {
@@ -27,12 +27,22 @@ export const crearProfesionalC = async (req, res) => {
   const { dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula } = req.body;
   
   try {
-      await crearProfesionalS(dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula);
-      console.log("Profesional creado exitosamente.");
-      res.render('admin/adminCreateSuccess', {message: 'Médico creado con éxito'});
+    await crearProfesionalS(dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula);
+    console.log("Profesional y especialidad procesados exitosamente.");
+    res.render('admin/adminCreateSuccess', {
+      message: 'Médico y especialidad procesados con éxito. Si el DNI ya existía, se agregó la nueva especialidad.'
+    });
   } catch (err) {
     console.error("Error al crear el profesional:", err);
-    return res.status(500).send("Hubo un error al crear el profesional.");
+    
+    // Si el error tiene status 400, es un error de validación controlado
+    if (err.status === 400) {
+      return res.status(400).render('admin/adminCreateProfesional', {
+        error: err.message
+      });
+    }
+    
+    return res.status(500).send("Hubo un error al crear el profesional: " + err.message);
   }
 };
 
@@ -86,16 +96,25 @@ export const actualizarMatriculaC = async (req, res) => {
     res.status(500).send("Hubo un error al actualizar la especialidad.");
   }
 };
-
-export const actualizarNombreCompletoC = async (req, res) => {
-  const { nuevo_nombre_completo, profesional_id } = req.body;
-  console.log('nuevo_nombre_completo: ',nuevo_nombre_completo)
+// Buscar profesionales dinámicamente (API endpoint para AJAX)
+export const buscarProfesionalesC = async (req, res) => {
+  const { texto, especialidad } = req.query;
   try {
-    await actualizarNombreCompletoS(nuevo_nombre_completo, profesional_id);
-    console.log("Nombre completo actualizado exitosamente.");
-    res.redirect('adminUpdateNameSuccess');
+    const profesionales = await buscarProfesionalesS(texto, especialidad);
+    res.json(profesionales);
   } catch (err) {
-    console.error("Error al actualizar el nombre completo:", err);
-    res.status(500).send("Hubo un error al actualizar el nombre completo.");
+    console.error('Error al buscar profesionales:', err);
+    res.status(500).json({ error: 'Error al buscar profesionales' });
+  }
+};
+
+// Obtener todas las especialidades (API endpoint para AJAX)
+export const obtenerEspecialidadesC = async (req, res) => {
+  try {
+    const especialidades = await obtenerEspecialidadesS();
+    res.json(especialidades);
+  } catch (err) {
+    console.error('Error al obtener especialidades:', err);
+    res.status(500).json({ error: 'Error al obtener especialidades' });
   }
 };
