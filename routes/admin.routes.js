@@ -1,5 +1,5 @@
 import express from 'express';
-import { obtenerProfesionalesC, actualizarEspecialidadC, actualizarMatriculaC, actualizarNombreCompletoC, borrarProfesionalC } from '../controllers/profesionalController.js';
+import { obtenerProfesionalesC, actualizarEspecialidadC, actualizarMatriculaC, borrarProfesionalC } from '../controllers/profesionalController.js';
 import { authRequired } from '../middlewares/validateToken.js';
 import verifyRol from '../middlewares/verifyRol.js';
 const router = express.Router();
@@ -46,7 +46,7 @@ router.get('/adminUpdateMatriculaSuccess', authRequired, verifyRol('admin'), (re
   res.render('admin/adminUpdateMatriculaSuccess')
 })
 
-router.post('/actualizarNombreCompleto', authRequired, verifyRol('admin'), actualizarNombreCompletoC);
+// router.post('/actualizarNombreCompleto', authRequired, verifyRol('admin'), actualizarNombreCompletoC);
 router.get('/adminUpdateNameSuccess', authRequired, verifyRol('admin'), (req, res) => {
   res.render('admin/adminUpdateNameSuccess')
 })
