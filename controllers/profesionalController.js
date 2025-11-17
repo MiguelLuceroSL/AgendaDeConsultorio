@@ -1,5 +1,5 @@
 import e from "express";
-import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS, obtenerProfesionalesVistaS, actualizarMatriculaS, cargarProfesionalEspecialidadS, obtenerIdPorDniS, obtenerEspecialidadPorNombreS} from "../services/profesionalService.js";
+import {crearProfesionalS, profesionalBorrarS, obtenerProfesionalesS, actualizarEspecialidadS, obtenerProfesionalesVistaS, actualizarMatriculaS, cargarProfesionalEspecialidadS, obtenerIdPorDniS, obtenerEspecialidadPorNombreS, buscarProfesionalesS, obtenerEspecialidadesS} from "../services/profesionalService.js";
 
 
 /*export const crearProfesionalC = async (req, res) => {

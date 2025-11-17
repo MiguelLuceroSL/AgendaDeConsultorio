@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const selectProfesional = document.getElementById("profesional");
+  const inputProfesionalId = document.getElementById("profesional-id");
   const inputFecha = document.getElementById("fecha");
   const selectHorario = document.getElementById("horario");
 
@@ -127,15 +127,27 @@ for (const hora of horariosBase) {
   }
 }
 
-  // Cuando seleccionan un profesional
-  selectProfesional.addEventListener("change", async () => {
-    const profesionalId = selectProfesional.value;
-    if (!profesionalId) return;
-
+  // Cuando seleccionan un profesional (ahora escuchamos cambios en el input oculto)
+  let previousProfesionalId = null;
+  
+  setInterval(() => {
+    const profesionalId = inputProfesionalId.value;
+    
+    if (profesionalId && profesionalId !== previousProfesionalId) {
+      previousProfesionalId = profesionalId;
+      cargarAgendasProfesional(profesionalId);
+    } else if (!profesionalId && previousProfesionalId) {
+      // Si se limpia el profesional, resetear todo
+      previousProfesionalId = null;
+      resetearSeleccion();
+    }
+  }, 500);
+  
+  async function cargarAgendasProfesional(profesionalId) {
     const agendas = await obtenerAgendas(profesionalId);
     if (!agendas.length) {
       alert("El medico no tiene turnos en este momento");
-      selectProfesional.value = "";
+      inputProfesionalId.value = "";
       selectHorario.value = "";
       selectHorario.disabled = true;
       inputFecha.value = "";
@@ -219,11 +231,21 @@ fp = flatpickr(inputFecha, {
     }
   ]
 });
-  });
+  }
+  
+  function resetearSeleccion() {
+    selectHorario.value = "";
+    selectHorario.disabled = true;
+    inputFecha.value = "";
+    inputFecha.disabled = true;
+    window._agendas = [];
+    window._diasPermitidos = [];
+    if (fp) fp.destroy();
+  }
 
   // Cuando seleccionan una fecha
 inputFecha.addEventListener("change", async () => {
-  const profesionalId = selectProfesional.value;
+  const profesionalId = inputProfesionalId.value;
   const fecha = inputFecha.value;
   const agendas = window._agendas;
   if (!fecha || agendas.length === 0) return;

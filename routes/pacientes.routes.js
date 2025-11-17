@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { borrarPaciente, getFotoC, obtenerPacientesVistaC, pacienteByUserIdC, pacienteByUserIdTurnoC, pacienteEditadoC, pacienteEditarC, pacientePerfilC, updateFotoC, updatePacienteC } from '../controllers/pacienteController.js';
+import { borrarPaciente, getFotoC, obtenerPacientesVistaC, pacienteByUserIdC, pacienteByUserIdTurnoC, pacienteEditadoC, pacienteEditarC, pacientePerfilC, updateFotoC, updatePacienteC, buscarPacientesC } from '../controllers/pacienteController.js';
 import { authRequired } from '../middlewares/validateToken.js';
 import verifyRol from '../middlewares/verifyRol.js';
 import { funcion2 } from '../middlewares/middle2.js';
@@ -41,5 +41,6 @@ router.post('/foto', (req, res) => {
 router.post('/crear', updatePacienteC);
 router.delete('/borrar', borrarPaciente);
 router.get('/listar', obtenerPacientesVistaC);
+router.get('/buscar', authRequired, buscarPacientesC);
 
 export default router;

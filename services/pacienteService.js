@@ -1,4 +1,4 @@
-import {crearPacienteM, borrarPacienteM, obtenerPacientesVistaM, pacienteByUserIdM, updateFotoM} from '../models/pacienteModel.js';
+import {crearPacienteM, borrarPacienteM, obtenerPacientesVistaM, pacienteByUserIdM, updateFotoM, buscarPacientesM} from '../models/pacienteModel.js';
 
 export const crearPacienteS = (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento) => {
     return new Promise((resolve, reject) => {

@@ -18,6 +18,6 @@ router.get('/gestionTurno', authRequired, verifyRol('secretaria'), obtenerProfes
 router.get('/crearListaEspera', authRequired, verifyRol('secretaria'), obtenerProfesionalesEsperaC);
 router.post('/crearEspera', authRequired, verifyRol('secretaria'), crearListaEsperaC);
 router.get('/listarEspera', authRequired, verifyRol('secretaria'), listarListaEsperaC);
-router.delete('/espera/:id', eliminarEsperaC);
+router.delete('/espera/:id', authRequired, verifyRol('secretaria'), eliminarEsperaC);
 
 export default router;

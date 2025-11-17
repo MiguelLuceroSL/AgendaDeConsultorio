@@ -1,4 +1,4 @@
-import { crearPacienteS, borrarPacienteS, obtenerPacientesVistaS, pacienteByUserIdS, updateFotoS } from '../services/pacienteService.js';
+import { crearPacienteS, borrarPacienteS, obtenerPacientesVistaS, pacienteByUserIdS, updateFotoS, buscarPacientesS } from '../services/pacienteService.js';
 import { obtenerProfesionalesVistaS } from '../services/profesionalService.js';
 
 export const crearPaciente = async (req, res) => {
@@ -154,5 +154,16 @@ export const getFotoC = async (req, res) => {
     } catch (error) {
         console.error('Error al obtener el paciente: ', error);
         res.status(500).json({ message: 'Hubo un error al obtener el paciente.' });
+    }
+};
+
+export const buscarPacientesC = async (req, res) => {
+    const { texto } = req.query;
+    try {
+        const pacientes = await buscarPacientesS(texto || '');
+        res.json(pacientes);
+    } catch (error) {
+        console.error('Error al buscar pacientes:', error);
+        res.status(500).json({ error: 'Error al buscar pacientes' });
     }
 };

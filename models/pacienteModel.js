@@ -105,5 +105,24 @@ export const updateFotoM = async (dni, icon, callback) => {
   }
 };
 
+export const buscarPacientesM = async (texto) => {
+  try {
+    const db = await connectDB();
+    const sql = `
+      SELECT id, nombre_completo, dni, obra_social 
+      FROM paciente 
+      WHERE nombre_completo LIKE ? OR dni LIKE ?
+      ORDER BY nombre_completo
+      LIMIT 10
+    `;
+    const searchTerm = `%${texto}%`;
+    const [rows] = await db.execute(sql, [searchTerm, searchTerm]);
+    return rows;
+  } catch (err) {
+    console.error('Error al buscar pacientes:', err);
+    throw err;
+  }
+};
+
 
 //SELECT id, nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento FROM paciente

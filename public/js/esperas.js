@@ -1,5 +1,5 @@
   document.addEventListener("click", async (e) => {
-    if (e.target.classList.contains("btn-eliminar")) {
+    if (e.target.classList.contains("btnEliminarSecreListaEspera")) {
       const id = e.target.dataset.id;
 
       if (!confirm("¿Estás seguro de que querés eliminar esta persona de las esperas?"))
@@ -14,7 +14,8 @@
 
         if (res.ok) {
           alert(data.message || "Espera eliminada correctamente.");
-          document.querySelector(`tr[data-id="${id}"]`)?.remove();
+          // Buscar el botón y eliminar su fila padre (tr)
+          e.target.closest('tr')?.remove();
         } else {
           alert(data.error || "Error al eliminar la espera.");
         }

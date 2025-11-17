@@ -187,3 +187,54 @@ export const actualizarNombreCompletoM = async (nuevo_nombre_completo, profesion
     callback(error, null);
   }
 };
+
+export const buscarProfesionalesM = async (texto, especialidadId = null) => {
+  try {
+    const connection = await connectDB();
+    let sql = `
+      SELECT 
+        pe.id, 
+        CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, 
+        e.nombre AS especialidad,
+        pe.matricula,
+        e.id AS especialidad_id
+      FROM profesional_especialidad pe
+      JOIN profesional p ON pe.profesional_id = p.id
+      JOIN especialidad e ON pe.especialidad_id = e.id
+      WHERE p.estado = 1
+    `;
+    
+    const params = [];
+    
+    if (texto) {
+      sql += ` AND (LOWER(p.apellido) LIKE ? OR LOWER(p.nombre) LIKE ?)`;
+      const searchTerm = `%${texto.toLowerCase()}%`;
+      params.push(searchTerm, searchTerm);
+    }
+    
+    if (especialidadId) {
+      sql += ` AND e.id = ?`;
+      params.push(especialidadId);
+    }
+    
+    sql += ` ORDER BY p.apellido, p.nombre LIMIT 10`;
+    
+    const [rows] = await connection.query(sql, params);
+    return rows;
+  } catch (error) {
+    console.error('Error al buscar profesionales:', error);
+    throw error;
+  }
+};
+
+export const obtenerEspecialidadesM = async () => {
+  try {
+    const connection = await connectDB();
+    const sql = `SELECT id, nombre FROM especialidad ORDER BY nombre`;
+    const [rows] = await connection.query(sql);
+    return rows;
+  } catch (error) {
+    console.error('Error al obtener especialidades:', error);
+    throw error;
+  }
+};

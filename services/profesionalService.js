@@ -1,4 +1,4 @@
-import { profesionalCrearM, profesionalBorrarM, obtenerProfesionalesM, actualizarEspecialidadM, obtenerProfesionalesVistaM, actualizarNombreCompletoM, actualizarMatriculaM, cargarProfesionalEspecialidadM, obtenerIdPorDniM, obtenerEspecialidadPorNombreM } from '../models/profesionalModel.js';
+import { profesionalCrearM, profesionalBorrarM, obtenerProfesionalesM, actualizarEspecialidadM, obtenerProfesionalesVistaM, actualizarNombreCompletoM, actualizarMatriculaM, cargarProfesionalEspecialidadM, obtenerIdPorDniM, obtenerEspecialidadPorNombreM, buscarProfesionalesM, obtenerEspecialidadesM } from '../models/profesionalModel.js';
 
 export const crearProfesionalS = (dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula) => {
   return new Promise((resolve, reject) => {
@@ -108,4 +108,22 @@ export const actualizarNombreCompletoS = (nuevo_nombre_completo, profesional_id)
           resolve(result);
       });
   });
+};
+
+export const buscarProfesionalesS = async (texto, especialidadId = null) => {
+  try {
+    return await buscarProfesionalesM(texto, especialidadId);
+  } catch (error) {
+    console.error('Error en servicio buscarProfesionalesS:', error);
+    throw error;
+  }
+};
+
+export const obtenerEspecialidadesS = async () => {
+  try {
+    return await obtenerEspecialidadesM();
+  } catch (error) {
+    console.error('Error en servicio obtenerEspecialidadesS:', error);
+    throw error;
+  }
 };
