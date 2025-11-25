@@ -28,7 +28,12 @@ export const login = async (req, res) => {
     }
     if (!passwordIsValid) return res.status(401).send('Contraseña incorrecta');
 
-    const token = await createAccessToken({ id: user.usuario_id });
+    // Incluir rol y sucursal_id en el token
+    const token = await createAccessToken({ 
+      id: user.usuario_id, 
+      rol: user.rol,
+      sucursal_id: user.sucursal_id 
+    });
     res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'Lax' });
 
     if (user.rol === 'paciente') {
@@ -112,13 +117,13 @@ export const register = async (req, res) => {
 export const registerSecretaria = async (req, res) => {
   
   try {
-    const { email, password } = req.body;
+    const { email, password, sucursal_id } = req.body;
     const passwordHash = bcrypt.hashSync(password, 8);
     const rol = "secretaria";
     const connection = await connectDB();
     await connection.execute(
-      'INSERT INTO usuario(email, password, rol) VALUES (?, ?, ?)',
-      [email, passwordHash, rol]
+      'INSERT INTO usuario(email, password, rol, sucursal_id) VALUES (?, ?, ?, ?)',
+      [email, passwordHash, rol, sucursal_id]
     );
 
     return res.render('admin/adminSecretariaSuccess', { message: '¡Secretaria creada con éxito!' });

@@ -5,8 +5,8 @@ export const crearListaEsperaS = async (paciente_id, profesional_especialidad_id
     return await crearListaEsperaM (paciente_id, profesional_especialidad_id, fecha_registro)
 }
 
-export const traerListaEsperaS = async () => {
-    return await traerListaEsperaM()
+export const traerListaEsperaS = async (sucursalId = null) => {
+    return await traerListaEsperaM(sucursalId)
 }
 
 export const eliminarEsperaS = async (id) => {

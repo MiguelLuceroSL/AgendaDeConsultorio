@@ -283,18 +283,31 @@ export const obtenerAusenciasTotalesM = async (profesional_especialidad_id) => {
   }
 };
 
-export const mostarAusenciasM = async () =>{
+export const mostarAusenciasM = async (sucursalId = null) =>{
    try {
     const connection = await connectDB();
-    const sql = `
-      SELECT a.*, CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, e.nombre AS especialidad
+    let sql = `
+      SELECT DISTINCT a.*, CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, e.nombre AS especialidad
       FROM ausencias a
       JOIN profesional_especialidad pe ON pe.id = a.profesional_especialidad_id
       JOIN profesional p ON p.id = pe.profesional_id
       JOIN especialidad e ON e.id = pe.especialidad_id
-      ORDER BY p.apellido, p.nombre, fecha_inicio DESC
     `;
-    const [rows] = await connection.execute(sql, []);
+    
+    const params = [];
+    
+    // Si hay sucursalId, filtrar por profesionales que tengan agendas en esa sucursal
+    if (sucursalId) {
+      sql += `
+      JOIN agenda ag ON ag.profesional_especialidad_id = pe.id
+      WHERE ag.sucursal_id = ?
+      `;
+      params.push(sucursalId);
+    }
+    
+    sql += ` ORDER BY p.apellido, p.nombre, fecha_inicio DESC`;
+    
+    const [rows] = await connection.execute(sql, params);
     return rows;
   } catch (error) {
     console.error("Error en mostarAusenciasM:", error);

@@ -1,5 +1,6 @@
 import express from 'express';
 import { obtenerProfesionalesC, actualizarEspecialidadC, actualizarMatriculaC, borrarProfesionalC } from '../controllers/profesionalController.js';
+import { obtenerSucursales } from '../models/agendaModel.js';
 import { authRequired } from '../middlewares/validateToken.js';
 import verifyRol from '../middlewares/verifyRol.js';
 const router = express.Router();
@@ -20,8 +21,14 @@ router.get('/createProfesional', authRequired, verifyRol('admin'), (req, res) =>
   res.render('admin/adminCreateProfesional');
 });
 
-router.get('/registerSecretaria', authRequired, verifyRol('admin'), (req, res) => {
-  res.render('admin/adminRegisterSecretaria');
+router.get('/registerSecretaria', authRequired, verifyRol('admin'), async (req, res) => {
+  try {
+    const sucursales = await obtenerSucursales();
+    res.render('admin/adminRegisterSecretaria', { sucursales });
+  } catch (error) {
+    console.error('Error al obtener sucursales:', error);
+    res.status(500).send('Error al cargar el formulario');
+  }
 });
 
 

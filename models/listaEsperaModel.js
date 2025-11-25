@@ -14,11 +14,11 @@ export const crearListaEsperaM = async (paciente_id, profesional_especialidad_id
 };
 
 
-export const traerListaEsperaM = async () => {
+export const traerListaEsperaM = async (sucursalId = null) => {
     try {
         const connection = await connectDB();
-        const sql = `
-            SELECT 
+        let sql = `
+            SELECT DISTINCT
                 le.id,
                 p.nombre_completo,
                 p.telefono,
@@ -30,9 +30,22 @@ export const traerListaEsperaM = async () => {
             JOIN profesional_especialidad pe ON le.profesional_especialidad_id = pe.id
             JOIN profesional pr ON pe.profesional_id = pr.id
             JOIN especialidad e ON pe.especialidad_id = e.id
-            ORDER BY pr.apellido, pr.nombre, le.fecha_registro
         `;
-        const [rows] = await connection.execute(sql);
+        
+        const params = [];
+        
+        // Si hay sucursalId, filtrar por profesionales que tengan agendas en esa sucursal
+        if (sucursalId) {
+            sql += `
+            JOIN agenda a ON a.profesional_especialidad_id = pe.id
+            WHERE a.sucursal_id = ?
+            `;
+            params.push(sucursalId);
+        }
+        
+        sql += ` ORDER BY pr.apellido, pr.nombre, le.fecha_registro`;
+        
+        const [rows] = await connection.execute(sql, params);
         return rows;
     } catch (error) {
         console.error('Error al traer la lista de espera:', error);

@@ -32,9 +32,9 @@ export const obtenerProfesionalesS = (especialidad) => {
   });
 };
 
-export const obtenerProfesionalesVistaS = async () => {
+export const obtenerProfesionalesVistaS = async (sucursalId = null) => {
   try {
-    return await obtenerProfesionalesVistaM();
+    return await obtenerProfesionalesVistaM(sucursalId);
   } catch (error) {
     console.error('Error en servicio obtenerProfesionalesVistaS:', error);
     throw error;
@@ -110,9 +110,9 @@ export const actualizarNombreCompletoS = (nuevo_nombre_completo, profesional_id)
   });
 };
 
-export const buscarProfesionalesS = async (texto, especialidadId = null) => {
+export const buscarProfesionalesS = async (texto, especialidadId = null, sucursalId = null) => {
   try {
-    return await buscarProfesionalesM(texto, especialidadId);
+    return await buscarProfesionalesM(texto, especialidadId, sucursalId);
   } catch (error) {
     console.error('Error en servicio buscarProfesionalesS:', error);
     throw error;

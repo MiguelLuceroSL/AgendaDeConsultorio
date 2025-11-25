@@ -132,17 +132,30 @@ export const obtenerProfesionalesM = async (especialidad, callback) => {
 };
 
 
-export const obtenerProfesionalesVistaM = async() => {
+export const obtenerProfesionalesVistaM = async(sucursalId = null) => {
   try{
         const connection = await connectDB();
-  const sql = `
-    SELECT pe.id, CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
+  let sql = `
+    SELECT DISTINCT pe.id, CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
     FROM profesional_especialidad pe
     JOIN profesional p ON pe.profesional_id = p.id
     JOIN especialidad e ON pe.especialidad_id = e.id
-    ORDER BY p.apellido, p.nombre;
   `;
-     const [rows] = await connection.query(sql);
+  
+  const params = [];
+  
+  // Si hay sucursalId, filtrar por profesionales que tengan agendas en esa sucursal
+  if (sucursalId) {
+    sql += `
+    JOIN agenda a ON a.profesional_especialidad_id = pe.id
+    WHERE a.sucursal_id = ?
+    `;
+    params.push(sucursalId);
+  }
+  
+  sql += ` ORDER BY p.apellido, p.nombre;`;
+  
+  const [rows] = await connection.query(sql, params);
 
     return rows;
     }catch(error){
@@ -188,11 +201,11 @@ export const actualizarNombreCompletoM = async (nuevo_nombre_completo, profesion
   }
 };
 
-export const buscarProfesionalesM = async (texto, especialidadId = null) => {
+export const buscarProfesionalesM = async (texto, especialidadId = null, sucursalId = null) => {
   try {
     const connection = await connectDB();
     let sql = `
-      SELECT 
+      SELECT DISTINCT
         pe.id, 
         CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, 
         e.nombre AS especialidad,
@@ -201,6 +214,7 @@ export const buscarProfesionalesM = async (texto, especialidadId = null) => {
       FROM profesional_especialidad pe
       JOIN profesional p ON pe.profesional_id = p.id
       JOIN especialidad e ON pe.especialidad_id = e.id
+      JOIN agenda a ON a.profesional_especialidad_id = pe.id
       WHERE p.estado = 1
     `;
     
@@ -215,6 +229,12 @@ export const buscarProfesionalesM = async (texto, especialidadId = null) => {
     if (especialidadId) {
       sql += ` AND e.id = ?`;
       params.push(especialidadId);
+    }
+    
+    // Filtrar por sucursal si se proporciona (para secretarias)
+    if (sucursalId) {
+      sql += ` AND a.sucursal_id = ?`;
+      params.push(sucursalId);
     }
     
     sql += ` ORDER BY p.apellido, p.nombre LIMIT 10`;

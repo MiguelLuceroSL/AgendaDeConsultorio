@@ -194,8 +194,9 @@ export const registrarAusenciaC = async (req, res) => {
 
     await registrarAusenciaS({ profesional_especialidad_id, fecha_inicio, fecha_fin, tipo });
 
-    const profesionales = await obtenerProfesionalesVistaM();
-    const ausencias = await mostarAusenciasM();
+    const sucursalId = req.user?.sucursal_id;
+    const profesionales = await obtenerProfesionalesVistaM(sucursalId);
+    const ausencias = await mostarAusenciasM(sucursalId);
     res.render('secretaria/secretariaCrearAusenciaSuccess', { profesionales, ausencias });
   } catch (err) {
     console.error('Error al registrar ausencia:', err);
@@ -218,8 +219,9 @@ export const verificarAusenciaC = async (req, res) => {
 
 export const formCrearAusenciaC = async (req, res) => {
   try {
-    const profesionales = await obtenerProfesionalesVistaM();
-    const ausencias = await mostarAusenciasM();
+    const sucursalId = req.user?.sucursal_id;
+    const profesionales = await obtenerProfesionalesVistaM(sucursalId);
+    const ausencias = await mostarAusenciasM(sucursalId);
     res.render('secretaria/secretariaCrearAusencia', { profesionales, ausencias });
   } catch (error) {
     console.error("Error al mostrar formulario de ausencia:", error);

@@ -104,7 +104,8 @@ export const confTurnoC = async (req, res) => {
 
 export const obtenerProfesionalesVistaC = async (req, res) => {
   try {
-    const profesionales = await obtenerProfesionalesVistaS();
+    const sucursalId = req.user?.sucursal_id; // Obtener sucursal del usuario logueado
+    const profesionales = await obtenerProfesionalesVistaS(sucursalId);
     const pacientes = await obtenerPacientesVistaS()
 
     console.log('Profesionales:', profesionales?.length);
@@ -134,8 +135,10 @@ export const obtenerProfesionalesVistaC = async (req, res) => {
 
 export const traerTurnosC = async (req, res) => {
   try {
+    const sucursalIdUsuario = req.user?.sucursal_id; // Sucursal del usuario logueado
+    
     const filtros = {
-      sucursal: req.query.sucursal || null,
+      sucursal: req.query.sucursal || sucursalIdUsuario || null, // Si no hay filtro, usar la del usuario
       paciente: req.query.paciente || null,
       profesional: req.query.profesional || null
     };
@@ -148,7 +151,11 @@ export const traerTurnosC = async (req, res) => {
       t.fecha = date.toLocaleDateString('es-AR');
     });
 
-    res.render('secretaria/secretariaTurnos', { turnos, sucursales });
+    res.render('secretaria/secretariaTurnos', { 
+      turnos, 
+      sucursales,
+      sucursalUsuario: sucursalIdUsuario // Pasar al template para pre-seleccionar
+    });
   } catch (err) {
     console.error('Error al obtener Turnos:', err);
     res.status(500).json({ message: 'Hubo un error al obtener Turnos' });
@@ -216,7 +223,8 @@ export const obtenerTurnoYMedicosC = async (req, res) => {
   const id = req.params.id;
   try {
     const turno = await traerTurnoPorIdS(id);
-    const profesionales = await obtenerProfesionalesVistaS();
+    const sucursalId = req.user?.sucursal_id;
+    const profesionales = await obtenerProfesionalesVistaS(sucursalId);
     console.log('Turno:', turno);
     console.log('Profesionales:', profesionales);
     if (!turno) {

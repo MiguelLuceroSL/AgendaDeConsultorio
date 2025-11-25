@@ -98,9 +98,11 @@ export const actualizarMatriculaC = async (req, res) => {
 };
 // Buscar profesionales dinámicamente (API endpoint para AJAX)
 export const buscarProfesionalesC = async (req, res) => {
-  const { texto, especialidad } = req.query;
+  const { texto, especialidadId } = req.query;
+  const sucursalId = req.user?.sucursal_id; // Obtener sucursal del usuario logueado
+  
   try {
-    const profesionales = await buscarProfesionalesS(texto, especialidad);
+    const profesionales = await buscarProfesionalesS(texto, especialidadId, sucursalId);
     res.json(profesionales);
   } catch (err) {
     console.error('Error al buscar profesionales:', err);

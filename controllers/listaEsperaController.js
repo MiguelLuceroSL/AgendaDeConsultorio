@@ -7,7 +7,8 @@ export const crearListaEsperaC = async (req, res) => {
     const { paciente_id, profesional_especialidad_id } = req.body
     const fecha_registro = new Date().toISOString().split('T')[0]
     await crearListaEsperaS(paciente_id, profesional_especialidad_id, fecha_registro)
-    const profesionales = await obtenerProfesionalesVistaS();
+    const sucursalId = req.user?.sucursal_id;
+    const profesionales = await obtenerProfesionalesVistaS(sucursalId);
     const pacientes = await obtenerPacientesVistaS()
 
     console.log('Profesionales:', profesionales?.length);
@@ -22,7 +23,8 @@ export const crearListaEsperaC = async (req, res) => {
 
 export const listarListaEsperaC = async (req, res) => {
   try {
-    const lista = await traerListaEsperaS()
+    const sucursalId = req.user?.sucursal_id;
+    const lista = await traerListaEsperaS(sucursalId)
     res.render('secretaria/secretariaListaEspera', { lista })
   } catch (error) {
     console.error(error);
@@ -33,7 +35,8 @@ export const listarListaEsperaC = async (req, res) => {
 
 export const obtenerProfesionalesEsperaC = async (req, res) => {
   try {
-    const profesionales = await obtenerProfesionalesVistaS();
+    const sucursalId = req.user?.sucursal_id;
+    const profesionales = await obtenerProfesionalesVistaS(sucursalId);
     const pacientes = await obtenerPacientesVistaS()
 
     console.log('Profesionales:', profesionales?.length);
