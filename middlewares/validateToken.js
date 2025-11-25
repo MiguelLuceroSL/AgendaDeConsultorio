@@ -6,7 +6,6 @@ export const authRequired = (req, res, next) => {
 
     const token = req.cookies.token.trimStart();
     
-
     if (!token) res.status(401).json({ message: 'No token, authorization denied' });
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {

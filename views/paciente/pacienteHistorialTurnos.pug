@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title Vista Paciente
+    title Historial de Turnos
     link(rel="stylesheet" href="/css/headerPaciente.css")
     link(rel="stylesheet" href="/css/paciente.css")
     link(rel="stylesheet" href="/css/pacienteHome.css")
@@ -9,12 +9,12 @@ html
   body
     include ../includes/headerPaciente
     main(class="mainPaciente")
-      h1(class="tituloBienvenida") Bienvenido, #{paciente[0].nombre_completo}!
+      h1(class="tituloBienvenida") Mi historial de turnos
       section(class="seccionTurnos")
         article(class="datosPaciente")
-          h2(class="tituloEspacioPersonal") Mis proximos turnos:
+          h2(class="tituloEspacioPersonal") Aquí puedes ver el historial de tus turnos pasados:
           if !turnos || turnos.length === 0
-            p(class="sinTurnos") No tenés turnos programados.
+            p(class="sinTurnos") No tenés turnos en tu historial.
           else
             table(class="tablaTurnos")
               thead

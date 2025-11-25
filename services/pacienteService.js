@@ -1,4 +1,4 @@
-import {crearPacienteM, borrarPacienteM, obtenerPacientesVistaM, pacienteByUserIdM, updateFotoM, buscarPacientesM} from '../models/pacienteModel.js';
+import {crearPacienteM, borrarPacienteM, obtenerPacientesVistaM, pacienteByUserIdM, updateFotoM, buscarPacientesM, obtenerTurnosPorPacienteIdM, pacienteIdByUserIdM, obtenerHistorialTurnosPorPacienteIdM} from '../models/pacienteModel.js';
 
 export const crearPacienteS = (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento) => {
     return new Promise((resolve, reject) => {
@@ -46,6 +46,39 @@ export const obtenerPacienteDniS = (dni) => {
 export const pacienteByUserIdS = (usuario_id) => {
     return new Promise((resolve, reject)=>{
         pacienteByUserIdM(usuario_id,(err, result)=>{
+            if(err){
+                return reject(err);
+            }
+            resolve(result);
+        })
+    })
+};
+
+export const pacienteIdByUserIdS = (usuario_id) => {
+    return new Promise((resolve, reject)=>{
+        pacienteIdByUserIdM(usuario_id,(err, result)=>{
+            if(err){
+                return reject(err);
+            }
+            resolve(result);
+        })
+    })
+};
+
+export const obtenerTurnosPorPacienteIdS = (usuario_id) => {
+    return new Promise((resolve, reject)=>{
+        obtenerTurnosPorPacienteIdM(usuario_id,(err, result)=>{
+            if(err){
+                return reject(err);
+            }
+            resolve(result);
+        })
+    })
+};
+
+export const obtenerHistorialTurnosPorPacienteIdS = (usuario_id) => {
+    return new Promise((resolve, reject)=>{
+        obtenerHistorialTurnosPorPacienteIdM(usuario_id,(err, result)=>{
             if(err){
                 return reject(err);
             }

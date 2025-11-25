@@ -83,6 +83,61 @@ export const pacienteByUserIdM = async (usuario_id, callback) => {
   }
 };
 
+export const pacienteIdByUserIdM = async (usuario_id, callback) => {
+  try {
+    const db = await connectDB();
+    const sql = `SELECT id FROM paciente WHERE usuario_id = ?`;
+    const [result] = await db.execute(sql, [usuario_id]);
+    callback(null, result);
+  } catch (err) {
+    callback(err);
+  }
+};
+
+export const obtenerTurnosPorPacienteIdM = async (usuario_id, callback) => {
+  try {
+    const db = await connectDB();
+    const sql = `SELECT t.detalle_turno, t.fecha, t.hora, t.estado, p.nombre, p.apellido, e.nombre AS especialidad
+      FROM turnos t
+      JOIN profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
+      JOIN profesional p ON pe.profesional_id = p.id
+      JOIN especialidad e ON pe.especialidad_id = e.id
+      WHERE t.paciente_id = ?
+      AND (
+            t.fecha > CURDATE()
+            OR (t.fecha = CURDATE() AND t.hora >= CURTIME())
+          )
+      ORDER BY t.fecha, t.hora;`;
+    const [result] = await db.execute(sql, [usuario_id]);
+    console.log("Turnos obtenidos para paciente ID:", usuario_id, result);
+    callback(null, result);
+  } catch (err) {
+    callback(err);
+  }
+};
+
+export const obtenerHistorialTurnosPorPacienteIdM = async (usuario_id, callback) => {
+  try {
+    const db = await connectDB();
+    const sql = `SELECT t.detalle_turno, t.fecha, t.hora, t.estado, p.nombre, p.apellido, e.nombre AS especialidad
+      FROM turnos t
+      JOIN profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
+      JOIN profesional p ON pe.profesional_id = p.id
+      JOIN especialidad e ON pe.especialidad_id = e.id
+      WHERE t.paciente_id = ?
+      AND (
+            t.fecha < CURDATE()
+            OR (t.fecha = CURDATE() AND t.hora < CURTIME())
+          )
+      ORDER BY t.fecha, t.hora;`;
+    const [result] = await db.execute(sql, [usuario_id]);
+    console.log("Turnos obtenidos para paciente ID:", usuario_id, result);
+    callback(null, result);
+  } catch (err) {
+    callback(err);
+  }
+};
+
 export const updatePacienteM = async (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, callback) => {
   try {
     const db = await connectDB();

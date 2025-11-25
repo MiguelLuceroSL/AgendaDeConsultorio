@@ -1,0 +1,83 @@
+.mainPaciente {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.tituloBienvenida {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.seccionTurnos {
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.datosPaciente {
+    background-color: white;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tituloEspacioPersonal {
+    font-size: 20px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.descripcion {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.sinTurnos {
+    font-size: 14px;
+    color: #e74c3c;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+.tablaTurnos {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+.tablaTurnos thead {
+    background-color: #3498db;
+    color: white;
+}
+
+.tablaTurnos th {
+    padding: 12px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.tablaTurnos td {
+    padding: 12px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.tablaTurnos tbody tr:hover {
+    background-color: #ecf0f1;
+}
+
+.dudas {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #ecf0f1;
+    text-align: center;
+}

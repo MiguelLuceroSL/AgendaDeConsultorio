@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { borrarPaciente, getFotoC, obtenerPacientesVistaC, pacienteByUserIdC, pacienteByUserIdTurnoC, pacienteEditadoC, pacienteEditarC, pacientePerfilC, updateFotoC, updatePacienteC, buscarPacientesC } from '../controllers/pacienteController.js';
+import { borrarPaciente, getFotoC, obtenerPacientesVistaC, pacienteByUserIdC, pacienteByUserIdTurnoC, pacienteEditadoC, pacienteEditarC, pacientePerfilC, updateFotoC, updatePacienteC, buscarPacientesC, historialTurnosByUserIdC } from '../controllers/pacienteController.js';
 import { authRequired } from '../middlewares/validateToken.js';
 import verifyRol from '../middlewares/verifyRol.js';
 import { funcion2 } from '../middlewares/middle2.js';
@@ -11,6 +11,10 @@ router.get('/paciente', funcion2, authRequired, verifyRol('paciente'), (req, res
 
 router.get('/turno', funcion2, authRequired, verifyRol('paciente'), (req, res) => {
   pacienteByUserIdTurnoC(req, res);
+});
+
+router.get('/pacienteHistorialTurnos', funcion2, authRequired, verifyRol('paciente'), (req, res) => {
+  historialTurnosByUserIdC(req, res);
 });
 
 router.get('/perfil', funcion2, authRequired, verifyRol('paciente'), (req, res) => {
