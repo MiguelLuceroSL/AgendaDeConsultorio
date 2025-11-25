@@ -1,5 +1,5 @@
 
-import { crearAgendaS, obtenerAgendaS, actulizarAgendaS, borrarAgendaS,obtenerAgendasActivasS,obtenerSucursalesS, registrarAusenciaS, verificarAusenciaS, obtenerAusenciasTotalesS, eliminarAusenciaS } from '../services/agendaService.js';
+import { crearAgendaS, obtenerAgendaS, actulizarAgendaS, borrarAgendaS,obtenerAgendasActivasS,obtenerSucursalesS, registrarAusenciaS, verificarAusenciaS, obtenerAusenciasTotalesS, eliminarAusenciaS, obtenerAgendasActivasAgrupadasS, eliminarAgendaS } from '../services/agendaService.js';
 import{ obtenerSucursales, obtenerAgendasActivasPorProfesional, mostarAusenciasM } from '../models/agendaModel.js' 
 import {obtenerProfesionalesVistaM} from "../models/profesionalModel.js";
 
@@ -250,5 +250,60 @@ export const eliminarAusenciaC = async (req, res) => {
   } catch (error) {
     console.error("Error al eliminar ausencia:", error);
     res.status(500).json({ error: "No se pudo eliminar la ausencia" });
+  }
+};
+
+export const listarAgendasActivasC = async (req, res) => {
+  try {
+    const sucursalId = req.user?.sucursal_id;
+    const agendas = await obtenerAgendasActivasAgrupadasS(sucursalId);
+    
+    // Agrupar agendas por profesional
+    const profesionales = {};
+    agendas.forEach(agenda => {
+      if (!profesionales[agenda.profesional_id]) {
+        profesionales[agenda.profesional_id] = {
+          profesional_id: agenda.profesional_id,
+          nombre_profesional: agenda.nombre_profesional,
+          especialidades: {}
+        };
+      }
+      
+      if (!profesionales[agenda.profesional_id].especialidades[agenda.especialidad_id]) {
+        profesionales[agenda.profesional_id].especialidades[agenda.especialidad_id] = {
+          especialidad_id: agenda.especialidad_id,
+          especialidad: agenda.especialidad,
+          agendas: []
+        };
+      }
+      
+      profesionales[agenda.profesional_id].especialidades[agenda.especialidad_id].agendas.push({
+        agenda_id: agenda.agenda_id,
+        horario_inicio: agenda.horario_inicio,
+        horario_fin: agenda.horario_fin,
+        dias: agenda.dias,
+        tiempo_consulta: agenda.tiempo_consulta,
+        dia_inicio: agenda.dia_inicio,
+        dia_fin: agenda.dia_fin,
+        max_sobreturnos: agenda.max_sobreturnos,
+        sucursal: agenda.sucursal
+      });
+    });
+    
+    res.render('secretaria/secretariaGestionAgendas', { profesionales: Object.values(profesionales) });
+  } catch (error) {
+    console.error("Error al listar agendas:", error);
+    res.status(500).send("Error al cargar las agendas");
+  }
+};
+
+export const eliminarAgendaC = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await eliminarAgendaS(id);
+    res.json({ message: "Agenda eliminada correctamente" });
+  } catch (error) {
+    console.error("Error al eliminar agenda:", error);
+    res.status(500).json({ error: "No se pudo eliminar la agenda" });
   }
 };

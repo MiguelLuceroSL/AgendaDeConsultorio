@@ -328,3 +328,80 @@ export const eliminarAusenciaM = async (id) => {
     throw error;
   }
 };
+
+export const obtenerAgendasActivasAgrupadasM = async (sucursalId = null) => {
+  try {
+    const connection = await connectDB();
+    
+    let sql = `
+      SELECT 
+        a.id AS agenda_id,
+        a.horario_inicio,
+        a.horario_fin,
+        a.tiempo_consulta,
+        a.dia_inicio,
+        a.dia_fin,
+        a.max_sobreturnos,
+        a.estado,
+        p.id AS profesional_id,
+        CONCAT(p.apellido, ', ', p.nombre) AS nombre_profesional,
+        e.id AS especialidad_id,
+        e.nombre AS especialidad,
+        s.nombre AS sucursal,
+        pe.id AS profesional_especialidad_id,
+        GROUP_CONCAT(ad.dia_semana ORDER BY 
+          FIELD(ad.dia_semana, 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo')
+        ) AS dias
+      FROM agenda a
+      JOIN profesional_especialidad pe ON a.profesional_especialidad_id = pe.id
+      JOIN profesional p ON pe.profesional_id = p.id
+      JOIN especialidad e ON pe.especialidad_id = e.id
+      JOIN sucursal s ON a.sucursal_id = s.id
+      LEFT JOIN agenda_dias ad ON ad.agenda_id = a.id
+      WHERE a.estado = 'Activo'
+    `;
+    
+    const params = [];
+    
+    if (sucursalId) {
+      sql += ` AND a.sucursal_id = ?`;
+      params.push(sucursalId);
+    }
+    
+    sql += `
+      GROUP BY a.id, p.id, p.apellido, p.nombre, e.id, e.nombre, s.nombre, pe.id,
+               a.horario_inicio, a.horario_fin, a.tiempo_consulta, a.dia_inicio, 
+               a.dia_fin, a.max_sobreturnos, a.estado
+      ORDER BY p.apellido, p.nombre, e.nombre, a.horario_inicio
+    `;
+    
+    const [rows] = await connection.execute(sql, params);
+    return rows;
+  } catch (error) {
+    console.error("Error en obtenerAgendasActivasAgrupadasM:", error);
+    throw error;
+  }
+};
+
+export const eliminarAgendaM = async (agendaId) => {
+  try {
+    const connection = await connectDB();
+    
+    // Primero eliminar los días asociados
+    await connection.execute(
+      `DELETE FROM agenda_dias WHERE agenda_id = ?`,
+      [agendaId]
+    );
+    
+    // Luego eliminar la agenda
+    const [result] = await connection.execute(
+      `DELETE FROM agenda WHERE id = ?`,
+      [agendaId]
+    );
+    
+    return result;
+  } catch (error) {
+    console.error("Error en eliminarAgendaM:", error);
+    throw error;
+  }
+};
