@@ -198,7 +198,11 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
         CONCAT(pr.apellido, ', ', pr.nombre) AS nombre_medico,
         e.nombre AS especialidad,
         t.detalle_turno,
-        s.nombre AS sucursal,
+        (SELECT s.nombre 
+         FROM agenda a2 
+         JOIN sucursal s ON a2.sucursal_id = s.id 
+         WHERE a2.profesional_especialidad_id = pe.id 
+         LIMIT 1) AS sucursal,
         t.fecha, 
         t.hora, 
         t.estado,
@@ -213,22 +217,28 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
         profesional pr ON pe.profesional_id = pr.id
     JOIN 
         especialidad e ON pe.especialidad_id = e.id
-    JOIN
-    	agenda a ON a.profesional_especialidad_id = pe.id
-    JOIN
-    	sucursal s ON a.sucursal_id = s.id
+    WHERE 1=1
     `;
 
         const params = [];
 
-        if (filtros.sucursal) {
-            sql += ' AND s.nombre = ?';
-            params.push(filtros.sucursal);
+        // Filtro por sucursal_id
+        if (filtros.sucursal_id) {
+            sql += ` AND EXISTS (
+                SELECT 1 FROM agenda a 
+                WHERE a.profesional_especialidad_id = pe.id 
+                AND a.sucursal_id = ?
+            )`;
+            params.push(filtros.sucursal_id);
         }
+        
+        // Filtro por paciente
         if (filtros.paciente) {
             sql += ' AND LOWER(p.nombre_completo) LIKE ?';
             params.push(`%${filtros.paciente.toLowerCase()}%`);
         }
+        
+        // Filtro por profesional
         if (filtros.profesional) {
             sql += ' AND (LOWER(pr.apellido) LIKE ? OR LOWER(pr.nombre) LIKE ?)';
             params.push(`%${filtros.profesional.toLowerCase()}%`);
@@ -247,7 +257,7 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
 export const obtenerTodasLasSucursales = async () => {
     try {
         const connection = await connectDB();
-        const [rows] = await connection.query('SELECT nombre FROM sucursal');
+        const [rows] = await connection.query('SELECT id, nombre FROM sucursal');
         return rows;
     } catch (err) {
         console.error('Error al obtener sucursales:', err);

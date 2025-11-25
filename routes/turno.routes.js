@@ -1,6 +1,7 @@
 import express from 'express';
 import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC, crearTurnoPacienteC, traerTurnoPorId2C, editarEstadoTurnoC, obtenerTurnoYMedicosC, actualizarTurnoTrasladoC, verificarSobreturnos, obtenerHorariosPorEstadoC} 
 from '../controllers/turnoController.js';
+import { authRequired } from '../middlewares/validateToken.js';
 import multer from 'multer';
 import { storage } from '../config/cloudinaryConfig.js';
 
@@ -28,17 +29,17 @@ router.get('/horarios/ocupados', getTurnosOcupadosController);
 
 //router.get('/gestionTurno', obtenerProfesionalesVistaC);
 
-router.get('/listarTurnos', traerTurnosC)
+router.get('/listarTurnos', authRequired, traerTurnosC)
 
-router.get('/detalles/:id', traerTurnoPorIdC);
+router.get('/detalles/:id', authRequired, traerTurnoPorIdC);
 
-router.get('/editarTurno/:id', traerTurnoPorId2C);
+router.get('/editarTurno/:id', authRequired, traerTurnoPorId2C);
 
-router.post('/editar/:id', editarEstadoTurnoC);
+router.post('/editar/:id', authRequired, editarEstadoTurnoC);
 
-router.get('/trasladar/:id', obtenerTurnoYMedicosC);
+router.get('/trasladar/:id', authRequired, obtenerTurnoYMedicosC);
 
-router.post('/trasladar/:id', actualizarTurnoTrasladoC);
+router.post('/trasladar/:id', authRequired, actualizarTurnoTrasladoC);
 
 router.get("/horarios/estado", obtenerHorariosPorEstadoC);
 

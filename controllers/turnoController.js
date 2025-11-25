@@ -137,8 +137,12 @@ export const traerTurnosC = async (req, res) => {
   try {
     const sucursalIdUsuario = req.user?.sucursal_id; // Sucursal del usuario logueado
     
+    // Si es secretaria, SIEMPRE filtrar por su sucursal (no permitir cambiar)
+    // Si es admin (sin sucursal_id), permitir filtrar
+    const sucursalFiltro = sucursalIdUsuario || req.query.sucursal || null;
+    
     const filtros = {
-      sucursal: req.query.sucursal || sucursalIdUsuario || null, // Si no hay filtro, usar la del usuario
+      sucursal_id: sucursalFiltro,
       paciente: req.query.paciente || null,
       profesional: req.query.profesional || null
     };
