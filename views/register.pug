@@ -19,7 +19,7 @@ html
             input.inputRegistro(type="email", id="registerEmail", name="email", required, placeholder="Correo electrónico")
           fieldset.campoRegistro
             label.lbRegistro(for="registerDni") DNI:
-            input.inputRegistro(type="text", id="registerDni", name="dni", required, placeholder="DNI")
+            input.inputRegistro(type="text", id="registerDni", name="dni", required, placeholder="DNI", pattern="\\d{7,8}", title="El DNI debe tener 7 u 8 dígitos", oninput="this.value = this.value.replace(/[^0-9]/g, '')", maxlength="8")
           fieldset.campoRegistro
             label.lbRegistro(for="registerMutual") Mutual:
             input.inputRegistro(type="text", id="registerMutual", name="mutual", required, placeholder="Mutual que posee o ponga Ninguna")
@@ -28,12 +28,18 @@ html
             input.inputRegistro(type="text", id="registerDireccion", name="direccion", required, placeholder="Dirección")
           fieldset.campoRegistro
             label.lbRegistro(for="registerTelefono") Teléfono:
-            input.inputRegistro(type="text", id="registerTelefono", name="telefono", required, placeholder="Teléfono")
+            input.inputRegistro(type="text", id="registerTelefono", name="telefono", required, placeholder="Teléfono", pattern="\\d{7,15}", title="El teléfono debe contener entre 7 y 15 dígitos", oninput="this.value = this.value.replace(/[^0-9]/g, '')", maxlength="15")
           fieldset.campoRegistro
             label.lbRegistro(for="registerFechaNacimiento") Fecha de nacimiento:
-            input.inputRegistro(type="date", id="registerFechaNacimiento", name="fecha_nacimiento", required)
+            - var hoy = new Date();
+            - var maxFecha = new Date(hoy.getFullYear() - 18, hoy.getMonth(), hoy.getDate()).toISOString().split('T')[0];
+            - var minFecha = new Date(hoy.getFullYear() - 100, hoy.getMonth(), hoy.getDate()).toISOString().split('T')[0];
+            input.inputRegistro(type="date", id="registerFechaNacimiento", name="fecha_nacimiento", required, min=minFecha, max=maxFecha, title="Debe tener entre 18 y 100 años")
           fieldset.campoRegistro
             label.lbRegistro(for="registerPassword") Contraseña:
-            input.inputRegistro(type="password", id="registerPassword", name="password", required, placeholder="Contraseña")
+            input.inputRegistro(type="password", id="registerPassword", name="password", required, placeholder="Contraseña", minlength="8")
+          fieldset.campoRegistro
+            label.lbRegistro(for="registerConfirmPassword") Confirmar contraseña:
+            input.inputRegistro(type="password", id="registerConfirmPassword", name="confirm_password", required, placeholder="Confirmar contraseña", minlength="8")
           button.botonRegistro(type="submit") Registrarse
     include includes/footer

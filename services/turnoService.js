@@ -1,5 +1,7 @@
 import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM, obtenerTurnosOcupados, traerTurnosFiltrados, traerTurnoPorIdM, actuEstadoTurnoM, actualizarTurnoTrasladoM, verificarSobreturnosM, obtenerHorariosPorEstadoM, obtenerCantidadSobreturnos } from '../models/turnoModel.js';
 
+
+
 export const crearTurnoS = async (
   paciente_id,
   profesional_especialidad_id,
@@ -155,7 +157,7 @@ export const getTurnosOcupadosService = async (profesionalId, fecha) => {
     return await obtenerTurnosOcupados(profesionalId, fecha);
 };
 
-export const actualizarEstadoTurnoS = (estado, id) => {
+export const actualizarEstadoTurnoS = async (estado, id) => {
     return new Promise((resolve, reject) => {
         actuEstadoTurnoM(estado, id, (err, result) => {
             if (err) {

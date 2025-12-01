@@ -15,6 +15,13 @@ export const crearAgendaC = async (req, res) => {
     if (!profesional_especialidad_id || !sucursal_id || !dia_inicio || !dia_fin || !tiempo_consulta) {
       return res.status(400).json({ error: "Todos los campos son requeridos" });
     }
+    
+    // Validar que dia_fin sea posterior a dia_inicio
+    const fechaInicio = new Date(dia_inicio);
+    const fechaFin = new Date(dia_fin);
+    if (fechaFin <= fechaInicio) {
+      return res.status(400).json({ error: "La fecha de fin debe ser posterior a la fecha de inicio" });
+    }
 
     const diasActivos = Object.values(dias).some(dia => dia.activo);
     if (!diasActivos) {

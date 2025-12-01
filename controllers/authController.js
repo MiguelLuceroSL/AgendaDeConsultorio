@@ -76,12 +76,71 @@ export const login = async (req, res) => {
 
 
 export const register = async (req, res) => {
-  const { nombre, email, dni, mutual, direccion, telefono, fecha_nacimiento, password } = req.body;
-  const passwordHash = bcrypt.hashSync(password, 8);
-  const rol = "paciente";
-
+  const { nombre, email, dni, mutual, direccion, telefono, fecha_nacimiento, password, confirm_password } = req.body;
+  
   try {
-    const connection = await connectDB(); // Esperar la conexión
+    const connection = await connectDB();
+    
+    // Validar que las contraseñas coincidan
+    if (password !== confirm_password) {
+      return res.status(400).send('Las contraseñas no coinciden');
+    }
+    
+    // Validar que el email no exista
+    const [emailExists] = await connection.execute(
+      'SELECT usuario_id FROM usuario WHERE email = ?',
+      [email]
+    );
+    if (emailExists.length > 0) {
+      return res.status(400).send('El email ya está registrado');
+    }
+    
+    // Validar que el DNI no exista
+    const [dniExists] = await connection.execute(
+      'SELECT id FROM paciente WHERE dni = ?',
+      [dni]
+    );
+    if (dniExists.length > 0) {
+      return res.status(400).send('El DNI ya está registrado');
+    }
+    
+    // Validar formato de DNI (7-8 dígitos numéricos)
+    if (!/^\d{7,8}$/.test(dni)) {
+      return res.status(400).send('El DNI debe tener 7 u 8 dígitos numéricos');
+    }
+    
+    // Validar formato de teléfono (7-15 dígitos numéricos)
+    if (!/^\d{7,15}$/.test(telefono)) {
+      return res.status(400).send('El teléfono debe contener entre 7 y 15 dígitos numéricos');
+    }
+    
+    // Validar edad: entre 18 y 100 años
+    const fechaNac = new Date(fecha_nacimiento);
+    const hoy = new Date();
+    
+    // Calcular edad
+    let edad = hoy.getFullYear() - fechaNac.getFullYear();
+    const mesActual = hoy.getMonth();
+    const mesNacimiento = fechaNac.getMonth();
+    const diaActual = hoy.getDate();
+    const diaNacimiento = fechaNac.getDate();
+    
+    // Ajustar edad si aún no cumplió años este año
+    if (mesActual < mesNacimiento || (mesActual === mesNacimiento && diaActual < diaNacimiento)) {
+      edad--;
+    }
+    
+    if (edad < 18) {
+      return res.status(400).send('Debe ser mayor de 18 años para registrarse');
+    }
+    
+    if (edad > 100) {
+      return res.status(400).send('La fecha de nacimiento no es válida (edad máxima: 100 años)');
+    }
+    
+    const passwordHash = bcrypt.hashSync(password, 8);
+    const rol = "paciente";
+    
     // Inserta en la tabla usuario
     const insertUserQuery = 'INSERT INTO usuario(email, password, rol) VALUES (?, ?, ?)';
     await connection.execute(insertUserQuery, [email, passwordHash, rol]);
@@ -117,10 +176,26 @@ export const register = async (req, res) => {
 export const registerSecretaria = async (req, res) => {
   
   try {
-    const { email, password, sucursal_id } = req.body;
+    const { email, password, confirm_password, sucursal_id } = req.body;
+    const connection = await connectDB();
+    
+    // Validar que las contraseñas coincidan
+    if (password !== confirm_password) {
+      return res.status(400).send('Las contraseñas no coinciden');
+    }
+    
+    // Validar que el email no exista
+    const [emailExists] = await connection.execute(
+      'SELECT usuario_id FROM usuario WHERE email = ?',
+      [email]
+    );
+    if (emailExists.length > 0) {
+      return res.status(400).send('El email ya está registrado');
+    }
+    
     const passwordHash = bcrypt.hashSync(password, 8);
     const rol = "secretaria";
-    const connection = await connectDB();
+    
     await connection.execute(
       'INSERT INTO usuario(email, password, rol, sucursal_id) VALUES (?, ?, ?, ?)',
       [email, passwordHash, rol, sucursal_id]

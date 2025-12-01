@@ -387,6 +387,20 @@ export const eliminarAgendaM = async (agendaId) => {
   try {
     const connection = await connectDB();
     
+    // Verificar si la agenda tiene turnos asociados
+    const [turnos] = await connection.execute(
+      `SELECT COUNT(*) as total 
+       FROM turnos t
+       JOIN profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
+       JOIN agenda a ON a.profesional_especialidad_id = pe.id
+       WHERE a.id = ? AND t.estado NOT IN ('Cancelado', 'Atendido')`,
+      [agendaId]
+    );
+    
+    if (turnos[0].total > 0) {
+      throw new Error('No se puede eliminar la agenda porque tiene turnos activos asociados');
+    }
+    
     // Primero eliminar los días asociados
     await connection.execute(
       `DELETE FROM agenda_dias WHERE agenda_id = ?`,
