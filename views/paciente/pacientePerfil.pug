@@ -8,6 +8,10 @@ html
   body
     include ../includes/headerPaciente
     main(class="mainPacientePerfil")
+      if msg == 'ok'
+        h4(class="mensajeOk") Datos editados exitosamente
+      if msg == 'error'
+        h4(class="mensajeError") Hubo un error al editar tus datos
       h1.h1Perfil Datos Personales
       section.sectionPrincipal
         img(src=`/img/icon/${paciente[0].icon}.jpg`, alt="icon" class="icon" id="icon")

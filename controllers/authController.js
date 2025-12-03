@@ -5,8 +5,6 @@ import jwt from 'jsonwebtoken';
 import connectDB from '../config/db.js';
 
 export const login = async (req, res) => {
-  console.log('Entrando al fetch back');
-  console.log('REQ BACK LOGIN:', req.body);
 
   try {
     const db = await connectDB(); // Esperar la conexión
@@ -16,9 +14,7 @@ export const login = async (req, res) => {
 
     if (result.length === 0) return res.status(404).send('Usuario no encontrado');
 
-    console.log('Entrando al try del fetch back');
     const user = result[0];
-    console.log('User authController:', user);
 
     const passwordIsValid = bcrypt.compareSync(password, user.password);
     if (passwordIsValid) {
@@ -37,9 +33,7 @@ export const login = async (req, res) => {
     res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'Lax' });
 
     if (user.rol === 'paciente') {
-      console.log('Entramos al rol paciente');
       const [pacienteResult] = await db.execute('SELECT * FROM paciente WHERE usuario_id = ?', [user.usuario_id]);
-      console.log("PACIENTE RESULT: ",pacienteResult);
       if (pacienteResult.length === 0) return res.status(404).send('Datos del paciente no encontrados');
 
       const paciente = pacienteResult[0];
@@ -59,7 +53,6 @@ export const login = async (req, res) => {
         },
       });
     } else {
-      console.log('Entramos al rol que no es paciente');
       return res.json({
         id: user.usuario_id,
         username: user.username,
@@ -68,7 +61,6 @@ export const login = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log('Entramos al catch del fetch back');
     res.status(500).json({ error: error.message });
   }
 };

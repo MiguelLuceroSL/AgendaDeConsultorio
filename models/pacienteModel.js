@@ -138,11 +138,11 @@ export const obtenerHistorialTurnosPorPacienteIdM = async (usuario_id, callback)
   }
 };
 
-export const updatePacienteM = async (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, callback) => {
+export const updatePacienteM = async (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, callback) => {
   try {
     const db = await connectDB();
-    const sql = 'UPDATE paciente SET nombre_completo=?,dni=?,obra_social=?,telefono=?,email=?,direccion=?,fecha_nacimiento=?,fotocopia_documento=? WHERE dni=?';
-    await db.execute(sql, [nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, dni]);
+    const sql = 'UPDATE paciente SET nombre_completo=?,dni=?,obra_social=?,telefono=?,email=?,direccion=?,fecha_nacimiento=? WHERE dni=?';
+    await db.execute(sql, [nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, dni]);
     callback(null, { message: 'Paciente actualizado' });
   } catch (err) {
     callback(err);

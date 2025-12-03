@@ -1,4 +1,4 @@
-import {crearPacienteM, borrarPacienteM, obtenerPacientesVistaM, pacienteByUserIdM, updateFotoM, buscarPacientesM, obtenerTurnosPorPacienteIdM, pacienteIdByUserIdM, obtenerHistorialTurnosPorPacienteIdM} from '../models/pacienteModel.js';
+import {crearPacienteM, borrarPacienteM, obtenerPacientesVistaM, pacienteByUserIdM, updateFotoM, buscarPacientesM, obtenerTurnosPorPacienteIdM, pacienteIdByUserIdM, obtenerHistorialTurnosPorPacienteIdM, updatePacienteM} from '../models/pacienteModel.js';
 
 export const crearPacienteS = (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento) => {
     return new Promise((resolve, reject) => {
@@ -87,9 +87,9 @@ export const obtenerHistorialTurnosPorPacienteIdS = (usuario_id) => {
     })
 };
 
-export const updatePacienteS = (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento) => {
+export const updatePacienteS = (nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento) => {
     return new Promise((resolve, reject) => {
-        updatePacienteM(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento, (err, result) => {
+        updatePacienteM(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, (err, result) => {
             if (err) {
                 return reject(err);
             }

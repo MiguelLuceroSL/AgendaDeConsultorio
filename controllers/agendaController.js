@@ -10,8 +10,6 @@ export const crearAgendaC = async (req, res) => {
     const { profesional_especialidad_id, sucursal_id, dia_inicio, dia_fin, tiempo_consulta, dias, max_sobreturnos } = req.body;
 
 
-    console.log("🚀 ~ crearAgendaC ~ req.body:", req.body);
-
     if (!profesional_especialidad_id || !sucursal_id || !dia_inicio || !dia_fin || !tiempo_consulta) {
       return res.status(400).json({ error: "Todos los campos son requeridos" });
     }
@@ -183,9 +181,7 @@ export const borrarAgendaC = async (req,res) => {
 export const obtenerAgendasActivasC = async (req, res) => {
   try {
     const { profesionalId } = req.params;
-    console.log('[Controller] Recibido profesionalId:', profesionalId);
     const agendas = await obtenerAgendasActivasPorProfesional(profesionalId);
-    console.log('[Controller] Agendas encontradas:', agendas);
 
     res.json(agendas);
   } catch (error) {

@@ -30,6 +30,7 @@ router.get('/editar', funcion2, authRequired, verifyRol('paciente'), (req, res) 
 });
 
 router.post('/editar', (req, res) => {
+  //tengo que seguir con esto
   updatePacienteC(req, res);
 });
 

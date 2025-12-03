@@ -11,8 +11,6 @@ export const crearListaEsperaC = async (req, res) => {
     const profesionales = await obtenerProfesionalesVistaS(sucursalId);
     const pacientes = await obtenerPacientesVistaS()
 
-    console.log('Profesionales:', profesionales?.length);
-    console.log('Pacientes:', pacientes?.length);
     res.render('secretaria/secretariaCrearListaEsperaSuccess', { profesionales, pacientes });
   } catch (error) {
     console.error(error)
@@ -39,8 +37,6 @@ export const obtenerProfesionalesEsperaC = async (req, res) => {
     const profesionales = await obtenerProfesionalesVistaS(sucursalId);
     const pacientes = await obtenerPacientesVistaS()
 
-    console.log('Profesionales:', profesionales?.length);
-    console.log('Pacientes:', pacientes?.length);
     res.render('secretaria/secretariaCrearListaEspera', { profesionales, pacientes });
   } catch (err) {
     console.error('Error al obtener los profesionales:', err);

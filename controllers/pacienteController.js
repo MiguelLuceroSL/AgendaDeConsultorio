@@ -1,4 +1,4 @@
-import { crearPacienteS, borrarPacienteS, obtenerPacientesVistaS, pacienteByUserIdS, updateFotoS, buscarPacientesS, obtenerTurnosPorPacienteIdS, pacienteIdByUserIdS, obtenerHistorialTurnosPorPacienteIdS } from '../services/pacienteService.js';
+import { crearPacienteS, borrarPacienteS, obtenerPacientesVistaS, pacienteByUserIdS, updateFotoS, buscarPacientesS, obtenerTurnosPorPacienteIdS, pacienteIdByUserIdS, obtenerHistorialTurnosPorPacienteIdS, updatePacienteS } from '../services/pacienteService.js';
 import { obtenerProfesionalesVistaS } from '../services/profesionalService.js';
 
 export const crearPaciente = async (req, res) => {
@@ -127,11 +127,12 @@ export const pacientePerfilC = async (req, res) => {
 
 export const pacienteEditadoC = async (req, res) => {
     console.log('¡PACIENTE TRATANDO DE SER EDITADO!');
-    console.log('REQ del EDITADO: ', req);
 };
 
 export const pacienteEditarC = async (req, res) => {
     const id = req.res.req.user.id;
+    const msg = req.query.msg;
+    console.log("Mensaje recibido en pacienteEditarC:", msg);
     try {
         const paciente = await pacienteByUserIdS(id)
         const date = new Date(paciente[0].fecha_nacimiento);
@@ -140,7 +141,7 @@ export const pacienteEditarC = async (req, res) => {
             month: "2-digit",
             year: "numeric"
         });
-        res.render('paciente/pacienteEditar', { paciente, formattedDate });
+        res.render('paciente/pacienteEditar', { paciente, formattedDate, msg });
     } catch (error) {
         console.error("Error al obtener el paciente por ID de usuario:", error);
         res.status(500).json({ message: 'Hubo un error al obtener el paciente.' });
@@ -148,10 +149,12 @@ export const pacienteEditarC = async (req, res) => {
 };
 
 export const updatePacienteC = async (req, res) => {
-    const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento } = req.body;
+    const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento } = req.body;
+    console.log("datos obtenidos", nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento);
+    console.log("Reqbody edit paciente: ", req.body);
     try {
-        await updatePacienteS(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, fotocopia_documento);
-        res.json({ message: "Paciente editado exitosamente" });
+        await updatePacienteS(nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento);
+        return res.redirect("/pacientes/editar?msg=ok");
     } catch (err) {
         console.error("Error al editar el paciente:", err);
         res.json("Hubo un error al editar el Paciente.");

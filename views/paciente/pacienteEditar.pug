@@ -7,10 +7,19 @@ html
     link(rel="stylesheet" href="/css/footer.css")
   body
     include ../includes/headerPaciente
+    if msg == 'ok'
+      div.alert.alert-success
+        span.icon ✓
+        |  Datos editados exitosamente
+
+    if msg == 'error'
+      div.alert.alert-error
+        span.icon ⚠
+        |  Hubo un error al editar tus datos
     h1(class="tituloEditar") Datos Personales
     section(class="sectionPrincipalEditar")
       article
-        form.formPerfilEditar(action="/pacientes/perfil", method="POST")
+        form.formPerfilEditar(action="/pacientes/editar", method="POST")
           fieldset.campoPerfilEditar(class="campoImg")
             img(src=`/img/icon/${paciente[0].icon}.jpg`, alt="icon" class="iconEdit" id="icon")
             a.botonCambiarFoto(href="/pacientes/foto") Cambiar foto de perfil
@@ -19,10 +28,9 @@ html
             input.inputPerfil(
               type="text", 
               id="perfilNombre", 
-              name="nombre",
-              placeholder=paciente[0].nombre_completo,
+              name="nombre_completo",
               value=paciente[0].nombre_completo,
-              disabled
+              readonly
             )
           fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilEmail") Correo electrónico:
@@ -31,8 +39,8 @@ html
               id="perfilEmail", 
               name="email", 
               required, 
-              placeholder=paciente[0].email,
-              disabled
+              value=paciente[0].email,
+              readonly
             )
           fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilDni") DNI:
@@ -40,16 +48,16 @@ html
               type="text", 
               id="perfilDni", 
               name="dni", 
-              placeholder=paciente[0].dni,
-              disabled
+              value=paciente[0].dni,
+              readonly
             )
           fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilMutual") Mutual:
             input.inputPerfil(
               type="text", 
               id="perfilMutual", 
-              name="mutual", 
-              placeholder=paciente[0].obra_social
+              name="obra_social", 
+              value=paciente[0].obra_social
             )
           fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilDireccion") Dirección:
@@ -57,7 +65,7 @@ html
               type="text", 
               id="perfilDireccion", 
               name="direccion", 
-              placeholder=paciente[0].direccion
+              value=paciente[0].direccion
             )
           fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilTelefono") Teléfono:
@@ -65,7 +73,7 @@ html
               type="text", 
               id="perfilTelefono", 
               name="telefono", 
-              placeholder=paciente[0].telefono
+              value=paciente[0].telefono
             )
           fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilFechaNacimiento") Fecha de nacimiento:
@@ -78,3 +86,8 @@ html
           button.botonEditarFoto(type="submit") Editar
     include ../includes/footer
     script(src="/js/logout.js")
+    script.
+      setTimeout(() => {
+        const alert = document.querySelector('.alert');
+        if (alert) alert.style.display = 'none';
+      }, 4000);

@@ -28,7 +28,6 @@ export const crearProfesionalC = async (req, res) => {
   
   try {
     await crearProfesionalS(dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula);
-    console.log("Profesional y especialidad procesados exitosamente.");
     res.render('admin/adminCreateSuccess', {
       message: 'Médico y especialidad procesados con éxito. Si el DNI ya existía, se agregó la nueva especialidad.'
     });
@@ -51,7 +50,6 @@ export const borrarProfesionalC = async (req, res) => {
   
   try {
     await profesionalBorrarS(id);
-    console.log("Se cambio el estado del profesional exitosamente.");
     res.redirect('adminDeleteSuccess');
   } catch (err) {
     console.error("Error al cambiar el estado del profesional: ", err);
@@ -63,7 +61,6 @@ export const obtenerProfesionalesC = async (req, res) => {
   const especialidad = req.query.especialidad;
   try {
     const profesionales = await obtenerProfesionalesS(especialidad);
-    console.log('Profesionales con estado:', profesionales);
     res.render('admin/adminReadProfesional', { profesionales, especialidad });
   } catch (err) {
     console.error('Error al obtener los profesionales:', err);
