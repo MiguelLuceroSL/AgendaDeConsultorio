@@ -28,7 +28,7 @@ html
                     table
                         thead
                             tr
-                                th Id
+                                th Prof-Esp ID
                                 th Nombre Completo
                                 th Especialidad
                                 th Matrícula
@@ -36,11 +36,11 @@ html
                         tbody
                             each profesional in profesionales
                                 tr
-                                    td= profesional.id
+                                    td= profesional.profesional_especialidad_id
                                     td= profesional.nombre_completo
                                     td= profesional.especialidad
                                     td= profesional.matricula
-                                    td= profesional.estado === 1 ? 'Activo' : 'Inactivo'
+                                    td(class=profesional.estado === 1 ? 'estado-activo' : 'estado-inactivo')= profesional.estado === 1 ? 'Activo' : 'Inactivo'
                 else
                     p(class="noResults") No se encontraron profesionales para la especialidad seleccionada.
         include ../includes/footer

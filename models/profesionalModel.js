@@ -79,23 +79,86 @@ export const obtenerEspecialidadPorNombreM = async (especialidad, callback) => {
   }
 };
 
-export const profesionalBorrarM = async (id, callback) => {
+// Dar de baja/alta una especialidad específica de un profesional
+export const profesionalEspecialidadBorrarM = async (profesionalEspecialidadId, callback) => {
   try {
     const connection = await connectDB();
-    const sqlPrimera = 'SELECT estado FROM profesional WHERE id=?';
-    const [result] = await connection.query(sqlPrimera, [id]);
+    const sqlPrimera = 'SELECT estado FROM profesional_especialidad WHERE id=?';
+    const [result] = await connection.query(sqlPrimera, [profesionalEspecialidadId]);
     if (!result || result.length === 0) {
-      return callback(new Error('Profesional no encontrado'));
+      return callback(new Error('Especialidad del profesional no encontrada'));
     }
-    let estado = result[0].estado;
-    console.log("estadoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO:", estado);
-    estado === 1 ? estado = 0 : estado = 1;
-    const sql = 'UPDATE profesional SET estado=? WHERE id=?';
-    console.log("estado cambiado a:", estado);
-    const [updateResult] = await connection.query(sql, [estado, id]);
-    callback(null, updateResult);
+    
+    const estadoAnterior = result[0].estado;
+    const nuevoEstado = estadoAnterior === 1 ? 0 : 1;
+    
+    console.log("Estado anterior:", estadoAnterior);
+    console.log("Nuevo estado:", nuevoEstado);
+    
+    const sql = 'UPDATE profesional_especialidad SET estado=? WHERE id=?';
+    const [updateResult] = await connection.query(sql, [nuevoEstado, profesionalEspecialidadId]);
+    
+    callback(null, { 
+      ...updateResult, 
+      estadoAnterior, 
+      nuevoEstado 
+    });
   } catch (error) {
     callback(error);
+  }
+};
+
+export const marcarTurnosPorReasignarM = async (profesionalEspecialidadId) => {
+  try {
+    const connection = await connectDB();
+    const sql = `
+      UPDATE turnos t
+      SET t.estado = 'Por reasignar'
+      WHERE t.profesional_especialidad_id = ? 
+      AND t.estado NOT IN ('Atendido', 'Cancelado', 'Ausente')
+      AND t.fecha >= CURDATE()
+    `;
+    const [result] = await connection.query(sql, [profesionalEspecialidadId]);
+    return result;
+  } catch (error) {
+    console.error('Error al marcar turnos por reasignar:', error);
+    throw error;
+  }
+};
+
+export const verificarTurnosPendientesM = async (profesionalEspecialidadId) => {
+  try {
+    const connection = await connectDB();
+    const sql = `
+      SELECT COUNT(*) as cantidad 
+      FROM turnos t
+      WHERE t.profesional_especialidad_id = ? 
+      AND t.estado NOT IN ('Atendido', 'Cancelado', 'Ausente')
+      AND t.fecha >= CURDATE()
+    `;
+    const [result] = await connection.query(sql, [profesionalEspecialidadId]);
+    return {
+      tieneTurnosPendientes: result[0].cantidad > 0,
+      cantidadTurnos: result[0].cantidad
+    };
+  } catch (error) {
+    console.error('Error al verificar turnos pendientes:', error);
+    throw error;
+  }
+};
+
+export const eliminarAgendasProfesionalEspecialidadM = async (profesionalEspecialidadId) => {
+  try {
+    const connection = await connectDB();
+    const sql = `
+      DELETE FROM agenda 
+      WHERE profesional_especialidad_id = ?
+    `;
+    const [result] = await connection.query(sql, [profesionalEspecialidadId]);
+    return result;
+  } catch (error) {
+    console.error('Error al eliminar agendas de la especialidad:', error);
+    throw error;
   }
 };
 
@@ -111,12 +174,14 @@ export const obtenerProfesionalesM = async (especialidad, callback) => {
     const connection = await connectDB();
 
     const sql = `
-      SELECT p.id, CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
+      SELECT pe.id AS profesional_especialidad_id, p.id AS profesional_id, 
+             CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, 
+             e.nombre AS especialidad, pe.matricula, pe.estado
       FROM profesional_especialidad pe
       JOIN profesional p ON pe.profesional_id = p.id
       JOIN especialidad e ON pe.especialidad_id = e.id
       ${especialidad ? 'WHERE e.nombre = ?' : ''}
-      ORDER BY p.apellido, p.nombre;
+      ORDER BY p.apellido, p.nombre, e.nombre;
     `;
 
     const params = especialidad ? [especialidad] : [];
@@ -136,7 +201,9 @@ export const obtenerProfesionalesVistaM = async(sucursalId = null) => {
   try{
         const connection = await connectDB();
   let sql = `
-    SELECT DISTINCT pe.id, CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, e.nombre AS especialidad, pe.matricula, p.estado
+    SELECT DISTINCT pe.id AS profesional_especialidad_id, p.id AS profesional_id,
+           CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, 
+           e.nombre AS especialidad, pe.matricula, pe.estado
     FROM profesional_especialidad pe
     JOIN profesional p ON pe.profesional_id = p.id
     JOIN especialidad e ON pe.especialidad_id = e.id
@@ -153,7 +220,7 @@ export const obtenerProfesionalesVistaM = async(sucursalId = null) => {
     params.push(sucursalId);
   }
   
-  sql += ` ORDER BY p.apellido, p.nombre;`;
+  sql += ` ORDER BY p.apellido, p.nombre, e.nombre;`;
   
   const [rows] = await connection.query(sql, params);
 
@@ -201,9 +268,13 @@ export const actualizarNombreCompletoM = async (nuevo_nombre_completo, profesion
   }
 };
 
-export const buscarProfesionalesM = async (texto, especialidadId = null, sucursalId = null) => {
+export const buscarProfesionalesM = async (texto, especialidadId = null, sucursalId = null, soloConAgendas = false) => {
   try {
     const connection = await connectDB();
+    
+    // Si soloConAgendas es true o hay sucursalId, hacer JOIN con agenda
+    const necesitaAgenda = soloConAgendas || sucursalId;
+    
     let sql = `
       SELECT DISTINCT
         pe.id, 
@@ -214,8 +285,8 @@ export const buscarProfesionalesM = async (texto, especialidadId = null, sucursa
       FROM profesional_especialidad pe
       JOIN profesional p ON pe.profesional_id = p.id
       JOIN especialidad e ON pe.especialidad_id = e.id
-      JOIN agenda a ON a.profesional_especialidad_id = pe.id
-      WHERE p.estado = 1
+      ${necesitaAgenda ? 'JOIN agenda a ON a.profesional_especialidad_id = pe.id' : ''}
+      WHERE pe.estado = 1
     `;
     
     const params = [];

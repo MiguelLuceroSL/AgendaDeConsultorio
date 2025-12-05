@@ -54,6 +54,17 @@
     outline: none;
 }
 
+/* Estados visuales */
+.estado-activo {
+    color: #27ae60;
+    font-weight: 600;
+}
+
+.estado-inactivo {
+    color: #e74c3c;
+    font-weight: 600;
+}
+
 .filterButton {
     padding: 7px 22px;
     background: #2980b9;
@@ -185,22 +196,26 @@ tbody tr:hover {
     }
 
     td:nth-of-type(1):before {
-        content: "Id";
+        content: "Prof-Esp ID";
     }
 
     td:nth-of-type(2):before {
-        content: "Nombre Completo";
+        content: "ID Prof";
     }
 
     td:nth-of-type(3):before {
-        content: "Especialidad";
+        content: "Nombre Completo";
     }
 
     td:nth-of-type(4):before {
-        content: "Matrícula";
+        content: "Especialidad";
     }
 
     td:nth-of-type(5):before {
+        content: "Matrícula";
+    }
+
+    td:nth-of-type(6):before {
         content: "Estado";
     }
 }

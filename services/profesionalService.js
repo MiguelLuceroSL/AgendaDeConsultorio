@@ -1,4 +1,4 @@
-import { profesionalCrearM, profesionalBorrarM, obtenerProfesionalesM, actualizarEspecialidadM, obtenerProfesionalesVistaM, actualizarNombreCompletoM, actualizarMatriculaM, cargarProfesionalEspecialidadM, obtenerIdPorDniM, obtenerEspecialidadPorNombreM, buscarProfesionalesM, obtenerEspecialidadesM } from '../models/profesionalModel.js';
+import { profesionalCrearM, profesionalEspecialidadBorrarM, obtenerProfesionalesM, actualizarEspecialidadM, obtenerProfesionalesVistaM, actualizarNombreCompletoM, actualizarMatriculaM, cargarProfesionalEspecialidadM, obtenerIdPorDniM, obtenerEspecialidadPorNombreM, buscarProfesionalesM, obtenerEspecialidadesM, marcarTurnosPorReasignarM, verificarTurnosPendientesM, eliminarAgendasProfesionalEspecialidadM } from '../models/profesionalModel.js';
 
 export const crearProfesionalS = (dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula) => {
   return new Promise((resolve, reject) => {
@@ -11,9 +11,9 @@ export const crearProfesionalS = (dni, nombre, apellido, fecha_nacimiento, telef
   });
 };
 
-export const profesionalBorrarS = (id) => {
+export const profesionalEspecialidadBorrarS = (profesionalEspecialidadId) => {
   return new Promise((resolve, reject) => {
-    profesionalBorrarM(id, (err, result) => {
+    profesionalEspecialidadBorrarM(profesionalEspecialidadId, (err, result) => {
       if (err) reject(err);
       resolve(result);
     });
@@ -110,9 +110,9 @@ export const actualizarNombreCompletoS = (nuevo_nombre_completo, profesional_id)
   });
 };
 
-export const buscarProfesionalesS = async (texto, especialidadId = null, sucursalId = null) => {
+export const buscarProfesionalesS = async (texto, especialidadId = null, sucursalId = null, soloConAgendas = false) => {
   try {
-    return await buscarProfesionalesM(texto, especialidadId, sucursalId);
+    return await buscarProfesionalesM(texto, especialidadId, sucursalId, soloConAgendas);
   } catch (error) {
     console.error('Error en servicio buscarProfesionalesS:', error);
     throw error;
@@ -124,6 +124,33 @@ export const obtenerEspecialidadesS = async () => {
     return await obtenerEspecialidadesM();
   } catch (error) {
     console.error('Error en servicio obtenerEspecialidadesS:', error);
+    throw error;
+  }
+};
+
+export const marcarTurnosPorReasignarS = async (profesionalEspecialidadId) => {
+  try {
+    return await marcarTurnosPorReasignarM(profesionalEspecialidadId);
+  } catch (error) {
+    console.error('Error en servicio marcarTurnosPorReasignarS:', error);
+    throw error;
+  }
+};
+
+export const verificarTurnosPendientesS = async (profesionalEspecialidadId) => {
+  try {
+    return await verificarTurnosPendientesM(profesionalEspecialidadId);
+  } catch (error) {
+    console.error('Error en servicio verificarTurnosPendientesS:', error);
+    throw error;
+  }
+};
+
+export const eliminarAgendasProfesionalEspecialidadS = async (profesionalEspecialidadId) => {
+  try {
+    return await eliminarAgendasProfesionalEspecialidadM(profesionalEspecialidadId);
+  } catch (error) {
+    console.error('Error en servicio eliminarAgendasProfesionalEspecialidadS:', error);
     throw error;
   }
 };

@@ -245,7 +245,7 @@ export const obtenerTurnoYMedicosC = async (req, res) => {
 export const editarEstadoTurnoC = async (req, res) => {
   const { id } = req.params;
   const { estado } = req.body;
-  const estadosValidos = ['No disponible', 'Libre', 'Reservada', 'Confirmado', 'Cancelado', 'Ausente', 'Presente', 'En consulta', 'Atendido'];
+  const estadosValidos = ['No disponible', 'Libre', 'Reservada', 'Confirmado', 'Cancelado', 'Ausente', 'Presente', 'En consulta', 'Atendido', 'Por reasignar'];
   if (!estadosValidos.includes(estado)) {
     return res.status(400).send('Estado inválido');
   }
@@ -332,6 +332,61 @@ export const verificarSobreturnos = async (req, res) => {
   } catch (error) {
     console.error("Error al verificar sobreturnos:", error);
     res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+export const obtenerTurnoParaReasignarC = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const turno = await traerTurnoPorIdS(id);
+    
+    if (!turno) {
+      return res.status(404).send('Turno no encontrado');
+    }
+    
+    if (turno.estado !== 'Por reasignar') {
+      return res.status(400).send('Este turno no está marcado para reasignar');
+    }
+    
+    // Formatear la fecha
+    const fecha = new Date(turno.fecha);
+    turno.fechaFormateada = fecha.toLocaleDateString('es-AR');
+    
+    // Obtener profesionales con la misma especialidad que TENGAN AGENDAS ACTIVAS
+    // Usamos sucursalId para filtrar por sucursal
+    const sucursalId = req.user?.sucursal_id;
+    const profesionales = await obtenerProfesionalesVistaS(sucursalId);
+    
+    // Filtrar solo profesionales con la misma especialidad del turno y que estén activos
+    const profesionalesFiltrados = profesionales.filter(p => 
+      p.especialidad === turno.especialidad && p.estado === 1
+    );
+    
+    console.log('Turno a reasignar:', { especialidad: turno.especialidad, fecha: turno.fecha });
+    console.log('Profesionales disponibles con agendas:', profesionalesFiltrados);
+    
+    res.render('secretaria/secretariaReasignarTurno', { 
+      turno, 
+      profesionales: profesionalesFiltrados 
+    });
+  } catch (error) {
+    console.error('Error al preparar reasignación:', error);
+    res.status(500).send('Error al preparar reasignación');
+  }
+};
+
+export const reasignarTurnoC = async (req, res) => {
+  const { id } = req.params;
+  const { profesional_especialidad_id, fecha, hora } = req.body;
+  
+  try {
+    // Actualizar el turno con la nueva agenda y cambiar estado a "Confirmado"
+    await actualizarTurnoTrasladoS(fecha, hora, 'Confirmado', id, profesional_especialidad_id, '');
+    
+    res.redirect('/turnos/listarTurnos');
+  } catch (error) {
+    console.error('Error al reasignar turno:', error);
+    res.status(500).send('Error al reasignar turno');
   }
 };
 

@@ -169,9 +169,10 @@ export const traerTurnoPorIdM = async (id, callback) => {
         profesional pr ON pe.profesional_id = pr.id
     JOIN 
         especialidad e ON pe.especialidad_id = e.id
-    JOIN
-    	agenda a ON a.profesional_especialidad_id = pe.id
-    JOIN
+    LEFT JOIN
+    	agenda a ON a.profesional_especialidad_id = pe.id 
+        AND t.fecha BETWEEN a.dia_inicio AND a.dia_fin
+    LEFT JOIN
     	sucursal s ON a.sucursal_id = s.id
     WHERE t.id = ?
     `;
@@ -198,11 +199,7 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
         CONCAT(pr.apellido, ', ', pr.nombre) AS nombre_medico,
         e.nombre AS especialidad,
         t.detalle_turno,
-        (SELECT s.nombre 
-         FROM agenda a2 
-         JOIN sucursal s ON a2.sucursal_id = s.id 
-         WHERE a2.profesional_especialidad_id = pe.id 
-         LIMIT 1) AS sucursal,
+        s.nombre AS sucursal,
         t.fecha, 
         t.hora, 
         t.estado,
@@ -217,6 +214,11 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
         profesional pr ON pe.profesional_id = pr.id
     JOIN 
         especialidad e ON pe.especialidad_id = e.id
+    LEFT JOIN 
+        agenda a ON a.profesional_especialidad_id = pe.id 
+        AND t.fecha BETWEEN a.dia_inicio AND a.dia_fin
+    LEFT JOIN
+        sucursal s ON a.sucursal_id = s.id
     WHERE 1=1
     `;
 
@@ -224,11 +226,7 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
 
         // Filtro por sucursal_id
         if (filtros.sucursal_id) {
-            sql += ` AND EXISTS (
-                SELECT 1 FROM agenda a 
-                WHERE a.profesional_especialidad_id = pe.id 
-                AND a.sucursal_id = ?
-            )`;
+            sql += ` AND (a.sucursal_id = ? OR a.sucursal_id IS NULL)`;
             params.push(filtros.sucursal_id);
         }
         

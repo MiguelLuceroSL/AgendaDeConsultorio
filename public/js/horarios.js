@@ -18,8 +18,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function obtenerAgendas(profesionalId) {
     try {
+      console.log(`Obteniendo agendas para profesional ID: ${profesionalId}`);
       const res = await fetch(`/agendas/agendas/${profesionalId}`);
-      return await res.json();
+      if (!res.ok) {
+        console.error(`Error HTTP al obtener agendas: ${res.status}`);
+        return [];
+      }
+      const agendas = await res.json();
+      console.log(`Agendas recibidas del servidor:`, agendas);
+      return agendas;
     } catch (err) {
       console.error("Error al obtener las agendas:", err);
       return [];
@@ -48,13 +55,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const horarios = [];
     let inicio = new Date(`2025-05-05T${horaInicio}`);
     const fin = new Date(`2025-05-05T${horaFin}`);
-    const minutos = parseInt(duracion.split(":")[1]);
+    
+    // Parsear la duración correctamente (HH:MM:SS)
+    const partiesDuracion = duracion.split(":");
+    const horas = parseInt(partiesDuracion[0]) || 0;
+    const minutos = parseInt(partiesDuracion[1]) || 0;
+    const totalMinutos = (horas * 60) + minutos;
+    
+    // Validación: evitar bucle infinito si la duración es 0 o inválida
+    if (totalMinutos <= 0) {
+      console.error("Duración inválida:", duracion, "- Total minutos:", totalMinutos);
+      return [];
+    }
+    
+    console.log(`Generando horarios: ${horaInicio} a ${horaFin}, cada ${totalMinutos} minutos`);
 
     while (inicio < fin) {
       const h = inicio.getHours().toString().padStart(2, "0");
       const m = inicio.getMinutes().toString().padStart(2, "0");
       horarios.push(`${h}:${m}`); //para solo usar la hora
-      inicio.setMinutes(inicio.getMinutes() + minutos); //le sumamos los tiempos de consulta
+      inicio.setMinutes(inicio.getMinutes() + totalMinutos); //le sumamos los tiempos de consulta
     }
 
     return horarios;
@@ -129,35 +149,70 @@ for (const hora of horariosBase) {
 
   // Cuando seleccionan un profesional (ahora escuchamos cambios en el input oculto)
   let previousProfesionalId = null;
+  let isLoadingAgendas = false; // Flag para evitar llamadas múltiples
+  let debounceTimeout = null;
+  let observer = null; // Mover la declaración aquí para poder desconectarlo
   
-  setInterval(() => {
-    const profesionalId = inputProfesionalId.value;
-    
-    if (profesionalId && profesionalId !== previousProfesionalId) {
-      previousProfesionalId = profesionalId;
-      cargarAgendasProfesional(profesionalId);
-    } else if (!profesionalId && previousProfesionalId) {
-      // Si se limpia el profesional, resetear todo
-      previousProfesionalId = null;
-      resetearSeleccion();
+  // Función debounce para evitar llamadas múltiples
+  function handleProfesionalChange() {
+    if (isLoadingAgendas || isLoadingHorarios) {
+      console.log("Bloqueando cambio de profesional porque hay una carga en progreso");
+      return; // No procesar si hay carga en progreso
     }
-  }, 500);
+    
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+    }
+    
+    debounceTimeout = setTimeout(() => {
+      const profesionalId = inputProfesionalId.value;
+      
+      if (profesionalId && profesionalId !== previousProfesionalId && !isLoadingAgendas) {
+        previousProfesionalId = profesionalId;
+        cargarAgendasProfesional(profesionalId);
+      } else if (!profesionalId && previousProfesionalId && !isLoadingAgendas) {
+        // Si se limpia el profesional, resetear todo
+        previousProfesionalId = null;
+        resetearSeleccion();
+      }
+    }, 300);
+  }
+  
+  // Usar MutationObserver en lugar de setInterval para mejor rendimiento
+  observer = new MutationObserver(() => {
+    handleProfesionalChange();
+  });
+  
+  if (inputProfesionalId) {
+    observer.observe(inputProfesionalId, { 
+      attributes: true, 
+      attributeFilter: ['value'] 
+    });
+    
+    // También escuchar el evento input como respaldo
+    inputProfesionalId.addEventListener('input', handleProfesionalChange);
+  }
   
   async function cargarAgendasProfesional(profesionalId) {
-    const agendas = await obtenerAgendas(profesionalId);
-    if (!agendas.length) {
-      alert("El medico no tiene turnos en este momento");
-      inputProfesionalId.value = "";
-      selectHorario.value = "";
-      selectHorario.disabled = true;
-      inputFecha.value = "";
-      inputFecha.disabled = true;
+    // Marcar que estamos cargando para evitar llamadas múltiples
+    isLoadingAgendas = true;
+    
+    try {
+      const agendas = await obtenerAgendas(profesionalId);
+      if (!agendas.length) {
+        alert("El medico no tiene turnos en este momento");
+        inputProfesionalId.value = "";
+        selectHorario.value = "";
+        selectHorario.disabled = true;
+        inputFecha.value = "";
+        inputFecha.disabled = true;
 
-      window._agendas = [];
-      window._diasPermitidos = [];
-
-      return;
-    }
+        window._agendas = [];
+        window._diasPermitidos = [];
+        
+        isLoadingAgendas = false;
+        return;
+      }
 
     async function obtenerAusenciasTotales(profesionalId) {
   try {
@@ -190,9 +245,11 @@ for (const hora of horariosBase) {
 
     // Guardar agendas para usar luego
     window._agendas = agendas;
+    console.log("window._agendas guardado:", window._agendas);
 
     const diasPermitidosSet = new Set(); //set elimina duplicados pero manteniendo horarios
     agendas.forEach((agenda) => {
+      console.log(`Procesando agenda ${agenda.id}, dias:`, agenda.dias);
       agenda.dias.forEach((dia) => diasPermitidosSet.add(dia));
     });
     window._diasPermitidos = [...diasPermitidosSet];
@@ -231,6 +288,13 @@ fp = flatpickr(inputFecha, {
     }
   ]
 });
+    
+    // Marcar que terminamos de cargar
+    isLoadingAgendas = false;
+    } catch (error) {
+      console.error("Error al cargar agendas:", error);
+      isLoadingAgendas = false;
+    }
   }
   
   function resetearSeleccion() {
@@ -244,36 +308,73 @@ fp = flatpickr(inputFecha, {
   }
 
   // Cuando seleccionan una fecha
-inputFecha.addEventListener("change", async () => {
-  const profesionalId = inputProfesionalId.value;
-  const fecha = inputFecha.value;
-  const agendas = window._agendas;
-  if (!fecha || agendas.length === 0) return;
+  let isLoadingHorarios = false;
+  let lastLoadedFecha = null;
 
-  const [ano, mes, dia] = fecha.split("-");
-  const fechaObj = new Date(ano, mes - 1, dia, 12);
-  const diaSemana = normalizarDia(
-    fechaObj.toLocaleDateString("es-AR", { weekday: "long" })
-  );
-
-  const fechaStr = fechaObj.toISOString().slice(0, 10);
-
-  console.log("Día mapeado:", diaSemana);
-  console.log("Agendas:", agendas);
-  console.log("Fecha seleccionada:", fechaStr);
-
-  const agendasDelDia = agendas.filter((agenda) => {
-    const inicioStr = new Date(agenda.dia_inicio).toISOString().slice(0, 10);
-    const finStr = new Date(agenda.dia_fin).toISOString().slice(0, 10);
-
-    return (
-      agenda.dias.includes(diaSemana) &&
-      fechaStr >= inicioStr &&
-      fechaStr <= finStr
+if (inputFecha) {
+  inputFecha.addEventListener("change", async () => {
+    const profesionalId = inputProfesionalId.value;
+    const fecha = inputFecha.value;
+    
+    // Hacer una copia local inmediata para evitar que se sobrescriba
+    const agendasCopia = JSON.parse(JSON.stringify(window._agendas || []));
+  
+  console.log("=== INICIO PROCESAMIENTO FECHA ===");
+  console.log("Agendas copiadas:", agendasCopia);
+  
+  // Prevenir carga duplicada
+  if (!fecha || agendasCopia.length === 0 || isLoadingHorarios || lastLoadedFecha === fecha) {
+    console.log("Deteniendo: fecha vacía, sin agendas, o carga duplicada");
+    return;
+  }
+  
+  isLoadingHorarios = true;
+  lastLoadedFecha = fecha;
+  
+  try {
+    const [ano, mes, dia] = fecha.split("-");
+    const fechaObj = new Date(ano, mes - 1, dia, 12);
+    const diaSemana = normalizarDia(
+      fechaObj.toLocaleDateString("es-AR", { weekday: "long" })
     );
-  });
+
+    const fechaStr = fechaObj.toISOString().slice(0, 10);
+
+    console.log("Día mapeado:", diaSemana);
+    console.log("Agendas a filtrar:", agendasCopia);
+    console.log("Fecha seleccionada:", fechaStr);
+
+    const agendasDelDia = agendasCopia.filter((agenda) => {
+      const inicioStr = new Date(agenda.dia_inicio).toISOString().slice(0, 10);
+      const finStr = new Date(agenda.dia_fin).toISOString().slice(0, 10);
+      
+      const incluye = agenda.dias.includes(diaSemana);
+      const enRango = fechaStr >= inicioStr && fechaStr <= finStr;
+      const resultado = incluye && enRango;
+      
+      console.log(`Verificando agenda ${agenda.id}:`, {
+        diasAgenda: agenda.dias,
+        diaBuscado: diaSemana,
+        incluye,
+        inicioStr,
+        finStr,
+        fechaStr,
+        enRango,
+        RESULTADO: resultado
+      });
+
+      return resultado;
+    });
 
   console.log("Agendas que coinciden con el día y fecha:", agendasDelDia);
+  
+  // Si no hay agendas para este día, detener
+  if (agendasDelDia.length === 0) {
+    console.warn("No hay agendas disponibles para esta fecha");
+    selectHorario.innerHTML = "<option disabled selected>No hay horarios disponibles para este día</option>";
+    isLoadingHorarios = false;
+    return;
+  }
 
   let horariosBase = [];
   for (const agenda of agendasDelDia) {
@@ -284,6 +385,14 @@ inputFecha.addEventListener("change", async () => {
     );
     horariosBase.push(...franjas);
   }
+  
+  // Limitar horarios para prevenir sobrecarga de memoria
+  if (horariosBase.length > 100) {
+    console.error("Demasiados horarios generados:", horariosBase.length);
+    selectHorario.innerHTML = "<option disabled selected>Error: Configuración de agenda inválida</option>";
+    isLoadingHorarios = false;
+    return;
+  }
 
   const ausencias = await obtenerAusencias(profesionalId, fecha);
   console.log("Ausencias recibidas:", ausencias);
@@ -291,26 +400,37 @@ inputFecha.addEventListener("change", async () => {
 
   // Acá es donde llamamos a la función que carga los horarios con sus estados!
   await cargarHorariosConEstados(profesionalId, fecha, horariosBase, agendasDelDia);
-});
-
-
-selectHorario.addEventListener("change", () => {
-  const option = selectHorario.options[selectHorario.selectedIndex];
-  const esSobreturno = option.dataset.sobreturno === "true";
-  const maxAlcanzado = option.dataset.maxAlcanzado === "true";
-  const esSobreturnoInput = document.getElementById("es_sobreturno");
-
-
-if (esSobreturno && !maxAlcanzado) {
-  alert("Esta creando un sobreturno.");
-  esSobreturnoInput.value = 1;
-} else {
-    esSobreturnoInput.value = 0;
+  
+  } catch (error) {
+    console.error("Error al procesar fecha seleccionada:", error);
+  } finally {
+    isLoadingHorarios = false;
   }
+  });
+}
 
-  console.log("option.dataset:", option.dataset);
-  console.log("esSobreturno:", esSobreturno);
-  console.log("maxAlcanzado:", maxAlcanzado);
-  console.log("Valor seteado en hidden:", esSobreturnoInput.value);
-});
+
+if (selectHorario) {
+  selectHorario.addEventListener("change", () => {
+    const option = selectHorario.options[selectHorario.selectedIndex];
+    const esSobreturno = option.dataset.sobreturno === "true";
+    const maxAlcanzado = option.dataset.maxAlcanzado === "true";
+    const esSobreturnoInput = document.getElementById("es_sobreturno");
+
+    // Solo intentar setear el valor si el input existe (vista de crear turno)
+    if (esSobreturnoInput) {
+      if (esSobreturno && !maxAlcanzado) {
+        alert("Esta creando un sobreturno.");
+        esSobreturnoInput.value = 1;
+      } else {
+        esSobreturnoInput.value = 0;
+      }
+
+      console.log("option.dataset:", option.dataset);
+      console.log("esSobreturno:", esSobreturno);
+      console.log("maxAlcanzado:", maxAlcanzado);
+      console.log("Valor seteado en hidden:", esSobreturnoInput.value);
+    }
+  });
+}
 });

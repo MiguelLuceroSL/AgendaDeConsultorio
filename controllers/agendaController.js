@@ -310,3 +310,24 @@ export const eliminarAgendaC = async (req, res) => {
     res.status(500).json({ error: "No se pudo eliminar la agenda" });
   }
 };
+
+// Buscar sucursales para autocompletado
+export const buscarSucursalesC = async (req, res) => {
+  try {
+    const { texto } = req.query;
+    const sucursales = await obtenerSucursalesS();
+    
+    // Filtrar sucursales por texto (manejar valores NULL)
+    const resultados = sucursales.filter(sucursal => {
+      const textoLower = texto.toLowerCase();
+      const nombreMatch = sucursal.nombre && sucursal.nombre.toLowerCase().includes(textoLower);
+      const direccionMatch = sucursal.direccion && sucursal.direccion.toLowerCase().includes(textoLower);
+      return nombreMatch || direccionMatch;
+    });
+    
+    res.json(resultados);
+  } catch (error) {
+    console.error('Error al buscar sucursales:', error);
+    res.status(500).json({ error: 'Error al buscar sucursales' });
+  }
+};

@@ -1,5 +1,5 @@
 import express from 'express';
-import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC, crearTurnoPacienteC, traerTurnoPorId2C, editarEstadoTurnoC, obtenerTurnoYMedicosC, actualizarTurnoTrasladoC, verificarSobreturnos, obtenerHorariosPorEstadoC} 
+import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC, crearTurnoPacienteC, traerTurnoPorId2C, editarEstadoTurnoC, obtenerTurnoYMedicosC, actualizarTurnoTrasladoC, verificarSobreturnos, obtenerHorariosPorEstadoC, obtenerTurnoParaReasignarC, reasignarTurnoC} 
 from '../controllers/turnoController.js';
 import { authRequired } from '../middlewares/validateToken.js';
 import multer from 'multer';
@@ -40,6 +40,10 @@ router.post('/editar/:id', authRequired, editarEstadoTurnoC);
 router.get('/trasladar/:id', authRequired, obtenerTurnoYMedicosC);
 
 router.post('/trasladar/:id', authRequired, actualizarTurnoTrasladoC);
+
+router.get('/reasignar/:id', authRequired, obtenerTurnoParaReasignarC);
+
+router.post('/reasignar/:id', authRequired, reasignarTurnoC);
 
 router.get("/horarios/estado", obtenerHorariosPorEstadoC);
 
