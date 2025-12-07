@@ -2,16 +2,20 @@ doctype html
 html
   head
     title Agenda de Consultorios
+    link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap", rel="stylesheet")
     link(rel="stylesheet", href="/css/home.css")
+    
   body
     include includes/headerHome
     main
-        h1 Agenda de Consultorios 
+        section.hero
+          h1 Agenda de Consultorios
+          p.subtitle Gestioná tus turnos médicos fácil, rápido y sin llamadas.
+          div.heroButtons
+            a.btnPrimary(href="/auth/register") Registrarse
         section(class="sectionCarrousel")
-          button(type="button" class="btnIzq" id="btnIzq"): img(src="/img/btn2.png", alt="btn2" class="btn2")
           article(class="carrousel")
             img(src="/img/1.jpg", alt="carrousel1" class="carrouselImg" id="imgCarrousel")
             p(id="pCarrousel") Saca tus turnos médicos de manera fácil y rápida.
-          button(type="button" class="btnDer" id="btnDer"): img(src="/img/btn1.png", alt="btn1" class="btn1")
     include includes/footer
     script(type="module" src="/js/home.js")

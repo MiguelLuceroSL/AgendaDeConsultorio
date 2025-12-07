@@ -1,198 +1,182 @@
-html {
+/*fuente*/
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background: #f8f9fb;
+}
+
+/*contenedor principal*/
+.login-container {
     width: 100%;
     height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    background-color: #FBFBFB;
+    align-items: stretch;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+/*lado izquierdo, imagen*/
+
+.left-side {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    overflow: hidden;
 }
 
-.mainLogin {
-    min-height: 60vh;
+.imgLogin {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.6);
+}
+
+.img-text {
+    position: absolute;
+    color: white;
+    padding: 30px;
+    max-width: 450px;
+}
+
+.img-text h2 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.img-text p {
+    margin-top: 10px;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/*lado derecho*/
+
+.right-side {
     flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-}
-
-.seccion {
-    width: 60vw;
-    height: 500px;
-    display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 60px;
+    gap: 50px;
 }
 
-.seccionSecre {
-    width: 60vw;
-    height: 500px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+.form-box {
+    background: white;
+    padding: 40px 50px;
+    border-radius: 12px;
+    width: 380px;
+    box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
 }
 
-.articuloLogin {
-    height: 100%;
-    width: 400px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    -webkit-box-shadow: 0 10px 6px -6px #777;
-    -moz-box-shadow: 0 10px 6px -6px #777;
-    box-shadow: 0 10px 6px -6px #777;
-    border-radius: 20px;
+h1 {
+    margin: 0 0 10px 0;
+    font-size: 28px;
 }
 
-.articuloLogin {
-    background-color: #D4F6FF;
+.subtitle {
+    color: #666;
+    margin-bottom: 25px;
 }
 
-.formLogin {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-}
-
-.articuloLogin {
-    border: 1px solid rgb(65, 65, 65);
-}
-
-.spanLogin {
-    font-size: 30px;
-    padding: 20px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-
-.emailLogin,
-.pwLogin {
-    width: 20px;
-    border: none;
-}
-
-.lbEmailLogin,
-.lbPwLogin {
-    font-size: 18px;
-}
-
-.inputEmailLogin,
-.inputPwLogin {
-    border: 1px solid black;
-    margin-top: 10px;
-    height: 35px;
-    width: 250px;
+label {
     font-size: 14px;
+    margin-top: 15px;
+    font-weight: 500;
+    color: #333;
 }
 
-.pwOlvidada {
-    color: black;
+input {
+    margin: 8px 0 10px 0;
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #dadada;
+    font-size: 15px;
 }
 
-.botonLogin {
-    background-color: #FFDDAE;
+input:focus {
+    border-color: #4EA1D3;
+    outline: none;
+    box-shadow: 0 0 4px rgba(106, 90, 205, 0.3);
+}
+
+.forgot {
+    display: block;
+    text-align: right;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #4EA1D3;
+}
+
+.btnLogin {
+    width: 100%;
+    padding: 12px;
+    background-color: #4EA1D3;
+    color: white;
     border: none;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
+    border-radius: 6px;
     font-size: 16px;
-    margin: 4px 2px;
     cursor: pointer;
-    border-radius: 5px;
-    -webkit-box-shadow: 0 10px 6px -6px #1b1a1a;
-    -moz-box-shadow: 0 10px 6px -6px #242222;
-    box-shadow: 0 10px 6px -6px #2b2a2a;
+    margin-top: 5px;
 }
 
-.botonLogin:hover {
-    background-color: #f3c88d;
+.btnLogin:hover {
+    background-color: #388bbd;
+}
+
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    color: #aaa;
+}
+
+.btnGoogle {
+    width: 100%;
+    padding: 12px;
+    background: #f1f1f1;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btnGoogle:hover {
+    background: #e7e7e7;
+}
+
+.googleIcon {
+    width: 20px;
 }
 
 .pError {
     color: red;
-    font-size: 0.9em;
+    margin-top: 10px;
+    text-align: center;
 }
+
+/*responsive*/
 
 @media (max-width: 900px) {
-    .seccion,
-    .seccionSecre {
-        width: 90vw;
-        height: auto;
+    .login-container {
         flex-direction: column;
-        gap: 30px;
-        padding: 20px 0;
-    }
-
-    .articuloLogin {
-        width: 90vw;
-        max-width: 350px;
-        min-width: 220px;
-        height: auto;
-        margin: 0 auto;
-    }
-
-    .inputEmailLogin,
-    .inputPwLogin {
-        width: 90vw;
-        max-width: 250px;
-    }
-
-    .spanLogin {
-        font-size: 24px;
-        padding: 10px;
-    }
-}
-
-@media (max-width: 600px) {
-    html {
-        height: auto;
-        min-height: 100vh;
-        padding: 10px 0;
-    }
-
-    .mainLogin {
-        min-height: auto;
-        padding: 10px 0;
-    }
-
-    .seccion,
-    .seccionSecre {
-        width: 100vw;
-        gap: 15px;
         padding: 0;
     }
 
-    .articuloLogin {
-        width: 98vw;
-        max-width: 98vw;
-        min-width: 180px;
-        border-radius: 10px;
-        padding: 10px 0;
+    .left-side {
+        height: 260px;
+        margin: 0;
+        border-radius: 0;
     }
 
-    .inputEmailLogin,
-    .inputPwLogin {
-        width: 90vw;
-        max-width: 180px;
-        font-size: 12px;
+    .imgLogin {
+        border-radius: 0;
     }
 
-    .spanLogin {
-        font-size: 18px;
-        padding: 5px;
-    }
-
-    .botonLogin {
-        padding: 10px 20px;
-        font-size: 14px;
+    .form-box {
+        margin: 20px auto;
     }
 }

@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const btnDer = document.getElementById('btnDer');
-    const btnIzq = document.getElementById('btnIzq');
     const img = document.getElementById('imgCarrousel');
     const p = document.getElementById('pCarrousel');
 
@@ -20,16 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
         img.src = `http://localhost:3000/img/${index + 1}.jpg`;
         p.innerHTML = frases[index];
     }
-
-    btnDer.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % frases.length;
-        updateCarrousel(currentIndex);
-    });
-
-    btnIzq.addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + frases.length) % frases.length;
-        updateCarrousel(currentIndex);
-    });
 
     setInterval(() => {
         currentIndex = (currentIndex + 1) % frases.length;

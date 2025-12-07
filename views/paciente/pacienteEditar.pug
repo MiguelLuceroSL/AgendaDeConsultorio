@@ -30,8 +30,8 @@ html
               id="perfilNombre", 
               name="nombre_completo",
               value=paciente[0].nombre_completo,
-              readonly
             )
+            span.error#errNombre
           fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilEmail") Correo electrónico:
             input.inputPerfil(
@@ -75,6 +75,7 @@ html
               name="telefono", 
               value=paciente[0].telefono
             )
+            span.error#errTelefono
           fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilFechaNacimiento") Fecha de nacimiento:
             span(class="fechaNacimiento")=formattedDate
@@ -91,3 +92,32 @@ html
         const alert = document.querySelector('.alert');
         if (alert) alert.style.display = 'none';
       }, 4000);
+    script.
+      const nombreInput = document.getElementById("perfilNombre");
+      const nombreError = document.getElementById("errNombre");
+
+      const telInput = document.getElementById("perfilTelefono");
+      const telError = document.getElementById("errTelefono");
+
+      //validamos nombre que pueda permitir solo letras
+      nombreInput.addEventListener("input", () => {
+        const limpio = nombreInput.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g, "");
+        if (limpio !== nombreInput.value) {
+          nombreError.textContent = "Solo letras permitidas.";
+        } else {
+          nombreError.textContent = "";
+        }
+        nombreInput.value = limpio;
+      });
+
+      //validamos telefono
+      telInput.addEventListener("input", () => {
+        telInput.value = telInput.value.replace(/[^0-9]/g, "");
+
+        if (telInput.value.length > 13) {
+          telInput.value = telInput.value.slice(0, 13);
+          telError.textContent = "Máximo 13 números.";
+        } else {
+          telError.textContent = "";
+        }
+      });
