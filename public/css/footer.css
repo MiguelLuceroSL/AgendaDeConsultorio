@@ -1,5 +1,6 @@
 .footer {
   border-top: 1px solid rgb(129, 129, 129);
+  font-family: 'Poppins', sans-serif;
   width: 90vw;
   display: flex;
   justify-content: center;

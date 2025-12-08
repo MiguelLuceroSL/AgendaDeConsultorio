@@ -131,31 +131,79 @@ input:focus {
     color: #aaa;
 }
 
-.btnGoogle {
-    width: 100%;
-    padding: 12px;
-    background: #f1f1f1;
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.btnGoogle:hover {
-    background: #e7e7e7;
-}
-
-.googleIcon {
-    width: 20px;
+.logoHeader{
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 20px auto;
 }
 
 .pError {
     color: red;
     margin-top: 10px;
     text-align: center;
+}
+
+
+.register-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 24px;
+}
+
+/*el titulo y el subtitulo ocupan 2 columnas*/
+.register-grid h1,
+.register-grid p.subtitle {
+  grid-column: span 2;
+}
+
+/*hago que el btnn ocupe 2 columnas*/
+.register-grid button {
+  grid-column: span 2;
+}
+
+/*cada label+input deben colocarse verticalmente*/
+.register-grid label {
+  display: block;
+}
+
+.register-grid input {
+  width: 100%;
+}
+
+/*tabs*/
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  background: #f1f1f1;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.tab-btn.active {
+  background: white;
+  box-shadow: 0px 0px 6px rgba(0,0,0,0.1);
+  font-weight: 600;
+}
+
+/*ocultar formulario*/
+.hidden {
+  display: none;
+}
+
+.registerInput{
+    padding: 5px;
 }
 
 /*responsive*/
@@ -179,4 +227,16 @@ input:focus {
     .form-box {
         margin: 20px auto;
     }
+}
+
+@media (max-width: 768px) {
+  .register-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .register-grid h1,
+  .register-grid p.subtitle,
+  .register-grid button {
+    grid-column: span 1;
+  }
 }

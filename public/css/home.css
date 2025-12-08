@@ -22,13 +22,30 @@ header {
 }
 
 .logoHeader{
+  width: 130px;
+  height: 130px;
   padding-left: 70px;
+}
+
+.logoImg{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 35px;
 }
 
 nav ul {
   list-style: none;
   text-align: center;
   padding-right: 70px;
+}
+
+.ulNosotros {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  list-style: none;
+  padding-left: 70px;
 }
 
 nav ul li {
@@ -42,10 +59,16 @@ main{
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 70vh;
+  height: 74vh;
 }
 
-h1{
+.logoTitle{
+  font-size: 2em;
+  color: #355889;
+}
+
+.h1TituloSalud{
+  
   padding: 20px;
 }
 
@@ -139,7 +162,6 @@ a {
 
 a:hover {
   text-decoration: dotted;
-  color: #daa761;
 }
 
 .logoFooter {
@@ -205,6 +227,18 @@ a:hover {
 
 .footer a:hover {
   color: #4EA1D3;
+}
+
+.containerNosotros{
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 20px;
+}
+
+.h1Nosotros{
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 @media (max-width: 1024px) {

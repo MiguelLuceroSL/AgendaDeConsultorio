@@ -141,7 +141,10 @@ export const pacienteEditarC = async (req, res) => {
             month: "2-digit",
             year: "numeric"
         });
-        res.render('paciente/pacienteEditar', { paciente, formattedDate, msg });
+        const fechaISO = paciente[0].fecha_nacimiento; 
+        const fechaFormateada = fechaISO.toISOString().split('T')[0];
+        console.log("paciente editarC paciente:", paciente);
+        res.render('paciente/pacienteEditar', { paciente, formattedDate, msg, fechaFormateada });
     } catch (error) {
         console.error("Error al obtener el paciente por ID de usuario:", error);
         res.status(500).json({ message: 'Hubo un error al obtener el paciente.' });

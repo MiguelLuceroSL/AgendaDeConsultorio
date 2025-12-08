@@ -2,29 +2,72 @@ doctype html
 html(lang="es")
   head
     title Iniciar Sesión
-    link(rel="stylesheet", href="/css/login.css")
-    link(rel="stylesheet", href="/css/footer.css")
-    link(href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap", rel="stylesheet")
+    link(rel="stylesheet" href="/css/login.css")
+    link(rel="stylesheet" href="/css/footer.css")
+    link(href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet")
 
   body
-
     main.mainLogin
       .login-container
         .left-side
-          img.imgLogin(src="/img/login.jpg", alt="")
+          img.imgLogin(src="/img/login.jpg" alt="")
           .img-text
             h2 “Simplemente todas las herramientas que mi equipo y yo necesitamos.”
+
         .right-side
-          a(href="http://localhost:3000/", rel="noopener noreferrer"): img(src="/img/agenda.png", alt="" class="logoHeader")
+          a(href="http://localhost:3000/" rel="noopener noreferrer")
+            img(src="/img/agenda.png" alt="" class="logoHeader")
+
           .form-box
-            h1 Bienvenido
-            p.subtitle Iniciá sesión para continuar
+
+            // ---- TABS ----
+            .tabs
+              button.tab-btn.active(data-target="loginForm") Iniciar Sesión
+              button.tab-btn(data-target="registerForm") Registrarse
+
+            // ---- LOGIN ----
             form.formLogin(id="loginForm")
+              h1 Bienvenido
+              p.subtitle Iniciá sesión para continuar
+
               label(for="loginEmail") Email
-              input(type="email", id="loginEmail", name="email", required placeholder="Correo electrónico")
+              input(type="email" id="loginEmail" name="email", required placeholder="Correo electrónico")
+
               label(for="loginPassword") Contraseña
-              input(type="password", id="loginPassword", name="password", required placeholder="Contraseña")
+              input(type="password" id="loginPassword" name="password", required placeholder="Contraseña")
+
               a.forgot(href="/pwOlvidada") ¿Olvidaste tu contraseña?
+
               button.btnLogin(type="submit") Iniciar Sesión
-              p#error-message.pError
+
+            // ---- REGISTER ----
+            form.formRegister.hidden(id="registerForm" class="register-grid" action="/auth/register" method="POST")
+              h1 Crear Cuenta
+
+              label(for="registerNombre") Nombre completo:
+              input(type="text" class="registerInput" id="registerNombre" name="nombre", required placeholder="Nombre completo")
+
+              label(for="registerEmail") Correo electrónico:
+              input(type="email" class="registerInput" id="registerEmail" name="email", required placeholder="Correo electrónico")
+
+              label(for="registerDni") DNI:
+              input(type="text" class="registerInput" id="registerDni" name="dni", required placeholder="DNI" maxlength="8" oninput="this.value=this.value.replace(/[^0-9]/g,'')")
+
+              label(for="registerMutual") Mutual:
+              input(type="text" class="registerInput" id="registerMutual" name="mutual", required placeholder="Mutual o Ninguna")
+
+              label(for="registerDireccion") Dirección:
+              input(type="text" class="registerInput" id="registerDireccion" name="direccion", required placeholder="Dirección")
+
+              label(for="registerTelefono") Teléfono:
+              input(type="text" class="registerInput" id="registerTelefono" name="telefono", required placeholder="Teléfono" maxlength="15" oninput="this.value=this.value.replace(/[^0-9]/g,'')")
+
+              label(for="registerPassword") Contraseña:
+              input(type="password" class="registerInput" id="registerPassword" name="password", required minlength="8" placeholder="Contraseña")
+
+              label(for="registerConfirmPassword") Confirmar contraseña:
+              input(type="password" class="registerInput" id="registerConfirmPassword" name="confirm_password", required minlength="8" placeholder="Confirmar contraseña")
+
+              button.btnLogin(type="submit") Registrarse
     script(type="module" src="/js/login.js")
+    script(type="module" src="/js/loginTabs.js")

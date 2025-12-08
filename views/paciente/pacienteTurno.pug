@@ -2,9 +2,10 @@ doctype html
 html
   head
     title Vista Paciente
+    link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap", rel="stylesheet")
     link(rel="stylesheet" href="/css/pacienteTurno.css")
     link(rel="stylesheet" href="/css/headerPaciente.css")
-    link(rel="stylesheet" href="/css/footer.css")
+    link(rel="stylesheet" href="/css/footerNuevo.css")
     link(rel="stylesheet" href="/css/autocompletar_estilos.css")
     link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css")
   body
@@ -12,7 +13,7 @@ html
     main(class="mainPacienteTurno")
       h1 ¡Reserva tu turno ahora!
       form(action="/turnos/crearPaciente" method="POST" class="formTurnos" enctype="multipart/form-data") 
-        h3 Selecciona un Profesional
+        h3 Busca un Profesional
         .autocompletar_contenedor
           input(type="text" id="profesional-search" class="autocompletar_input" placeholder="Buscar por apellido o nombre..." autocomplete="off")
           input(type="hidden" name="profesional_especialidad_id" id="profesional-id" required)
@@ -25,7 +26,7 @@ html
         label(for="detalle_turno") Detalle del turno:
         textarea(name="detalle_turno" id="detalle_turno" rows="4" placeholder="Detalles adicionales del turno" required)
         input(type="hidden" name="estado" value="Reservada")
-        label(for="dni_foto") Subí tu fotocopia del DNI:
+        label(for="dni_foto") Subí tu foto del DNI:
         input(type="file" name="dni_foto" id="dni_foto" accept="image/*" required)
         button(type="submit") Crear Turno
     include ../includes/footer
@@ -34,5 +35,5 @@ html
     script(src="/js/autocompletar_profesional.js")
     script(src="https://cdn.jsdelivr.net/npm/flatpickr")
     script.
-      // Inicializar autocompletado
+      //inicializar autocompletado
       const autocompletarProfesional = new AutocompletarProfesional('profesional-search', 'profesional-id');

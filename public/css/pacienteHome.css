@@ -2,10 +2,11 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 .tituloBienvenida {
+    font-family: 'Poppins', sans-serif;
     font-size: 28px;
     color: #333;
     margin-bottom: 30px;

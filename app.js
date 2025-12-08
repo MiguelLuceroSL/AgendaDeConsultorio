@@ -22,6 +22,8 @@ import pacienteRoutes from './routes/pacientes.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import secretariaRoutes from './routes/secretaria.routes.js';
 import turnoRoutes from './routes/turno.routes.js';
+import infoRoutes from './routes/info.routes.js';
+
 
 
 // Middleware
@@ -39,6 +41,7 @@ app.use('/pacientes', pacienteRoutes);
 app.use('/admin', adminRoutes);
 app.use('/secretaria', secretariaRoutes);
 app.use('/turnos', turnoRoutes);
+app.use(infoRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {
@@ -60,6 +63,8 @@ app.get('/admin', (req, res) => {
 app.get('/crearpaciente', (req, res) => {
   res.render('crearPaciente');
 });
+
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

@@ -2,9 +2,10 @@ doctype html
 html
   head
     title Vista Paciente
+    link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap", rel="stylesheet")
     link(rel="stylesheet" href="/css/headerPaciente.css")
     link(rel="stylesheet" href="/css/pacienteEditar.css")
-    link(rel="stylesheet" href="/css/footer.css")
+    link(rel="stylesheet" href="/css/footerNuevo.css")
   body
     include ../includes/headerPaciente
     if msg == 'ok'
@@ -78,11 +79,11 @@ html
             span.error#errTelefono
           fieldset.campoPerfilEditar
             label.lbPerfil(for="perfilFechaNacimiento") Fecha de nacimiento:
-            span(class="fechaNacimiento")=formattedDate
             input.inputPerfil(
               type="date", 
               id="perfilFechaNacimiento", 
               name="fecha_nacimiento"
+              value=fechaFormateada
             )
           button.botonEditarFoto(type="submit") Editar
     include ../includes/footer

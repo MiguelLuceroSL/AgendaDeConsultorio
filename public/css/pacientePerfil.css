@@ -1,6 +1,6 @@
 body {
     background-color: #fbfbfb;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Poppins', sans-serif;
     color: #2c3e50;
     min-height: 100vh;
     display: flex;
@@ -16,10 +16,11 @@ body {
 }
 
 .h1Perfil {
+    font-family: 'Poppins', sans-serif;
     text-align: center;
-    color: #2c3e50;
+    color: #333;
     margin: 40px 0 30px 0;
-    font-size: 2.2rem;
+    font-size: 28px;
     font-weight: 700;
 }
 

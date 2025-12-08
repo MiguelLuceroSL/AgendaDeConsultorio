@@ -1,6 +1,7 @@
 .autocompletar_contenedor {
     position: relative;
     width: 100%;
+    text-align: center;
 }
 
 .autocompletar_input {

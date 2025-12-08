@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    title Sobre Nosotros
+    link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap", rel="stylesheet")
+    link(rel="stylesheet", href="/css/home.css")
+    
+  body
+    include includes/headerHome
+    .container
+        h1 Contactános
+        p Si tenés dudas o necesitas ayuda con la Agenda de Consultorios, completá el siguiente formulario:
+
+        form(action="/contacto" method="post" class="contact-form")
+            .form-group
+                label(for="nombre") Nombre
+                input#nombre(type="text" name="nombre" required)
+
+            .form-group
+                label(for="email") Email
+                input#email(type="email" name="email" required)
+
+            .form-group
+                label(for="mensaje") Mensaje
+                textarea#mensaje(name="mensaje" rows="5" required)
+
+            button(type="submit") Enviar mensaje
+    include includes/footer
