@@ -83,17 +83,16 @@ export const obtenerEspecialidadPorNombreM = async (especialidad, callback) => {
 export const profesionalEspecialidadBorrarM = async (profesionalEspecialidadId, callback) => {
   try {
     const connection = await connectDB();
+    
     const sqlPrimera = 'SELECT estado FROM profesional_especialidad WHERE id=?';
     const [result] = await connection.query(sqlPrimera, [profesionalEspecialidadId]);
+    
     if (!result || result.length === 0) {
       return callback(new Error('Especialidad del profesional no encontrada'));
     }
     
     const estadoAnterior = result[0].estado;
     const nuevoEstado = estadoAnterior === 1 ? 0 : 1;
-    
-    console.log("Estado anterior:", estadoAnterior);
-    console.log("Nuevo estado:", nuevoEstado);
     
     const sql = 'UPDATE profesional_especialidad SET estado=? WHERE id=?';
     const [updateResult] = await connection.query(sql, [nuevoEstado, profesionalEspecialidadId]);
@@ -268,7 +267,7 @@ export const actualizarNombreCompletoM = async (nuevo_nombre_completo, profesion
   }
 };
 
-export const buscarProfesionalesM = async (texto, especialidadId = null, sucursalId = null, soloConAgendas = false) => {
+export const buscarProfesionalesM = async (texto, especialidadId = null, sucursalId = null, soloConAgendas = false, incluirInactivos = false) => {
   try {
     const connection = await connectDB();
     
@@ -277,19 +276,26 @@ export const buscarProfesionalesM = async (texto, especialidadId = null, sucursa
     
     let sql = `
       SELECT DISTINCT
-        pe.id, 
+        pe.id AS profesional_especialidad_id,
+        pe.id,
         CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, 
         e.nombre AS especialidad,
         pe.matricula,
-        e.id AS especialidad_id
+        e.id AS especialidad_id,
+        pe.estado
       FROM profesional_especialidad pe
       JOIN profesional p ON pe.profesional_id = p.id
       JOIN especialidad e ON pe.especialidad_id = e.id
       ${necesitaAgenda ? 'JOIN agenda a ON a.profesional_especialidad_id = pe.id' : ''}
-      WHERE pe.estado = 1
+      WHERE 1=1
     `;
     
     const params = [];
+    
+    // Solo filtrar por estado activo si no se solicita incluir inactivos
+    if (!incluirInactivos) {
+      sql += ` AND pe.estado = 1`;
+    }
     
     if (texto) {
       sql += ` AND (LOWER(p.apellido) LIKE ? OR LOWER(p.nombre) LIKE ?)`;

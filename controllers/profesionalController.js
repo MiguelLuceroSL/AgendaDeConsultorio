@@ -48,6 +48,10 @@ export const crearProfesionalC = async (req, res) => {
 export const borrarProfesionalEspecialidadC = async (req, res) => {
   const { profesionalEspecialidadId, confirmar } = req.body;
   
+  if (!profesionalEspecialidadId) {
+    return res.status(400).json({ success: false, message: 'No se proporcionó el ID de la especialidad del profesional' });
+  }
+  
   try {
     // Primero verificar si tiene turnos pendientes antes de cambiar estado
     const verificacion = await verificarTurnosPendientesS(profesionalEspecialidadId);
@@ -57,25 +61,21 @@ export const borrarProfesionalEspecialidadC = async (req, res) => {
     
     // Si se dio de baja (1 -> 0)
     if (resultado.estadoAnterior === 1 && resultado.nuevoEstado === 0) {
-      console.log('✅ Especialidad dada de baja, eliminando agendas...');
-      
       // Marcar turnos pendientes como "Por reasignar" si se confirmó
       if (confirmar === 'true' && verificacion.tieneTurnosPendientes) {
         await marcarTurnosPorReasignarS(profesionalEspecialidadId);
-        console.log(`✅ Se marcaron ${verificacion.cantidadTurnos} turnos como "Por reasignar"`);
       }
       
       // Eliminar todas las agendas de esta especialidad
-      const agendasEliminadas = await eliminarAgendasProfesionalEspecialidadS(profesionalEspecialidadId);
-      console.log(`✅ Se eliminaron las agendas de la especialidad`);
+      await eliminarAgendasProfesionalEspecialidadS(profesionalEspecialidadId);
+      
+      return res.json({ success: true, message: 'Especialidad desactivada correctamente' });
     } else {
-      console.log('✅ Especialidad reactivada (0 -> 1)');
+      return res.json({ success: true, message: 'Especialidad activada correctamente' });
     }
-    
-    res.redirect('adminDeleteSuccess');
   } catch (err) {
     console.error("Error al cambiar el estado de la especialidad: ", err);
-    res.status(500).send("Hubo un error al cambiar el estado de la especialidad.");
+    res.status(500).json({ success: false, message: 'Hubo un error al cambiar el estado de la especialidad' });
   }
 };
 
@@ -167,6 +167,20 @@ export const verificarTurnosPendientesC = async (req, res) => {
   } catch (err) {
     console.error('Error al verificar turnos pendientes:', err);
     res.status(500).json({ error: 'Error al verificar turnos pendientes' });
+  }
+};
+
+// Buscar profesionales-especialidades con autocompletado (para admin)
+export const buscarProfesionalEspecialidadC = async (req, res) => {
+  const { texto } = req.query;
+  
+  try {
+    // Buscar sin filtro de sucursal, sin filtro de agendas, y permitir inactivos (para admin)
+    const profesionales = await buscarProfesionalesS(texto, null, null, false, true);
+    res.json(profesionales);
+  } catch (err) {
+    console.error('Error al buscar profesional-especialidad:', err);
+    res.status(500).json({ error: 'Error al buscar' });
   }
 };
 

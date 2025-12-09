@@ -6,28 +6,34 @@ html
         link(rel="stylesheet", href="/css/styleGeneral1.css")
         link(rel="stylesheet", href="/css/adminCargarProfesional.css")
         link(rel="stylesheet" href="/css/adminDeleteProfesional.css")
+        link(rel="stylesheet" href="/css/autocompletar_estilos.css")
         link(rel="stylesheet" href="/css/footer.css")
     body
         include ../includes/headerAdmin
         main(class="mainAdminDeleteProfesional") 
             section(class="deleteContainer")
-                p(class="searchInfo") Buscar el ID de Profesional-Especialidad en este 
-                    a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
                 h1(class="mainTitle") Activar / Inactivar una Especialidad de un Médico
-                p(style="color: #666; margin-bottom: 20px; font-size: 0.9rem;") 
+                p(style="color: #666; margin-bottom: 20px; font-size: 0.9rem;") Busca el médico y especialidad para cambiar su estado
                 form(action="/admin/cambiarEstadoEspecialidad" method="POST" class="formChangeState" id="formCambiarEstado")
-                    input(type="text" name="profesionalEspecialidadId" placeholder="ID de Profesional-Especialidad" required class="inputId" id="profesionalEspecialidadId")
+                    label(for="profesional-search") Buscar médico por su nombre:
+                    div(style="position: relative; width: 100%;")
+                        input(type="text" id="profesional-search" class="autocompletar_input" placeholder="Escribe el nombre del médico..." autocomplete="off")
+                    input(type="hidden" name="profesionalEspecialidadId" id="profesional-id" required)
                     input(type="hidden" name="confirmar" id="confirmarInput" value="false")
                     button(type="button" class="button" id="btnCambiarEstado") Cambiar de estado
         include ../includes/footer
         script(src="/js/logout.js")
+        script(src="/js/autocompletar_profesional_especialidad.js")
         script.
+            // Inicializar autocompletador
+            const autocompletar = new AutocompletarProfesionalEspecialidad('profesional-search', 'profesional-id');
+            
             document.getElementById('btnCambiarEstado').addEventListener('click', async function(e) {
                 e.preventDefault();
-                const profesionalEspecialidadId = document.getElementById('profesionalEspecialidadId').value;
+                const profesionalEspecialidadId = document.getElementById('profesional-id').value;
                 
                 if (!profesionalEspecialidadId) {
-                    alert('Por favor ingrese el ID de Profesional-Especialidad');
+                    alert('Por favor seleccione un médico y especialidad de la lista');
                     return;
                 }
                 
@@ -45,15 +51,34 @@ html
                     mensaje += '\n\n¿Desea continuar?';
                     
                     if (confirm(mensaje)) {
-                        if (data.tieneTurnosPendientes) {
-                            document.getElementById('confirmarInput').value = 'true';
+                        // Enviar el cambio de estado
+                        const confirmarValue = data.tieneTurnosPendientes ? 'true' : 'false';
+                        
+                        const cambiarResponse = await fetch('/admin/cambiarEstadoEspecialidad', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                profesionalEspecialidadId: profesionalEspecialidadId,
+                                confirmar: confirmarValue
+                            })
+                        });
+                        
+                        const resultado = await cambiarResponse.json();
+                        
+                        if (resultado.success) {
+                            alert(resultado.message);
+                            // Limpiar el formulario
+                            document.getElementById('profesional-search').value = '';
+                            document.getElementById('profesional-id').value = '';
+                            document.getElementById('confirmarInput').value = 'false';
+                        } else {
+                            alert('Error: ' + resultado.message);
                         }
-                        document.getElementById('formCambiarEstado').submit();
                     }
                 } catch (error) {
-                    console.error('Error al verificar turnos:', error);
-                    if (confirm('No se pudo verificar los turnos pendientes. ¿Desea continuar de todas formas?')) {
-                        document.getElementById('formCambiarEstado').submit();
-                    }
+                    console.error('Error:', error);
+                    alert('Hubo un error al cambiar el estado de la especialidad');
                 }
             });

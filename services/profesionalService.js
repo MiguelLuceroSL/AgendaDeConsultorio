@@ -110,9 +110,9 @@ export const actualizarNombreCompletoS = (nuevo_nombre_completo, profesional_id)
   });
 };
 
-export const buscarProfesionalesS = async (texto, especialidadId = null, sucursalId = null, soloConAgendas = false) => {
+export const buscarProfesionalesS = async (texto, especialidadId = null, sucursalId = null, soloConAgendas = false, incluirInactivos = false) => {
   try {
-    return await buscarProfesionalesM(texto, especialidadId, sucursalId, soloConAgendas);
+    return await buscarProfesionalesM(texto, especialidadId, sucursalId, soloConAgendas, incluirInactivos);
   } catch (error) {
     console.error('Error en servicio buscarProfesionalesS:', error);
     throw error;

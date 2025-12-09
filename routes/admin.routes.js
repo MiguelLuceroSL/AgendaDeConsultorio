@@ -1,5 +1,5 @@
 import express from 'express';
-import { obtenerProfesionalesC, actualizarEspecialidadC, actualizarMatriculaC, borrarProfesionalEspecialidadC, verificarTurnosPendientesC } from '../controllers/profesionalController.js';
+import { obtenerProfesionalesC, actualizarEspecialidadC, actualizarMatriculaC, borrarProfesionalEspecialidadC, verificarTurnosPendientesC, buscarProfesionalEspecialidadC } from '../controllers/profesionalController.js';
 import { obtenerSucursales } from '../models/agendaModel.js';
 import { authRequired } from '../middlewares/validateToken.js';
 import verifyRol from '../middlewares/verifyRol.js';
@@ -60,6 +60,9 @@ router.get('/adminUpdateNameSuccess', authRequired, verifyRol('admin'), (req, re
 router.get('/deleteProfesional', authRequired, verifyRol('admin'), (req, res) => {
   res.render('admin/adminDeleteProfesional');
 });
+
+// API para buscar profesionales-especialidades (autocompletado)
+router.get('/buscar-profesional-especialidad', authRequired, verifyRol('admin'), buscarProfesionalEspecialidadC);
 
 // API para verificar turnos pendientes de una especialidad
 router.get('/verificarTurnosPendientes', authRequired, verifyRol('admin'), verificarTurnosPendientesC);

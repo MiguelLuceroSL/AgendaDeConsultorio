@@ -12,8 +12,6 @@ html
         main(class="mainAdminDeleteProfesional") 
             section(class="deleteContainer")
                 h1(class="mainTitle") ¡¡Estado de la especialidad cambiado exitosamente!!
-                p(class="searchInfo") Buscar el ID de Profesional-Especialidad en este 
-                    a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
                 h1(class="mainTitle") Activar / Inactivar una Especialidad
                 form(action="/admin/cambiarEstadoEspecialidad" method="POST" class="formChangeState" id="formCambiarEstado")
                     input(type="text" name="profesionalEspecialidadId" placeholder="ID de Profesional-Especialidad" required class="inputId" id="profesionalEspecialidadId")
