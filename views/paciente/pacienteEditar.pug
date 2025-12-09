@@ -88,11 +88,7 @@ html
           button.botonEditarFoto(type="submit") Editar
     include ../includes/footer
     script(src="/js/logout.js")
-    script.
-      setTimeout(() => {
-        const alert = document.querySelector('.alert');
-        if (alert) alert.style.display = 'none';
-      }, 4000);
+    script(src="/js/alerta.js")
     script.
       const nombreInput = document.getElementById("perfilNombre");
       const nombreError = document.getElementById("errNombre");

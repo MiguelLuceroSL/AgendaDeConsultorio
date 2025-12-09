@@ -95,13 +95,15 @@ export const historialTurnosByUserIdC = async (req, res) => {
 };
 
 export const pacienteByUserIdTurnoC = async (req, res) => {
+    //TURNOS GET
     const id = req.res.req.user.id;
     let idPaciente = 0;
+    const msg = req.query.msg;
     try {
         const profesionales = await obtenerProfesionalesVistaS();
         const paciente = await pacienteByUserIdS(id)
         idPaciente = paciente[0].id;
-        res.render('paciente/pacienteTurno', { idPaciente, paciente, profesionales });
+        res.render('paciente/pacienteTurno', { idPaciente, paciente, profesionales, msg });
     } catch (error) {
         console.error("Error al obtener el paciente por ID de usuario:", error);
         res.status(500).json({ message: 'Hubo un error al obtener el paciente.' });
@@ -130,6 +132,7 @@ export const pacienteEditadoC = async (req, res) => {
 };
 
 export const pacienteEditarC = async (req, res) => {
+    //EDITAR GET
     const id = req.res.req.user.id;
     const msg = req.query.msg;
     console.log("Mensaje recibido en pacienteEditarC:", msg);
@@ -152,6 +155,7 @@ export const pacienteEditarC = async (req, res) => {
 };
 
 export const updatePacienteC = async (req, res) => {
+    //EDITAR POST
     const { nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento } = req.body;
     console.log("datos obtenidos", nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento);
     console.log("Reqbody edit paciente: ", req.body);
@@ -168,7 +172,7 @@ export const updateFotoC = async (req, res) => {
     const { dni, icon } = req.body;
     try {
         await updateFotoS(dni, icon);
-        res.render('paciente/pacienteEditarFotoSuccess');
+        return res.redirect("/pacientes/foto?msg=ok");
     } catch (err) {
         console.error("Error al editar la foto:", err);
         res.json("Hubo un error al editar la foto.");
@@ -176,12 +180,14 @@ export const updateFotoC = async (req, res) => {
 };
 
 export const getFotoC = async (req, res) => {
+    //FOTO GET
     const id = req.res.req.user.id;
+    const msg = req.query.msg;
     try {
         const paciente = await pacienteByUserIdS(id);
         const dni = paciente[0].dni
         const icon = paciente[0].icon
-        res.render('paciente/pacienteEditarFoto', { dni, icon });
+        res.render('paciente/pacienteEditarFoto', { dni, icon, msg });
     } catch (error) {
         console.error("Error al obtener el paciente por ID de usuario:", error);
         res.status(500).json({ message: 'Hubo un error al obtener el paciente.' });
