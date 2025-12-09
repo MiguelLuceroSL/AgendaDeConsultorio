@@ -4,12 +4,22 @@ html
     title Vista Paciente
     link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap", rel="stylesheet")
     link(rel="stylesheet" href="/css/pacienteTurno.css")
+    link(rel="stylesheet" href="/css/alerta.css")
     link(rel="stylesheet" href="/css/headerPaciente.css")
     link(rel="stylesheet" href="/css/footerNuevo.css")
     link(rel="stylesheet" href="/css/autocompletar_estilos.css")
     link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css")
   body
     include ../includes/headerPaciente
+    if msg == 'ok'
+      div.alert.alert-success
+        span.icon ✓
+        |  Turno reservado exitosamente
+
+    if msg == 'error'
+      div.alert.alert-error
+        span.icon ⚠
+        |  Hubo un error al reservar el turno
     main(class="mainPacienteTurno")
       h1 ¡Reserva tu turno ahora!
       form(action="/turnos/crearPaciente" method="POST" class="formTurnos" enctype="multipart/form-data") 
@@ -34,6 +44,7 @@ html
     script(src="/js/horarios.js")
     script(src="/js/autocompletar_profesional.js")
     script(src="https://cdn.jsdelivr.net/npm/flatpickr")
+    script(src="/js/alerta.js")
     script.
       
       document.getElementById('dni_foto').addEventListener('change', function(e) {

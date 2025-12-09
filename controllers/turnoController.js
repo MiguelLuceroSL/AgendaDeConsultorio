@@ -31,7 +31,7 @@ export const crearTurnoPacienteC = async (req, res) => {
 
   try {
     await crearTurnoS(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl);
-    res.render('paciente/pacienteTurnoSuccess');
+    return res.redirect('../pacientes/turno?msg=ok');
   } catch (err) {
     console.error('Error al crear turno:', err.message);
     res.status(500).json({ message: err.message });
