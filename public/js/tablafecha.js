@@ -6,9 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     order: [[4, 'asc'], [5, 'asc']],
     searching: false,
     columnDefs: [{
-      targets: [6,7,8],
-      orderable : false
-    }]
+      targets: [6, 7, 8, 9],
+      orderable: false
+    }],
+    autoWidth: false
   });
 });
 
