@@ -4,9 +4,19 @@ html
     title Agenda de Consultorios
     link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap", rel="stylesheet")
     link(rel="stylesheet", href="/css/home.css")
+    link(rel="stylesheet" href="/css/alerta.css")
     
   body
     include includes/headerHome
+    if msg == 'ok'
+      div.alert.alert-success
+        span.icon ✓
+        |  Registrado exitosamente. Ya podés iniciar sesión.
+
+    if msg == 'error'
+      div.alert.alert-error
+        span.icon ⚠
+        |  Hubo un error al registrarte. Por favor, intentá nuevamente.
     main
         section.hero
           h1.h1TituloSalud Salud sin complicaciones
@@ -19,3 +29,4 @@ html
             p(id="pCarrousel") Saca tus turnos médicos de manera fácil y rápida.
     include includes/footer
     script(type="module" src="/js/home.js")
+    script(src="/js/alerta.js")

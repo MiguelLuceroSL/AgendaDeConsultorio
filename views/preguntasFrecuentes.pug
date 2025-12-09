@@ -7,18 +7,24 @@ html
     
   body
     include includes/headerHome
-    .containerNosotros
-        h1.h1Nosotros Preguntas Frecuentes
-
-        .faq
-            h3 ¿Cómo reservo un turno?
-            p Desde el menú principal podés iniciar sesión y seleccionar un consultorio disponible.
-
-            h3 ¿Necesito crear una cuenta?
-            p Sí, para poder reservar turnos es necesario registrarte.
-
-            h3 ¿Puedo reservar un turno en el horario que quiera?
-            p Depende si hay un espacio disponible en ese horario para ese médico.
+    h1.h1Nosotros Preguntas Frecuentes
+    .containerPreguntas
         
-        p.h1Nosotros Dejanos tus dudas contactandonos a través de nuestro LinkedIn.
+        .preguntas
+          
+          .faq
+              h3 ¿Cómo reservo un turno?
+              p Desde el menú principal podés iniciar sesión y seleccionar un consultorio disponible.
+
+              h3 ¿Necesito crear una cuenta?
+              p Sí, para poder reservar turnos es necesario registrarte.
+
+              h3 ¿Puedo reservar un turno en el horario que quiera?
+              p Depende si hay un espacio disponible en ese horario para ese médico.
+
+              h3 ¿Es obligatorio subir la foto del documento?
+              p Sí, es obligatorio para verificar tu identidad y asegurar la correcta asignación del turno.
+          img(src="/img/perropreguntas.png", alt="Preguntas Frecuentes" class="imgPreguntas")
+        
+        p.pPreguntas Dejanos tus dudas contactandonos a través de nuestro LinkedIn.
     include includes/footer

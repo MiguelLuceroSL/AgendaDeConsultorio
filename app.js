@@ -45,7 +45,8 @@ app.use(infoRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {
-  res.render('home');
+  const { msg } = req.query;
+  res.render('home', { msg });
 });
 
 app.get('/auth/register', (req, res) => {

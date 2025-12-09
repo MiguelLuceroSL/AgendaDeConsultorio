@@ -156,7 +156,7 @@ export const register = async (req, res) => {
     await connection.execute(insertPacienteQuery, [nombre, dni, mutual, telefono, email, direccion, fecha_nacimiento, usuarioId]);
 
     // Renderiza la vista de éxito
-    res.render('registerSuccess', { message: '¡Usuario creado con éxito!' });
+    return res.redirect('/?msg=ok');
 
   } catch (error) {
     console.error('Error al registrar usuario o paciente:', error);

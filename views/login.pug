@@ -62,6 +62,9 @@ html(lang="es")
               label(for="registerTelefono") Teléfono:
               input(type="text" class="registerInput" id="registerTelefono" name="telefono", required placeholder="Teléfono" maxlength="15" oninput="this.value=this.value.replace(/[^0-9]/g,'')")
 
+              label(for="registerFechaNacimiento") Fecha de Nacimiento:
+              input(type="date" class="registerInput" id="registerFechaNacimiento" name="fecha_nacimiento", required)
+
               label(for="registerPassword") Contraseña:
               input(type="password" class="registerInput" id="registerPassword" name="password", required minlength="8" placeholder="Contraseña")
 

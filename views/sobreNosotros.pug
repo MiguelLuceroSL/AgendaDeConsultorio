@@ -2,19 +2,23 @@ doctype html
 html
   head
     title Sobre Nosotros
-    link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap", rel="stylesheet")
-    link(rel="stylesheet", href="/css/home.css")
-    
+    link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet")
+    link(rel="stylesheet" href="/css/home.css")
+
   body
     include includes/headerHome
+    h1.h1Nosotros Sobre Nosotros
     .containerNosotros
-        h1.h1Nosotros Sobre Nosotros
+      .articuloNosotros
         p Agenda de Consultorios es un proyecto académico desarrollado para facilitar la gestión de turnos médicos de manera rápida y eficiente.
         p Nuestro objetivo es ofrecer una herramienta clara, simple y funcional para mejorar la experiencia de pacientes y profesionales.
-        p El sistema permite:
+        p.negrita El sistema permite:
         ul.ulNosotros
-            li - Gestión centralizada de turnos
-            li - Visualización de médicos disponibles
-            li - Administración de médicos, pacientes y horarios
-            li - Reducción de errores y tiempos de espera
+          li - Gestión centralizada de turnos
+          li - Visualización de médicos disponibles
+          li - Administración de médicos, pacientes y horarios
+          li - Reducción de errores y tiempos de espera
+          li - Y mucho más...
+      img(src="/img/perronosotros.png", alt="Sobre Nosotros" class="imgPreguntas")
+    p.pNosotros Estamos comprometidos con la mejora continua y la innovación en el ámbito de la salud.
     include includes/footer
