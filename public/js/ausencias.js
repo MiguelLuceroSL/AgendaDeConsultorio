@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const profesionalSelect = document.getElementById("profesional_especialidad_id");
+  const profesionalIdInput = document.getElementById("profesional-id");
   const fechaInicioInput = document.getElementById("fecha_inicio");
   const fechaFinInput = document.getElementById("fecha_fin");
 
@@ -42,8 +42,56 @@ document.addEventListener("DOMContentLoaded", () => {
   let fpInicio = null;
   let fpFin = null;
 
-  profesionalSelect.addEventListener("change", async () => {
-    const profesionalId = profesionalSelect.value;
+  // Observar cambios en el campo oculto del autocomplete
+  const observer = new MutationObserver(async () => {
+    const profesionalId = profesionalIdInput.value;
+    if (!profesionalId) return;
+
+    agendas = await obtenerAgendas(profesionalId);
+    if (!agendas.length) {
+      alert("Este profesional no tiene agendas activas.");
+      return;
+    }
+
+    const minDate = agendas.reduce(
+      (min, a) => (new Date(a.dia_inicio) < min ? new Date(a.dia_inicio) : min),
+      new Date(8640000000000000)
+    );
+    const maxDate = agendas.reduce(
+      (max, a) => (new Date(a.dia_fin) > max ? new Date(a.dia_fin) : max),
+      new Date(-8640000000000000)
+    );
+    const diasValidos = diasPermitidos();
+
+    const disableFunc = (date) => {
+      const dia = normalizarDia(date);
+      const enRango = rangoDias(date, minDate, maxDate);
+      return !diasValidos.includes(dia) || !enRango;
+    };
+
+    if (fpInicio) fpInicio.destroy();
+    if (fpFin) fpFin.destroy();
+
+    fpInicio = flatpickr(fechaInicioInput, {
+      dateFormat: "Y-m-d",
+      disable: [disableFunc],
+    });
+
+    fpFin = flatpickr(fechaFinInput, {
+      dateFormat: "Y-m-d",
+      disable: [disableFunc],
+    });
+  });
+
+  // Observar cambios en el valor del input oculto
+  observer.observe(profesionalIdInput, {
+    attributes: true,
+    attributeFilter: ['value']
+  });
+
+  // También escuchar el evento input
+  profesionalIdInput.addEventListener('input', async () => {
+    const profesionalId = profesionalIdInput.value;
     if (!profesionalId) return;
 
     agendas = await obtenerAgendas(profesionalId);
