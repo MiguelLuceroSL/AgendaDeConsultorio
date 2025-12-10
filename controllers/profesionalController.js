@@ -84,7 +84,7 @@ export const obtenerProfesionalesC = async (req, res) => {
   try {
     const profesionales = await obtenerProfesionalesS(especialidad);
     
-    // Si es petición AJAX, devolver JSON
+    
     if (req.headers.accept && !req.headers.accept.includes('text/html')) {
       return res.json(profesionales);
     }
@@ -102,7 +102,7 @@ export const actualizarEspecialidadC = async (req, res) => {
     await actualizarEspecialidadS(matricula, especialidad);
     console.log("Especialidad actualizada exitosamente.");
     
-    // Si es petición AJAX, devolver JSON
+    
     if (req.headers['content-type'] === 'application/json') {
       return res.json({ success: true, message: 'Especialidad actualizada correctamente' });
     }
@@ -125,7 +125,7 @@ export const actualizarMatriculaC = async (req, res) => {
     await actualizarMatriculaS(matricula, nueva_matricula);
     console.log("Matricula actualizada exitosamente.");
     
-    // Si es petición AJAX, devolver JSON
+    
     if (req.headers['content-type'] === 'application/json') {
       return res.json({ success: true, message: 'Matrícula actualizada correctamente' });
     }
@@ -141,8 +141,7 @@ export const actualizarMatriculaC = async (req, res) => {
     res.status(500).send("Hubo un error al actualizar la matrícula.");
   }
 };
-// Buscar profesionales dinámicamente (API endpoint para AJAX)
-// Para crear TURNOS - solo profesionales con agendas
+
 export const buscarProfesionalesC = async (req, res) => {
   const { texto, especialidadId } = req.query;
   const sucursalId = req.user?.sucursal_id; // Obtener sucursal del usuario logueado
