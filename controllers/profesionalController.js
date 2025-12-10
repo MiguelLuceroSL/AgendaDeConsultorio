@@ -83,6 +83,12 @@ export const obtenerProfesionalesC = async (req, res) => {
   const especialidad = req.query.especialidad;
   try {
     const profesionales = await obtenerProfesionalesS(especialidad);
+    
+    // Si es petición AJAX, devolver JSON
+    if (req.headers.accept && !req.headers.accept.includes('text/html')) {
+      return res.json(profesionales);
+    }
+    
     res.render('admin/adminReadProfesional', { profesionales, especialidad });
   } catch (err) {
     console.error('Error al obtener los profesionales:', err);
@@ -95,9 +101,20 @@ export const actualizarEspecialidadC = async (req, res) => {
   try {
     await actualizarEspecialidadS(matricula, especialidad);
     console.log("Especialidad actualizada exitosamente.");
+    
+    // Si es petición AJAX, devolver JSON
+    if (req.headers['content-type'] === 'application/json') {
+      return res.json({ success: true, message: 'Especialidad actualizada correctamente' });
+    }
+    
     res.redirect('adminUpdateEspecialidadSuccess');
   } catch (err) {
     console.error("Error al actualizar la especialidad:", err);
+    
+    if (req.headers['content-type'] === 'application/json') {
+      return res.status(500).json({ success: false, message: 'Error al actualizar la especialidad' });
+    }
+    
     res.status(500).send("Hubo un error al actualizar la especialidad.");
   }
 };
@@ -105,14 +122,23 @@ export const actualizarEspecialidadC = async (req, res) => {
 export const actualizarMatriculaC = async (req, res) => {
   const {matricula, nueva_matricula } = req.body;
   try {
-    console.log("matricula controller: ", matricula);
-    console.log("nueva_matricula controller: ", nueva_matricula);
     await actualizarMatriculaS(matricula, nueva_matricula);
     console.log("Matricula actualizada exitosamente.");
+    
+    // Si es petición AJAX, devolver JSON
+    if (req.headers['content-type'] === 'application/json') {
+      return res.json({ success: true, message: 'Matrícula actualizada correctamente' });
+    }
+    
     res.redirect('adminUpdateMatriculaSuccess');
   } catch (err) {
-    console.error("Error al actualizar la especialidad:", err);
-    res.status(500).send("Hubo un error al actualizar la especialidad.");
+    console.error("Error al actualizar la matrícula:", err);
+    
+    if (req.headers['content-type'] === 'application/json') {
+      return res.status(500).json({ success: false, message: 'Error al actualizar la matrícula' });
+    }
+    
+    res.status(500).send("Hubo un error al actualizar la matrícula.");
   }
 };
 // Buscar profesionales dinámicamente (API endpoint para AJAX)

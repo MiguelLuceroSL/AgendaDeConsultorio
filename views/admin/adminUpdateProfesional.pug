@@ -1,37 +1,336 @@
 doctype html
 html
     head
-        title Actualizar Médico
+        title Editar Datos del Médico
         link(rel="stylesheet", href="/css/headerAdmin.css")
         link(rel="stylesheet", href="/css/styleGeneral1.css")
         link(rel="stylesheet" href="/css/adminCargarProfesional.css")
         link(rel="stylesheet" href="/css/adminUpdateProfesional.css")
+        link(rel="stylesheet" href="/css/autocompletar_estilos.css")
         link(rel="stylesheet" href="/css/footer.css")
+        style.
+            .update-container {
+                max-width: 700px;
+                margin: 40px auto;
+                padding: 30px;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+            .update-title {
+                text-align: center;
+                color: #333;
+                margin-bottom: 30px;
+                font-size: 1.8rem;
+            }
+            .search-section {
+                margin-bottom: 30px;
+            }
+            .search-label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 600;
+                color: #555;
+            }
+            .datos-profesional {
+                display: none;
+                margin-top: 30px;
+                padding: 25px;
+                background: #f8f9fa;
+                border-radius: 6px;
+                border: 1px solid #dee2e6;
+            }
+            .datos-profesional.visible {
+                display: block;
+            }
+            .datos-header {
+                text-align: center;
+                padding: 15px;
+                background: #007bff;
+                color: white;
+                border-radius: 6px;
+                margin-bottom: 20px;
+                font-size: 1.2rem;
+                font-weight: 600;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 6px;
+                font-weight: 600;
+                color: #555;
+                font-size: 0.95rem;
+            }
+            .form-group input,
+            .form-group select {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                font-size: 1rem;
+                transition: border-color 0.2s;
+            }
+            .form-group input:focus,
+            .form-group select:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+            }
+            .form-group input:disabled {
+                background-color: #e9ecef;
+                cursor: not-allowed;
+            }
+            .form-group small {
+                display: block;
+                margin-top: 4px;
+                color: #6c757d;
+                font-size: 0.85rem;
+            }
+            .btn-group {
+                display: flex;
+                gap: 15px;
+                margin-top: 25px;
+            }
+            .btn {
+                flex: 1;
+                padding: 12px;
+                border: none;
+                border-radius: 4px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .btn-primary {
+                background: #007bff;
+                color: white;
+            }
+            .btn-primary:hover {
+                background: #0056b3;
+            }
+            .btn-secondary {
+                background: #6c757d;
+                color: white;
+            }
+            .btn-secondary:hover {
+                background: #545b62;
+            }
+            .info-box {
+                background: #d1ecf1;
+                border: 1px solid #bee5eb;
+                border-radius: 4px;
+                padding: 12px;
+                margin-bottom: 20px;
+                color: #0c5460;
+                font-size: 0.9rem;
+            }
     body
         include ../includes/headerAdmin
         main(class="mainAdmin")
-            section(class="sectionAdmin")
-                p(class="buscarId") Buscar la ID o Matrícula en este
-                    a(href="http://localhost:3000/admin/readProfesional", rel="noopener noreferrer", class="aLink") link
-                h2(class="tituloActualizar") Actualizar especialidad de un médico
-                form(action="/admin/actualizarEspecialidad" method="POST" class="formActualizar")
-                    input(type="text" name="matricula" placeholder="Matrícula del médico" required class="inputMatricula")
-                    select(name="especialidad" required class="selectEspecialidad")
-                        option(value="1") Cardiología
-                        option(value="2") Pediatría
-                        option(value="3") Kinesiología
-                        option(value="4") Psicología
-                        option(value="5") Odontología
-                    button(type="submit" class="botonActualizar") Actualizar
-                h2(class="tituloActualizar") Actualizar matrícula de un médico
-                form(action="/admin/actualizarMatricula" method="POST" class="formActualizar")
-                    input(type="text" name="matricula" placeholder="Matrícula actual" required class="inputMatricula")
-                    input(type="text" name="nueva_matricula" placeholder="Nueva matrícula" required class="inputMatricula")
-                    button(type="submit" class="botonActualizar") Actualizar
-                h2(class="tituloActualizar") Actualizar nombre completo de un médico
-                form(action="/admin/actualizarNombreCompleto" method="POST" class="formActualizar")
-                    input(type="text" name="profesional_id" placeholder="ID del médico" required class="inputMatricula")
-                    input(type="text" name="nuevo_nombre_completo" placeholder="Nuevo nombre completo" required class="inputMatricula")
-                    button(type="submit" class="botonActualizar") Actualizar
+            section(class="update-container")
+                h1(class="update-title") Editar Datos del Médico
+                
+                .search-section
+                    label(for="profesional-search" class="search-label") Buscar médico:
+                    div(style="position: relative;")
+                        input(type="text" id="profesional-search" class="autocompletar_input" placeholder="Escribe el nombre del médico..." autocomplete="off")
+                    input(type="hidden" id="profesional-id")
+                
+                .datos-profesional#datos-profesional
+                    .datos-header
+                        span#nombre-medico
+                    
+                    .info-box
+                        <p> Los cambios se guardarán solo para la combinación médico en la especialidad seleccionada.
+                    
+                    form(id="form-actualizar")
+                        input(type="hidden" id="profesional-especialidad-id" name="profesional_especialidad_id")
+                        
+                        .form-group
+                            label(for="nombre-completo") Nombre Completo del Médico
+                            input(type="text" id="nombre-completo" disabled)
+                            small Este campo no se puede editar desde aquí
+                        
+                        .form-group
+                            label(for="especialidad") Especialidad
+                            select(id="especialidad" name="especialidad_id" required)
+                                option(value="") Seleccione una especialidad
+                        
+                        .form-group
+                            label(for="matricula") Matrícula
+                            input(type="text" id="matricula" name="matricula" placeholder="Ej: MN12345" required style="text-transform: uppercase;")
+                            small Ingrese números y/o letras
+                        
+                        .btn-group
+                            button(type="button" class="btn btn-secondary" id="btn-cancelar") Cancelar
+                            button(type="submit" class="btn btn-primary") Guardar Cambios
+        
         include ../includes/footer
         script(src="/js/logout.js")
+        script(src="/js/autocompletar_profesional_especialidad.js")
+        script.
+            let especialidades = [];
+            let datosOriginales = {};
+            
+            // Cargar especialidades
+            async function cargarEspecialidades() {
+                try {
+                    const response = await fetch('/profesional/especialidades');
+                    especialidades = await response.json();
+                    
+                    const select = document.getElementById('especialidad');
+                    select.innerHTML = '<option value="">Seleccione una especialidad</option>';
+                    especialidades.forEach(esp => {
+                        const option = document.createElement('option');
+                        option.value = esp.id;
+                        option.textContent = esp.nombre;
+                        select.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error al cargar especialidades:', error);
+                }
+            }
+            
+            // Inicializar autocompletador
+            const autocompletar = new AutocompletarProfesionalEspecialidad('profesional-search', 'profesional-id');
+            
+            // Sobrescribir el método seleccionar para cargar datos
+            const seleccionarOriginal = autocompletar.seleccionar.bind(autocompletar);
+            autocompletar.seleccionar = async function(index) {
+                seleccionarOriginal(index);
+                const item = this.resultados[index];
+                await cargarDatosProfesional(item);
+            };
+            
+            async function cargarDatosProfesional(profesional) {
+                datosOriginales = {
+                    profesional_especialidad_id: profesional.profesional_especialidad_id,
+                    profesional_id: profesional.profesional_id,
+                    nombre_completo: profesional.nombre_completo,
+                    especialidad_id: profesional.especialidad_id,
+                    matricula: profesional.matricula
+                };
+                
+                if (!datosOriginales.profesional_id) {
+                    alert('Error: No se pudo obtener el ID del profesional.');
+                    return;
+                }
+                
+                // Obtener todas las especialidades que ya tiene este médico
+                const respProfesionales = await fetch(`/admin/profesionales`);
+                const todosProfesionales = await respProfesionales.json();
+                
+                const especialidadesDelMedico = todosProfesionales
+                    .filter(p => p.profesional_id == profesional.profesional_id)
+                    .map(p => p.especialidad_id);
+                
+                // Actualizar el select de especialidades, excluyendo las que ya tiene
+                const select = document.getElementById('especialidad');
+                select.innerHTML = '<option value="">Seleccione una especialidad</option>';
+                
+                especialidades.forEach(esp => {
+                    // Mostrar solo si NO la tiene, o si es la especialidad actual
+                    const yaLaTiene = especialidadesDelMedico.includes(esp.id);
+                    const esLaActual = esp.id == profesional.especialidad_id;
+                    
+                    if (!yaLaTiene || esLaActual) {
+                        const option = document.createElement('option');
+                        option.value = esp.id;
+                        option.textContent = esp.nombre;
+                        select.appendChild(option);
+                    }
+                });
+                
+                document.getElementById('nombre-medico').textContent = profesional.nombre_completo + ' - ' + profesional.especialidad;
+                document.getElementById('profesional-especialidad-id').value = profesional.profesional_especialidad_id;
+                document.getElementById('nombre-completo').value = profesional.nombre_completo;
+                document.getElementById('especialidad').value = profesional.especialidad_id;
+                document.getElementById('matricula').value = profesional.matricula;
+                
+                document.getElementById('datos-profesional').classList.add('visible');
+            }
+            
+            // Convertir matrícula a mayúsculas al escribir
+            document.getElementById('matricula').addEventListener('input', function(e) {
+                e.target.value = e.target.value.toUpperCase();
+            });
+            
+            // Cancelar
+            document.getElementById('btn-cancelar').addEventListener('click', function() {
+                document.getElementById('profesional-search').value = '';
+                document.getElementById('profesional-id').value = '';
+                document.getElementById('datos-profesional').classList.remove('visible');
+                document.getElementById('form-actualizar').reset();
+            });
+            
+            // Guardar cambios
+            document.getElementById('form-actualizar').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const profesionalEspecialidadId = document.getElementById('profesional-especialidad-id').value;
+                const nuevaEspecialidadId = document.getElementById('especialidad').value;
+                const nuevaMatricula = document.getElementById('matricula').value.toUpperCase();
+                
+                const cambios = [];
+                
+                // Verificar qué cambió
+                if (nuevaEspecialidadId != datosOriginales.especialidad_id) {
+                    cambios.push('especialidad');
+                }
+                if (nuevaMatricula !== datosOriginales.matricula) {
+                    cambios.push('matrícula');
+                }
+                
+                if (cambios.length === 0) {
+                    alert('No se realizaron cambios');
+                    return;
+                }
+                
+                const confirmMsg = `¿Confirma que desea actualizar ${cambios.join(' y ')} de este médico?`;
+                if (!confirm(confirmMsg)) return;
+                
+                try {
+                    // Actualizar especialidad si cambió
+                    if (cambios.includes('especialidad')) {
+                        const respEsp = await fetch('/admin/actualizarEspecialidad', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                matricula: datosOriginales.matricula,
+                                especialidad: nuevaEspecialidadId
+                            })
+                        });
+                        if (!respEsp.ok) throw new Error('Error al actualizar especialidad');
+                    }
+                    
+                    // Actualizar matrícula si cambió
+                    if (cambios.includes('matrícula')) {
+                        const respMat = await fetch('/admin/actualizarMatricula', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                matricula: datosOriginales.matricula,
+                                nueva_matricula: nuevaMatricula
+                            })
+                        });
+                        if (!respMat.ok) throw new Error('Error al actualizar matrícula');
+                    }
+                    
+                    alert('Datos actualizados correctamente');
+                    
+                    // Limpiar formulario
+                    document.getElementById('profesional-search').value = '';
+                    document.getElementById('profesional-id').value = '';
+                    document.getElementById('datos-profesional').classList.remove('visible');
+                    document.getElementById('form-actualizar').reset();
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error al actualizar los datos: ' + error.message);
+                }
+            });
+            
+            // Cargar especialidades al inicio
+            cargarEspecialidades();

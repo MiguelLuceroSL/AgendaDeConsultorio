@@ -64,6 +64,9 @@ router.get('/deleteProfesional', authRequired, verifyRol('admin'), (req, res) =>
 // API para buscar profesionales-especialidades (autocompletado)
 router.get('/buscar-profesional-especialidad', authRequired, verifyRol('admin'), buscarProfesionalEspecialidadC);
 
+// API para obtener todos los profesionales (para validaciones)
+router.get('/profesionales', authRequired, verifyRol('admin'), obtenerProfesionalesC);
+
 // API para verificar turnos pendientes de una especialidad
 router.get('/verificarTurnosPendientes', authRequired, verifyRol('admin'), verificarTurnosPendientesC);
 

@@ -175,7 +175,7 @@ export const obtenerProfesionalesM = async (especialidad, callback) => {
     const sql = `
       SELECT pe.id AS profesional_especialidad_id, p.id AS profesional_id, 
              CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, 
-             e.nombre AS especialidad, pe.matricula, pe.estado
+             e.nombre AS especialidad, e.id AS especialidad_id, pe.matricula, pe.estado
       FROM profesional_especialidad pe
       JOIN profesional p ON pe.profesional_id = p.id
       JOIN especialidad e ON pe.especialidad_id = e.id
@@ -278,6 +278,7 @@ export const buscarProfesionalesM = async (texto, especialidadId = null, sucursa
       SELECT DISTINCT
         pe.id AS profesional_especialidad_id,
         pe.id,
+        p.id AS profesional_id,
         CONCAT(p.apellido, ', ', p.nombre) AS nombre_completo, 
         e.nombre AS especialidad,
         pe.matricula,
