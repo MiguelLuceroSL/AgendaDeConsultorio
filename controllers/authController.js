@@ -150,8 +150,8 @@ export const register = async (req, res) => {
     // Inserta en la tabla paciente
     const insertPacienteQuery = `
       INSERT INTO paciente(
-        nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, usuario_id
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, usuario_id, icon
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
     `;
     await connection.execute(insertPacienteQuery, [nombre, dni, mutual, telefono, email, direccion, fecha_nacimiento, usuarioId]);
 
