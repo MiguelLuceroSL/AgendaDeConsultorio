@@ -1,100 +1,93 @@
-/* adminDeleteProfesional.css */
-
-.mainAdminDeleteProfesional {
-    background: #fbfbfb;
-    color: #333;
-    min-height: 60vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-.deleteContainer {
+/* MAIN */
+.mainAdminDeleteProfesional {
     flex: 1;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
 }
 
-.searchInfo {
-    font-size: 1rem;
-    color: #444;
-    margin-bottom: 18px;
-    text-align: center;
-}
-
-.aLink {
-    color: #1976d2;
-    text-decoration: underline;
-    margin-left: 4px;
-    transition: color 0.2s;
-}
-
-.aLink:hover {
-    color: #0d47a1;
-}
-
-.mainTitle {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #222;
-    margin-bottom: 28px;
-    text-align: center;
-}
-
-.formChangeState {
+/* CARD */
+.deleteContainer {
+    height: 50vh;
     width: 100%;
+    background-color: #ffffff;
+    padding: 35px 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+}
+
+/* TÍTULO */
+.mainTitle {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+/* FORM */
+.formChangeState {
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    align-items: stretch;
+    gap: 38px;
 }
 
-.inputId {
-    padding: 12px 14px;
-    border: 1px solid #bdbdbd;
-    border-radius: 6px;
-    font-size: 1rem;
+.formChangeState label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+}
+
+/* INPUT */
+.formChangeState input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.inputId:focus {
-    border-color: #1976d2;
+.formChangeState input[type="text"]:focus {
+    border-color: #e67e22;
+    box-shadow: 0 0 0 2px rgba(230, 126, 34, 0.15);
 }
 
+/* BOTÓN PELIGRO */
 .button {
-    padding: 12px 0;
-    background: #1976d2;
-    color: #fff;
+    margin-top: 10px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
     border: none;
-    border-radius: 6px;
-    font-size: 1.1rem;
-    font-weight: 500;
+    border-radius: 12px;
     cursor: pointer;
-    transition: background 0.2s;
+    background-color: #e74c3c;
+    color: #fff;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .button:hover {
-    background: #1565c0;
+    background-color: #c0392b;
 }
 
-@media (max-width: 600px) {
-    .mainAdminDeleteProfesional {
-        padding: 16px 4px;
+.button:active {
+    transform: scale(0.97);
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+    .deleteContainer {
+        padding: 25px 20px;
     }
 
     .mainTitle {
-        font-size: 1.1rem;
-        margin-bottom: 18px;
-    }
-
-    .formChangeState {
-        gap: 12px;
-    }
-
-    .inputId, .button {
-        font-size: 0.98rem;
-        padding: 10px 8px;
+        font-size: 20px;
     }
 }

@@ -1,5 +1,5 @@
 import express from 'express';
-import { obtenerProfesionalesC, actualizarEspecialidadC, actualizarMatriculaC, borrarProfesionalEspecialidadC, verificarTurnosPendientesC, buscarProfesionalEspecialidadC } from '../controllers/profesionalController.js';
+import { obtenerProfesionalesC, actualizarEspecialidadC, actualizarMatriculaC, borrarProfesionalEspecialidadC, verificarTurnosPendientesC, buscarProfesionalEspecialidadC, createProfesionalC } from '../controllers/profesionalController.js';
 import { obtenerSucursales } from '../models/agendaModel.js';
 import { authRequired } from '../middlewares/validateToken.js';
 import verifyRol from '../middlewares/verifyRol.js';
@@ -18,13 +18,14 @@ router.get('/cargarAgenda', authRequired, verifyRol('admin'), (req, res) => {
 });
 
 router.get('/createProfesional', authRequired, verifyRol('admin'), (req, res) => {
-  res.render('admin/adminCreateProfesional');
+  createProfesionalC(req, res);
 });
 
 router.get('/registerSecretaria', authRequired, verifyRol('admin'), async (req, res) => {
+  const msg = req.query.msg;
   try {
     const sucursales = await obtenerSucursales();
-    res.render('admin/adminRegisterSecretaria', { sucursales });
+    res.render('admin/adminRegisterSecretaria', { sucursales, msg });
   } catch (error) {
     console.error('Error al obtener sucursales:', error);
     res.status(500).send('Error al cargar el formulario');
@@ -38,7 +39,8 @@ router.get('/readProfesional', authRequired, verifyRol('admin'), (req, res) => {
 
 
 router.get('/updateProfesional', authRequired, verifyRol('admin'), async (req, res) => {
-  res.render('admin/adminUpdateProfesional');
+  const msg = req.query.msg;
+  res.render('admin/adminUpdateProfesional', { msg });
 });
 
 router.post('/actualizarEspecialidad', authRequired, verifyRol('admin'), actualizarEspecialidadC);

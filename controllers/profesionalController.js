@@ -23,14 +23,24 @@ import {crearProfesionalS, profesionalEspecialidadBorrarS, obtenerProfesionalesS
   }
 };*/
 
+export const createProfesionalC = async (req, res) => {
+    //create profesional GET
+    const msg = req.query.msg;
+    try {
+        res.render('admin/adminCreateProfesional', { msg });
+    } catch (error) {
+        console.error("Error al obtener crear profesional:", error);
+        res.status(500).json({ message: 'Hubo un error al obtener crear profesional.' });
+    }
+};
+
 export const crearProfesionalC = async (req, res) => {
+  //create profesional POST
   const { dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula } = req.body;
   
   try {
     await crearProfesionalS(dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, especialidad, matricula);
-    res.render('admin/adminCreateSuccess', {
-      message: 'Médico y especialidad procesados con éxito. Si el DNI ya existía, se agregó la nueva especialidad.'
-    });
+    return res.redirect("/admin/createProfesional?msg=ok");
   } catch (err) {
     console.error("Error al crear el profesional:", err);
     
@@ -106,8 +116,8 @@ export const actualizarEspecialidadC = async (req, res) => {
     if (req.headers['content-type'] === 'application/json') {
       return res.json({ success: true, message: 'Especialidad actualizada correctamente' });
     }
-    
-    res.redirect('adminUpdateEspecialidadSuccess');
+
+    return res.redirect("/admin/updateProfesional?msg=ok");
   } catch (err) {
     console.error("Error al actualizar la especialidad:", err);
     

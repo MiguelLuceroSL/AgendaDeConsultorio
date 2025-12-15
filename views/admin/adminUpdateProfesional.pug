@@ -2,12 +2,14 @@ doctype html
 html
     head
         title Editar Datos del Médico
+        link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap", rel="stylesheet")
         link(rel="stylesheet", href="/css/headerAdmin.css")
         link(rel="stylesheet", href="/css/styleGeneral1.css")
         link(rel="stylesheet" href="/css/adminCargarProfesional.css")
         link(rel="stylesheet" href="/css/adminUpdateProfesional.css")
         link(rel="stylesheet" href="/css/autocompletar_estilos.css")
-        link(rel="stylesheet" href="/css/footer.css")
+        link(rel="stylesheet" href="/css/alerta.css")
+        link(rel="stylesheet" href="/css/footerNuevo.css")
         style.
             .update-container {
                 max-width: 700px;
@@ -128,6 +130,15 @@ html
             }
     body
         include ../includes/headerAdmin
+        if msg == 'ok'
+            div.alert.alert-success
+                span.icon ✓
+                |  Datos editados exitosamente
+
+        if msg == 'error'
+            div.alert.alert-error
+                span.icon ⚠
+                |  Hubo un error al editar tus datos
         main(class="mainAdmin")
             section(class="update-container")
                 h1(class="update-title") Editar Datos del Médico
@@ -169,6 +180,7 @@ html
         
         include ../includes/footer
         script(src="/js/logout.js")
+        script(src="/js/alerta.js")
         script(src="/js/autocompletar_profesional_especialidad.js")
         script.
             let especialidades = [];

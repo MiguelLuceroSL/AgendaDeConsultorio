@@ -1,5 +1,9 @@
 /* adminCreateSuccess.css */
 
+body{
+    font-family: 'Poppins', sans-serif;
+}
+
 .mainAdminCreateSuccess {
     min-height: 70vh;
     display: flex;

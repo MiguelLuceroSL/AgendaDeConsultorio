@@ -1,121 +1,109 @@
 /* adminCreateProfesional.css */
 
-/* Main container styling */
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
 .mainAdminCreateProfesional {
+    min-height: calc(100vh - 250px);
+    padding: 40px 20px;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    min-height: 80vh;
-    background: #f7f9fa;
-    padding: 40px 0;
 }
 
-/* Form styling */
 .formCreate {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-    padding: 32px 28px;
     width: 100%;
-    max-width: 420px;
+    max-width: 600px;
+    background-color: #ffffff;
+    padding: 35px 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 18px;
 }
 
-/* Title styling */
 .spanCreate {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2d3a4b;
-    margin-bottom: 10px;
     text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
 }
 
-/* Fieldset styling */
-.formCreate fieldset {
+.infoCreate {
+    font-size: 14px;
+    color: #666;
+    background-color: #f4f6f8;
+    padding: 12px 14px;
+    border-radius: 10px;
+    line-height: 1.4;
+}
+
+fieldset {
     border: none;
     padding: 0;
-    margin: 0;
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-/* Label styling */
-.lbNombreCompleto,
-.lbMatricula,
-.lbEspecialidad {
-    font-size: 1rem;
-    color: #34495e;
-    margin-bottom: 2px;
+label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
 }
 
-/* Input styling */
-.inputNombreCompleto,
-.inputMatricula {
+input,
+select {
     padding: 10px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 1rem;
-    background: #f9fafb;
-    transition: border-color 0.2s;
-}
-
-.inputNombreCompleto:focus,
-.inputMatricula:focus {
-    border-color: #3498db;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
     outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Select styling */
-.selectEspecialidad {
-    padding: 10px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 1rem;
-    background: #f9fafb;
-    transition: border-color 0.2s;
+input:focus,
+select:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.15);
 }
 
-.selectEspecialidad:focus {
-    border-color: #3498db;
-    outline: none;
-}
-
-/* Button styling */
+/* Botón */
 .botonCreate {
-    margin-top: 18px;
-    padding: 12px 0;
-    background: #3498db;
-    color: #fff;
-    font-size: 1.1rem;
-    font-weight: 500;
+    margin-top: 10px;
+    padding: 13px;
+    font-size: 15px;
+    font-weight: 600;
     border: none;
-    border-radius: 6px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: background 0.2s;
+    background-color: #2ecc71;
+    color: #fff;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .botonCreate:hover {
-    background: #217dbb;
+    background-color: #27ae60;
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
-    .mainAdminCreateProfesional {
-        padding: 20px 0;
-    }
+.botonCreate:active {
+    transform: scale(0.98);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
     .formCreate {
-        padding: 20px 10px;
-        max-width: 100%;
-        gap: 16px;
+        padding: 25px 20px;
     }
+
     .spanCreate {
-        font-size: 1.2rem;
+        font-size: 20px;
     }
-    .botonCreate {
-        font-size: 1rem;
-        padding: 10px 0;
+
+    .infoCreate {
+        font-size: 13px;
     }
 }

@@ -193,7 +193,7 @@ export const registerSecretaria = async (req, res) => {
       [email, passwordHash, rol, sucursal_id]
     );
 
-    return res.render('admin/adminSecretariaSuccess', { message: '¡Secretaria creada con éxito!' });
+    return res.redirect("/admin/registerSecretaria?msg=ok");
   } catch (error) {
     console.error('Error al registrar secretaria:', error);
     return res.status(500).send('Error al registrar secretaria.');

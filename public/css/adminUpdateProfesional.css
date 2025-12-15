@@ -1,114 +1,170 @@
-/* adminUpdateProfesional.css */
-
-/* General layout */
-.mainAdmin {
-    min-height: 80vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    background: #f7f9fa;
-    padding: 40px 0;
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-.sectionAdmin {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    padding: 32px 40px;
-    max-width: 480px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
+/* CONTENEDOR PRINCIPAL */
+.update-container {
+    max-width: 700px;
+    margin: auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
 }
 
-.tituloVario {
-    font-size: 1.5rem;
-    color: #1976d2;
-    margin-bottom: 16px;
+/* TÍTULO */
+.update-title {
     text-align: center;
-    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 26px;
+    font-weight: 700;
 }
 
-.buscarId {
-    font-size: 1rem;
-    color: #444;
+/* BUSCADOR */
+.search-section {
+    margin-bottom: 30px;
+}
+
+.search-label {
+    display: block;
     margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+    font-size: 14px;
 }
 
-.aLink {
-    color: #1976d2;
-    text-decoration: underline;
-    margin-left: 6px;
-    font-weight: 500;
-    transition: color 0.2s;
-}
-.aLink:hover {
-    color: #0d47a1;
+/* DATOS DEL PROFESIONAL */
+.datos-profesional {
+    display: none;
+    margin-top: 30px;
+    padding: 25px;
+    background-color: #f4f6f8;
+    border-radius: 12px;
+    border: 1px solid #ddd;
 }
 
-.tituloActualizar {
-    font-size: 1.25rem;
-    color: #1976d2;
-    margin-bottom: 12px;
-    margin-top: 0;
+.datos-profesional.visible {
+    display: block;
+}
+
+/* HEADER CARD */
+.datos-header {
+    text-align: center;
+    padding: 14px;
+    background-color: #4a90e2;
+    color: #fff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
     font-weight: 600;
 }
 
-.formActualizar {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-bottom: 16px;
+/* INFO */
+.info-box {
+    background-color: #e9f4ff;
+    border: 1px solid #bcdcff;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 20px;
+    color: #1f4f7a;
+    font-size: 13px;
 }
 
-.inputMatricula,
-.selectEspecialidad {
+/* FORM */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #444;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
     padding: 10px 12px;
-    border: 1px solid #bdbdbd;
-    border-radius: 6px;
-    font-size: 1rem;
-    background: #fafbfc;
-    transition: border-color 0.2s;
-}
-.inputMatricula:focus,
-.selectEspecialidad:focus {
-    border-color: #1976d2;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
     outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.botonActualizar {
-    background: #1976d2;
-    color: #fff;
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.15);
+}
+
+.form-group input:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 4px;
+    color: #666;
+    font-size: 12px;
+}
+
+/* BOTONES */
+.btn-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px;
     border: none;
-    border-radius: 6px;
-    padding: 10px 0;
-    font-size: 1rem;
+    border-radius: 10px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s;
-}
-.botonActualizar:hover {
-    background: #125ea7;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-    .mainAdmin {
-        padding: 16px 0;
+.btn-primary {
+    background-color: #4a90e2;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #357abd;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+    .update-container {
+        padding: 25px 20px;
     }
-    .sectionAdmin {
-        padding: 18px 8px;
-        max-width: 100%;
-        gap: 20px;
+
+    .update-title {
+        font-size: 22px;
     }
-    .tituloActualizar {
-        font-size: 1.1rem;
-    }
-    .inputMatricula,
-    .selectEspecialidad,
-    .botonActualizar {
-        font-size: 0.98rem;
-        padding: 9px 8px;
+
+    .btn-group {
+        flex-direction: column;
     }
 }

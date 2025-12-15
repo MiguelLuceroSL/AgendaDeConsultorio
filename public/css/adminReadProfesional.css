@@ -1,233 +1,156 @@
-/* adminReadProfesional.css */
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
 
-/* General Styles */
+/* MAIN */
 .mainAdminReadProfesional {
-    max-width: 1100px;
-    min-height: 50vh;
-    margin: 40px auto 60px auto;
-    padding: 24px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-}
-
-.readContainer {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 40px 20px;
 }
 
+/* CONTENEDOR */
+.readContainer {
+    max-width: 1100px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+}
+
+/* TÍTULO */
 .mainTitle {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin-bottom: 28px;
-    color: #2c3e50;
     text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 25px;
 }
 
+/* FILTRO */
 .filterForm {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 32px;
-    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
 }
 
 .filterLabel {
-    font-size: 1.1rem;
-    color: #34495e;
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
 }
 
 .filterSelect {
-    padding: 7px 14px;
-    border-radius: 6px;
-    border: 1px solid #bfc9d1;
-    font-size: 1rem;
-    background: #f8fafc;
-    transition: border 0.2s;
-}
-
-.filterSelect:focus {
-    border: 1.5px solid #2980b9;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
     outline: none;
 }
 
-/* Estados visuales */
-.estado-activo {
-    color: #27ae60;
-    font-weight: 600;
-}
-
-.estado-inactivo {
-    color: #e74c3c;
-    font-weight: 600;
+.filterSelect:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.15);
 }
 
 .filterButton {
-    padding: 7px 22px;
-    background: #2980b9;
-    color: #fff;
+    padding: 9px 16px;
+    border-radius: 10px;
     border: none;
-    border-radius: 6px;
-    font-size: 1rem;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s;
+    background-color: #4a90e2;
+    color: #fff;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .filterButton:hover {
-    background: #1a5e8a;
+    background-color: #357abd;
 }
 
+.filterButton:active {
+    transform: scale(0.97);
+}
+
+/* TABLA */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 18px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+    font-size: 14px;
 }
 
 thead {
-    background: #2980b9;
-    color: #fff;
+    background-color: #f4f6f8;
 }
 
-th,
-td {
+th {
     padding: 12px 10px;
     text-align: left;
-    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+    border-bottom: 2px solid #ddd;
 }
 
-tbody tr:nth-child(even) {
-    background: #f1f7fa;
+td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    color: #444;
 }
 
+/* FILAS */
 tbody tr:hover {
-    background: #eaf3fa;
+    background-color: #f9fafb;
 }
 
+/* ESTADOS */
+.estado-activo {
+    font-weight: 700;
+    color: #2ecc71;
+}
+
+.estado-inactivo {
+    font-weight: 700;
+    color: #e74c3c;
+}
+
+/* SIN RESULTADOS */
 .noResults {
     text-align: center;
-    color: #b94a48;
-    font-size: 1.15rem;
+    font-size: 15px;
+    color: #666;
     margin-top: 30px;
-    font-weight: 500;
 }
 
-/* Responsive Design */
-@media (max-width: 900px) {
-    .mainAdminReadProfesional {
-        padding: 12px;
-        max-width: 98vw;
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    table {
+        font-size: 13px;
     }
 
-    .mainTitle {
-        font-size: 1.7rem;
-    }
-
-    th,
-    td {
-        font-size: 0.97rem;
-        padding: 10px 6px;
+    th, td {
+        padding: 8px;
     }
 }
 
-@media (max-width: 650px) {
-    .mainAdminReadProfesional {
-        padding: 6px;
-        margin: 18px 0 30px 0;
+@media (max-width: 480px) {
+    .readContainer {
+        padding: 20px;
     }
 
     .mainTitle {
-        font-size: 1.3rem;
-        margin-bottom: 18px;
+        font-size: 22px;
     }
 
     .filterForm {
         flex-direction: column;
-        gap: 10px;
         align-items: stretch;
     }
 
-    table,
-    thead,
-    tbody,
-    th,
-    td,
-    tr {
-        display: block;
+    .filterButton {
         width: 100%;
-    }
-
-    thead {
-        display: none;
-    }
-
-    tbody tr {
-        margin-bottom: 18px;
-        background: #f9f9f9;
-        border-radius: 6px;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-        padding: 8px 0;
-    }
-
-    td {
-        position: relative;
-        padding-left: 48%;
-        font-size: 0.98rem;
-        border: none;
-        border-bottom: 1px solid #e1e1e1;
-        min-height: 36px;
-    }
-
-    td:before {
-        position: absolute;
-        left: 12px;
-        top: 12px;
-        width: 45%;
-        white-space: nowrap;
-        font-weight: 600;
-        color: #2980b9;
-        font-size: 0.97rem;
-    }
-
-    td:nth-of-type(1):before {
-        content: "Prof-Esp ID";
-    }
-
-    td:nth-of-type(2):before {
-        content: "ID Prof";
-    }
-
-    td:nth-of-type(3):before {
-        content: "Nombre Completo";
-    }
-
-    td:nth-of-type(4):before {
-        content: "Especialidad";
-    }
-
-    td:nth-of-type(5):before {
-        content: "Matrícula";
-    }
-
-    td:nth-of-type(6):before {
-        content: "Estado";
-    }
-}
-
-@media (max-width: 400px) {
-    .mainTitle {
-        font-size: 1.05rem;
-    }
-
-    .filterButton,
-    .filterSelect {
-        font-size: 0.93rem;
-        padding: 6px 10px;
     }
 }
