@@ -94,8 +94,13 @@ export const obtenerProfesionalesC = async (req, res) => {
   try {
     const profesionales = await obtenerProfesionalesS(especialidad);
     
+
+    const acceptHeader = req.headers.accept || '';
+    const isJsonRequest = req.xhr || 
+                         acceptHeader.includes('application/json') || 
+                         (acceptHeader && !acceptHeader.includes('text/html') && !acceptHeader.includes('*/*'));
     
-    if (req.headers.accept && !req.headers.accept.includes('text/html')) {
+    if (isJsonRequest) {
       return res.json(profesionales);
     }
     

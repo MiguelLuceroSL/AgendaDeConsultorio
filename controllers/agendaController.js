@@ -7,11 +7,18 @@ import {obtenerProfesionalesVistaM} from "../models/profesionalModel.js";
 
 export const crearAgendaC = async (req, res) => {
   try {
-    const { profesional_especialidad_id, sucursal_id, dia_inicio, dia_fin, tiempo_consulta, dias, max_sobreturnos } = req.body;
-
+    const { profesional_especialidad_id, dia_inicio, dia_fin, tiempo_consulta, dias, max_sobreturnos } = req.body;
+    
+    // Obtener la sucursal del usuario logueado (secretaria)
+    const sucursal_id = req.user?.sucursal_id;
 
     if (!profesional_especialidad_id || !sucursal_id || !dia_inicio || !dia_fin || !tiempo_consulta) {
       return res.status(400).json({ error: "Todos los campos son requeridos" });
+    }
+    
+    // Verificar que el usuario tenga una sucursal asignada
+    if (!sucursal_id) {
+      return res.status(400).json({ error: "El usuario no tiene una sucursal asignada" });
     }
     
     // Validar que dia_fin sea posterior a dia_inicio
@@ -132,8 +139,8 @@ export const obtenerSucursalesC = async (req, res) => {
 export const FormCrearAgendaVista = async (req, res) => {
   try {
     const profesionales = await obtenerProfesionalesVistaM();
-    const sucursales = await obtenerSucursales();
-    res.render('secretaria/secretariaCrearAgenda', { profesionales, sucursales });
+    // Ya no se necesitan las sucursales porque se usa la del usuario logueado
+    res.render('secretaria/secretariaCrearAgenda', { profesionales });
   } catch (error) {
     console.error('Error al mostrar el formulario de agenda:', error);
     res.status(500).send('Error al cargar el formulario');

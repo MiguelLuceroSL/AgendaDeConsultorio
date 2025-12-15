@@ -1,6 +1,6 @@
 import connectDB from '../config/db.js';
 
-export const validarConflictoHorariosM = async (profesionalId, sucursalId, horarioInicio, horarioFin, diasSemana, agendaIdExcluir = null) => {
+export const validarConflictoHorariosM = async (profesionalId, sucursalId, horarioInicio, horarioFin, diasSemana, diaInicio, diaFin, agendaIdExcluir = null) => {
   const connection = await connectDB();
   try {
     // Obtener todas las especialidades del profesional
@@ -22,6 +22,8 @@ export const validarConflictoHorariosM = async (profesionalId, sucursalId, horar
           a.id,
           a.horario_inicio,
           a.horario_fin,
+          a.dia_inicio,
+          a.dia_fin,
           e.nombre AS especialidad,
           s.nombre AS sucursal
         FROM agenda a
@@ -38,11 +40,14 @@ export const validarConflictoHorariosM = async (profesionalId, sucursalId, horar
             (? > a.horario_inicio AND ? <= a.horario_fin) OR
             (? <= a.horario_inicio AND ? >= a.horario_fin)
           )
+          AND (
+            (? <= a.dia_fin AND ? >= a.dia_inicio)
+          )
       `;
 
       const params = agendaIdExcluir 
-        ? [especialidadIds, dia, agendaIdExcluir, horarioInicio, horarioInicio, horarioFin, horarioFin, horarioInicio, horarioFin]
-        : [especialidadIds, dia, horarioInicio, horarioInicio, horarioFin, horarioFin, horarioInicio, horarioFin];
+        ? [especialidadIds, dia, agendaIdExcluir, horarioInicio, horarioInicio, horarioFin, horarioFin, horarioInicio, horarioFin, diaInicio, diaFin]
+        : [especialidadIds, dia, horarioInicio, horarioInicio, horarioFin, horarioFin, horarioInicio, horarioFin, diaInicio, diaFin];
 
       const [conflictos] = await connection.query(sql, params);
 
@@ -50,7 +55,7 @@ export const validarConflictoHorariosM = async (profesionalId, sucursalId, horar
         const c = conflictos[0];
         return {
           conflicto: true,
-          mensaje: `El profesional ya tiene una agenda para ${dia} de ${c.horario_inicio.substring(0, 5)} a ${c.horario_fin.substring(0, 5)} en ${c.sucursal} (${c.especialidad}). Los horarios se solapan.`
+          mensaje: `El profesional ya tiene una agenda para ${dia} de ${c.horario_inicio.substring(0, 5)} a ${c.horario_fin.substring(0, 5)} en ${c.sucursal} (${c.especialidad}) que se solapa con el período solicitado (vigente desde ${c.dia_inicio} hasta ${c.dia_fin}).`
         };
       }
     }
@@ -77,13 +82,15 @@ export const crearAgendaM = async (agendaData, diasSemana) => {
 
     const profesionalId = profEsp[0].profesional_id;
 
-    // Validar conflictos de horarios
+    // Validar conflictos de horarios y fechas
     const validacion = await validarConflictoHorariosM(
       profesionalId,
       agendaData.sucursal_id,
       agendaData.horario_inicio,
       agendaData.horario_fin,
-      diasSemana
+      diasSemana,
+      agendaData.dia_inicio,
+      agendaData.dia_fin
     );
 
     if (validacion.conflicto) {

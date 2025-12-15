@@ -64,7 +64,6 @@ form.addEventListener('submit', async (e) => {
 
   // Construir el objeto completo, por ejemplo:
   const profesional_especialidad_id = form.profesional_especialidad_id.value;
-  const sucursal_id = form.sucursal_id.value;
   const dia_inicio = form.dia_inicio.value;
   const dia_fin = form.dia_fin.value;
   const tiempo_consulta = form.tiempo_consulta.value;
@@ -103,7 +102,6 @@ form.addEventListener('submit', async (e) => {
 
   const bodyData = {
     profesional_especialidad_id,
-    sucursal_id,
     dia_inicio,
     dia_fin,
     tiempo_consulta,

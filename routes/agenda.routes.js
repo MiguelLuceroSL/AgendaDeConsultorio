@@ -2,9 +2,10 @@ import express from 'express';
 const router = express.Router();
 import {crearAgendaC, obtenerAgendasC, actulizarAgendaC, borrarAgendaC, obtenerAgendasActivasC, FormCrearAgendaVista, registrarAusenciaC, verificarAusenciaC, formCrearAusenciaC, obtenerAusenciasTotalesC, eliminarAusenciaC, listarAgendasActivasC, eliminarAgendaC, buscarSucursalesC} from '../controllers/agendaController.js';
 import { authRequired } from '../middlewares/validateToken.js';
+import verifyRol from '../middlewares/verifyRol.js';
 
-router.get('/crear', FormCrearAgendaVista);
-router.post('/crear', crearAgendaC); 
+router.get('/crear', authRequired, verifyRol('secretaria'), FormCrearAgendaVista);
+router.post('/crear', authRequired, verifyRol('secretaria'), crearAgendaC); 
 router.get('/getagendas', obtenerAgendasC);
 router.put('/actagendas', actulizarAgendaC);
 router.delete('/delagendas', borrarAgendaC);
