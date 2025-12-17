@@ -25,11 +25,11 @@ html
       form(action="/turnos/crearPaciente" method="POST" class="formTurnos" enctype="multipart/form-data")
         h3 Seleccioná Sucursal y Especialidad
         .filtros-container
-          div
+          div.divFiltro
             label(for="sucursal-filtro") Sucursal: *
             select(id="sucursal-filtro" class="filtro-select" required)
               option(value="" selected disabled) Selecciona una sucursal
-          div
+          div.divFiltro
             label(for="especialidad-filtro") Especialidad: *
             select(id="especialidad-filtro" class="filtro-select" required)
               option(value="" selected disabled) Selecciona una especialidad

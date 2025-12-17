@@ -23,8 +23,10 @@ body {
     font-size: 28px;
 }
 
+
+
 .formTurnos {
-    width: 20vw;
+    width: 40vw;
     margin: 0 auto;
     background: #fff;
     border-radius: 15px;
@@ -45,10 +47,9 @@ body {
 }
 
 .filtros-container {
-    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    gap: 5px;
     margin-bottom: 20px;
     padding: 0 10%;
 }
@@ -87,7 +88,7 @@ body {
 .formTurnos select,
 .formTurnos input[type="text"],
 .formTurnos textarea {
-    width: 80%;
+    width: 60%;
     padding: 12px 15px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -96,6 +97,10 @@ body {
     background-color: #fff;
     text-align: center;
     font-family: 'Poppins', sans-serif;
+}
+
+.formTurnos .filtro-select{
+    width: 100%;
 }
 
 .formTurnos input[type="text"]:disabled {
@@ -142,6 +147,12 @@ body {
     color: #c0392b;
     font-style: italic;
     margin-bottom: 10px;
+}
+
+.divFiltro{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 @media (max-width: 900px) {
