@@ -54,7 +54,9 @@ app.get('/auth/register', (req, res) => {
 });
 
 app.get('/auth/login', (req, res) => {
-  res.render('login');
+  res.render('login', {
+    query: req.query
+  });
 });
 
 app.get('/admin', (req, res) => {

@@ -75,6 +75,7 @@ export const register = async (req, res) => {
     
     // Validar que las contraseñas coincidan
     if (password !== confirm_password) {
+      return res.redirect('/auth/login?error=pw');
       return res.status(400).send('Las contraseñas no coinciden');
     }
     
@@ -84,7 +85,7 @@ export const register = async (req, res) => {
       [email]
     );
     if (emailExists.length > 0) {
-      return res.status(400).send('El email ya está registrado');
+      return res.redirect('/auth/login?error=email');
     }
     
     // Validar que el DNI no exista
@@ -93,16 +94,18 @@ export const register = async (req, res) => {
       [dni]
     );
     if (dniExists.length > 0) {
-      return res.status(400).send('El DNI ya está registrado');
+      return res.redirect('/auth/login?error=dni');
     }
     
     // Validar formato de DNI (7-8 dígitos numéricos)
     if (!/^\d{7,8}$/.test(dni)) {
+      return res.redirect('/auth/login?error=dni78');
       return res.status(400).send('El DNI debe tener 7 u 8 dígitos numéricos');
     }
     
     // Validar formato de teléfono (7-15 dígitos numéricos)
     if (!/^\d{7,15}$/.test(telefono)) {
+      return res.redirect('/auth/login?error=tel');
       return res.status(400).send('El teléfono debe contener entre 7 y 15 dígitos numéricos');
     }
     
@@ -123,10 +126,12 @@ export const register = async (req, res) => {
     }
     
     if (edad < 18) {
+      return res.redirect('/auth/login?error=fecha18');
       return res.status(400).send('Debe ser mayor de 18 años para registrarse');
     }
     
     if (edad > 100) {
+      return res.redirect('/auth/login?error=fecha100');
       return res.status(400).send('La fecha de nacimiento no es válida (edad máxima: 100 años)');
     }
     
@@ -142,6 +147,7 @@ export const register = async (req, res) => {
     const [userResult] = await connection.execute(selectUserIdQuery, [email]);
 
     if (userResult.length === 0) {
+      return res.redirect('/auth/login?error=nouser');
       return res.status(404).send('Datos del usuario no encontrados.');
     }
 

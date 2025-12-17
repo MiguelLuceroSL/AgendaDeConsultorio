@@ -191,6 +191,7 @@ html
                 try {
                     const response = await fetch('/profesional/especialidades');
                     especialidades = await response.json();
+                    console.log("response ", response);
                     
                     const select = document.getElementById('especialidad');
                     select.innerHTML = '<option value="">Seleccione una especialidad</option>';

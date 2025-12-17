@@ -67,7 +67,10 @@ class AutocompletarProfesionalEspecialidad {
         <div style="font-size: 0.9em; color: #666;">${item.especialidad} - Mat: ${item.matricula}</div>
       `;
       
-      div.addEventListener('click', () => this.seleccionar(index));
+      div.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        this.seleccionar(index);
+      });
       this.resultadosDiv.appendChild(div);
     });
 

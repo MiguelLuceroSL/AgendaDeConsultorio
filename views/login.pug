@@ -40,6 +40,26 @@ html(lang="es")
 
               button.btnLogin(type="submit") Iniciar Sesión
 
+              if query.error
+                p.error-msg
+                  if query.error == 'dni'
+                    | El DNI ya está registrado
+                  else if query.error == 'email'
+                    | El email ya está registrado
+                  else if query.error == 'pw'
+                    | Las contraseñas no coinciden
+                  else if query.error == 'dni78'
+                    | El DNI debe tener 7 u 8 dígitos numéricos
+                  else if query.error == 'tel'
+                    | El teléfono debe contener entre 7 y 15 dígitos numéricos
+                  else if query.error == 'fecha18'
+                    | Debe ser mayor de 18 años para registrarse
+                  else if query.error == 'fecha100'
+                    | La fecha de nacimiento no es válida (edad máxima: 100 años)
+                  else if query.error == 'nouser'
+                    | Datos del usuario no encontrados.
+                  
+
             // ---- REGISTER ----
             form.formRegister.hidden(id="registerForm" class="register-grid" action="/auth/register" method="POST")
               h1 Crear Cuenta

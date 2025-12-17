@@ -206,6 +206,13 @@ input:focus {
     padding: 5px;
 }
 
+.error-msg {
+  color: red;
+  margin-bottom: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
 /*responsive*/
 
 @media (max-width: 900px) {

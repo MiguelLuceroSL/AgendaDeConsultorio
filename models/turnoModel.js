@@ -189,67 +189,67 @@ export const traerTurnoPorIdM = async (id, callback) => {
 
 
 export const traerTurnosFiltrados = async (filtros, callback) => {
-    try {
-        const connection = await connectDB();
+  try {
+    const connection = await connectDB();
 
-        let sql = `
+    let sql = `
       SELECT DISTINCT
-        t.id, 
-        p.nombre_completo AS paciente_nombre, 
+        t.id,
+        p.nombre_completo AS paciente_nombre,
         CONCAT(pr.apellido, ', ', pr.nombre) AS nombre_medico,
         e.nombre AS especialidad,
         t.detalle_turno,
         s.nombre AS sucursal,
-        t.fecha, 
-        t.hora, 
+        t.fecha,
+        t.hora,
         t.estado,
         t.dni_foto_url
-    FROM 
-        turnos t
-    JOIN 
-        paciente p ON t.paciente_id = p.id
-    JOIN 
-        profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
-    JOIN 
-        profesional pr ON pe.profesional_id = pr.id
-    JOIN 
-        especialidad e ON pe.especialidad_id = e.id
-    LEFT JOIN 
-        agenda a ON a.profesional_especialidad_id = pe.id 
+      FROM turnos t
+      JOIN paciente p ON t.paciente_id = p.id
+      JOIN profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
+      JOIN profesional pr ON pe.profesional_id = pr.id
+      JOIN especialidad e ON pe.especialidad_id = e.id
+      LEFT JOIN agenda a 
+        ON a.profesional_especialidad_id = pe.id
         AND t.fecha BETWEEN a.dia_inicio AND a.dia_fin
-    LEFT JOIN
-        sucursal s ON a.sucursal_id = s.id
-    WHERE 1=1
+      LEFT JOIN sucursal s ON a.sucursal_id = s.id
+      WHERE 1 = 1
     `;
 
-        const params = [];
+    const params = [];
 
-        // Filtro por sucursal_id
-        if (filtros.sucursal_id) {
-            sql += ` AND (a.sucursal_id = ? OR a.sucursal_id IS NULL)`;
-            params.push(filtros.sucursal_id);
-        }
-        
-        // Filtro por paciente
-        if (filtros.paciente) {
-            sql += ' AND LOWER(p.nombre_completo) LIKE ?';
-            params.push(`%${filtros.paciente.toLowerCase()}%`);
-        }
-        
-        // Filtro por profesional
-        if (filtros.profesional) {
-            sql += ' AND (LOWER(pr.apellido) LIKE ? OR LOWER(pr.nombre) LIKE ?)';
-            params.push(`%${filtros.profesional.toLowerCase()}%`);
-            params.push(`%${filtros.profesional.toLowerCase()}%`);
-        }
-
-        sql += ' ORDER BY t.fecha DESC, t.hora DESC, pr.apellido, pr.nombre';
-
-        const [rows] = await connection.query(sql, params);
-        callback(null, rows);
-    } catch (err) {
-        callback(err);
+    //filtro por sucursal sin perder reservados
+    if (filtros.sucursal_id) {
+      sql += `
+        AND (
+          t.estado <> 'Confirmado'
+          OR a.sucursal_id = ?
+        )
+      `;
+      params.push(filtros.sucursal_id);
     }
+
+    //filtro por paciente
+    if (filtros.paciente) {
+      sql += ` AND LOWER(p.nombre_completo) LIKE ?`;
+      params.push(`%${filtros.paciente.toLowerCase()}%`);
+    }
+
+    //filtro por profesional
+    if (filtros.profesional) {
+      sql += ` AND (LOWER(pr.apellido) LIKE ? OR LOWER(pr.nombre) LIKE ?)`;
+      params.push(`%${filtros.profesional.toLowerCase()}%`);
+      params.push(`%${filtros.profesional.toLowerCase()}%`);
+    }
+
+    sql += ` ORDER BY t.fecha DESC, t.hora DESC`;
+
+    const [rows] = await connection.query(sql, params);
+    callback(null, rows);
+
+  } catch (err) {
+    callback(err);
+  }
 };
 
 export const obtenerTodasLasSucursales = async () => {

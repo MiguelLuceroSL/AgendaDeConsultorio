@@ -91,6 +91,7 @@ export const borrarProfesionalEspecialidadC = async (req, res) => {
 
 export const obtenerProfesionalesC = async (req, res) => {
   const especialidad = req.query.especialidad;
+  console.log("especialidad en controller req query", req.query);
   try {
     const profesionales = await obtenerProfesionalesS(especialidad);
     

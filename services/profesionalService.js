@@ -21,6 +21,7 @@ export const profesionalEspecialidadBorrarS = (profesionalEspecialidadId) => {
 };
 
 export const obtenerProfesionalesS = (especialidad) => {
+  
   console.log("especialidad en service", especialidad);
   return new Promise((resolve, reject) => {
     obtenerProfesionalesM(especialidad, (err, result) => {
