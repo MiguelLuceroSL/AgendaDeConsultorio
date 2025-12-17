@@ -190,9 +190,17 @@ html
             async function cargarEspecialidades() {
                 try {
                     const response = await fetch('/profesional/especialidades');
+
+                    const contentType = response.headers.get('content-type') || '';
+                    if (!contentType.includes('application/json')) {
+                        // Si no es JSON, registrar el texto para ayudar a depurar (p. ej. página HTML de login o error)
+                        const text = await response.text();
+                        console.error('Respuesta inesperada al cargar especialidades (no JSON). Primero 300 chars:', text.slice(0,300));
+                        return;
+                    }
+
                     especialidades = await response.json();
-                    console.log("response ", response);
-                    
+
                     const select = document.getElementById('especialidad');
                     select.innerHTML = '<option value="">Seleccione una especialidad</option>';
                     especialidades.forEach(esp => {
@@ -232,7 +240,14 @@ html
                 }
                 
                 // Obtener todas las especialidades que ya tiene este médico
-                const respProfesionales = await fetch(`/admin/profesionales`);
+                const respProfesionales = await fetch(`/admin/profesionales`, { headers: { 'Accept': 'application/json' } });
+                const ct = respProfesionales.headers.get('content-type') || '';
+                if (!ct.includes('application/json')) {
+                    const txt = await respProfesionales.text();
+                    console.error('Respuesta inesperada de /admin/profesionales (no JSON). Primero 300 chars:', txt.slice(0,300));
+                    alert('Error al obtener datos del profesional: la respuesta no es JSON. Revisa la consola.');
+                    return;
+                }
                 const todosProfesionales = await respProfesionales.json();
                 
                 const especialidadesDelMedico = todosProfesionales

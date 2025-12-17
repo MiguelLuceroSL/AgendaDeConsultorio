@@ -37,9 +37,16 @@ class AutocompletarProfesionalEspecialidad {
     }
 
     try {
-      const response = await fetch(`/admin/buscar-profesional-especialidad?texto=${encodeURIComponent(texto)}`);
+      const response = await fetch(`/admin/buscar-profesional-especialidad?texto=${encodeURIComponent(texto)}`, { headers: { 'Accept': 'application/json' } });
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('Respuesta no JSON en buscar-profesional-especialidad. Primeros 300 chars:', text.slice(0,300));
+        this.cerrarResultados();
+        return;
+      }
       const data = await response.json();
-      
+
       this.resultados = data;
       this.mostrarResultados();
     } catch (error) {

@@ -207,7 +207,9 @@ export const buscarProfesionalesParaAgendasC = async (req, res) => {
 // Obtener todas las especialidades (API endpoint para AJAX)
 export const obtenerEspecialidadesC = async (req, res) => {
   try {
+    console.log('API GET /profesional/especialidades llamada');
     const especialidades = await obtenerEspecialidadesS();
+    console.log('Especialidades obtenidas:', Array.isArray(especialidades) ? especialidades.length : typeof especialidades);
     res.json(especialidades);
   } catch (err) {
     console.error('Error al obtener especialidades:', err);
