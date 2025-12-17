@@ -1,8 +1,10 @@
 class AutocompletarProfesional {
-    constructor(inputId, hiddenInputId, especialidadSelectId = null) {
+    constructor(inputId, hiddenInputId, especialidadSelectId = null, sucursalSelectId = null, especialidadFiltroId = null) {
         this.input = document.getElementById(inputId);
         this.hiddenInput = document.getElementById(hiddenInputId);
         this.especialidadSelect = especialidadSelectId ? document.getElementById(especialidadSelectId) : null;
+        this.sucursalSelect = sucursalSelectId ? document.getElementById(sucursalSelectId) : null;
+        this.especialidadFiltro = especialidadFiltroId ? document.getElementById(especialidadFiltroId) : null;
         this.resultsDiv = null;
         this.selectedIndex = -1;
         this.results = [];
@@ -24,6 +26,23 @@ class AutocompletarProfesional {
         // Si hay select de especialidad, escuchar cambios
         if (this.especialidadSelect) {
             this.especialidadSelect.addEventListener('change', () => {
+                if (this.input.value.trim()) {
+                    this.buscarProfesionales(this.input.value.trim());
+                }
+            });
+        }
+        
+        // Escuchar cambios en filtros de sucursal y especialidad
+        if (this.sucursalSelect) {
+            this.sucursalSelect.addEventListener('change', () => {
+                if (this.input.value.trim()) {
+                    this.buscarProfesionales(this.input.value.trim());
+                }
+            });
+        }
+        
+        if (this.especialidadFiltro) {
+            this.especialidadFiltro.addEventListener('change', () => {
                 if (this.input.value.trim()) {
                     this.buscarProfesionales(this.input.value.trim());
                 }
@@ -59,9 +78,19 @@ class AutocompletarProfesional {
         try {
             let url = `/profesional/buscar?texto=${encodeURIComponent(texto)}`;
             
-            // Agregar filtro de especialidad si existe
+            // Agregar filtro de especialidad si existe (para secretaria en crear agenda)
             if (this.especialidadSelect && this.especialidadSelect.value) {
                 url += `&especialidadId=${this.especialidadSelect.value}`;
+            }
+            
+            // Agregar filtro de sucursal si existe (para pacientes)
+            if (this.sucursalSelect && this.sucursalSelect.value) {
+                url += `&sucursalId=${this.sucursalSelect.value}`;
+            }
+            
+            // Agregar filtro de especialidad si existe (para pacientes)
+            if (this.especialidadFiltro && this.especialidadFiltro.value) {
+                url += `&especialidadId=${this.especialidadFiltro.value}`;
             }
             
             const response = await fetch(url);

@@ -159,12 +159,29 @@ export const actualizarMatriculaC = async (req, res) => {
 };
 
 export const buscarProfesionalesC = async (req, res) => {
-  const { texto, especialidadId } = req.query;
-  const sucursalId = req.user?.sucursal_id; // Obtener sucursal del usuario logueado
+  const { texto, especialidadId, sucursalId } = req.query;
+  
+  // Si el usuario es secretaria, usar su sucursal
+  // Si es paciente, la sucursal y especialidad son OBLIGATORIAS
+  let sucursalFinal = null;
+  let especialidadFinal = especialidadId;
+  
+  if (req.user?.rol === 'secretaria') {
+    sucursalFinal = req.user.sucursal_id; // Las secretarias solo ven su sucursal
+  } else if (req.user?.rol === 'paciente') {
+    // Para pacientes, sucursal y especialidad son OBLIGATORIAS
+    if (!sucursalId || !especialidadId) {
+      return res.status(400).json({ error: 'Sucursal y especialidad son obligatorias' });
+    }
+    sucursalFinal = sucursalId;
+  } else {
+    // Para otros roles (admin), usar lo que envíen
+    sucursalFinal = sucursalId || null;
+  }
   
   try {
     // soloConAgendas = true para crear turnos
-    const profesionales = await buscarProfesionalesS(texto, especialidadId, sucursalId, true);
+    const profesionales = await buscarProfesionalesS(texto, especialidadFinal, sucursalFinal, true);
     res.json(profesionales);
   } catch (err) {
     console.error('Error al buscar profesionales:', err);

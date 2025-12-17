@@ -9,7 +9,7 @@ router.post('/crear', authRequired, verifyRol('secretaria'), crearAgendaC);
 router.get('/getagendas', obtenerAgendasC);
 router.put('/actagendas', actulizarAgendaC);
 router.delete('/delagendas', borrarAgendaC);
-router.get('/agendas/:profesionalId', obtenerAgendasActivasC);
+router.get('/agendas/:profesionalId', authRequired, obtenerAgendasActivasC);
 router.post('/ausencias/registrar', registrarAusenciaC);
 router.get('/ausencias/verificar', verificarAusenciaC);
 router.get('/ausencias/form', formCrearAusenciaC);

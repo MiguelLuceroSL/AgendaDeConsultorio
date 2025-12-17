@@ -16,19 +16,31 @@ document.addEventListener("DOMContentLoaded", () => {
       .trim();
   }
 
-  async function obtenerAgendas(profesionalId) {
+  async function obtenerAgendas(profesionalId, sucursalId = null) {
     try {
-      console.log(`Obteniendo agendas para profesional ID: ${profesionalId}`);
-      const res = await fetch(`/agendas/agendas/${profesionalId}`);
+      console.log(`🔍 Obteniendo agendas para profesional ID: ${profesionalId}, Sucursal ID: ${sucursalId}`);
+      
+      let url = `/agendas/agendas/${profesionalId}`;
+      if (sucursalId) {
+        url += `?sucursalId=${sucursalId}`;
+      }
+      
+      const res = await fetch(url);
       if (!res.ok) {
-        console.error(`Error HTTP al obtener agendas: ${res.status}`);
+        console.error(`❌ Error HTTP al obtener agendas: ${res.status}`);
         return [];
       }
       const agendas = await res.json();
-      console.log(`Agendas recibidas del servidor:`, agendas);
+      console.log(`✅ Agendas recibidas del servidor (cantidad: ${agendas.length}):`, agendas);
+      console.log('📋 Detalles de agendas:', agendas.map(a => ({
+        id: a.id,
+        sucursal_id: a.sucursal_id,
+        horario: `${a.horario_inicio}-${a.horario_fin}`,
+        dias: a.dias
+      })));
       return agendas;
     } catch (err) {
-      console.error("Error al obtener las agendas:", err);
+      console.error("❌ Error al obtener las agendas:", err);
       return [];
     }
   }
@@ -49,7 +61,105 @@ document.addEventListener("DOMContentLoaded", () => {
     const res = await fetch(`/turnos/sobreturnos/verificar?profesionalId=${profesionalId}&fecha=${fecha}`);
     const data = await res.json();
     return data.cantidad;
-}
+  }
+
+  async function verificarDisponibilidadGeneral(profesionalId, fechaInicio, fechaFin) {
+    try {
+      // Verificar horarios disponibles en un rango de fechas representativo
+      const agendas = window._agendas || [];
+      if (agendas.length === 0) {
+        return false;
+      }
+
+      // Verificar las próximas 2 semanas o hasta el fin de la agenda
+      const hoy = new Date(fechaInicio);
+      const limite = new Date(hoy);
+      limite.setDate(limite.getDate() + 14);
+      const fechaLimite = limite < new Date(fechaFin) ? limite : new Date(fechaFin);
+
+      // Revisar cada día en el rango
+      for (let d = new Date(hoy); d <= fechaLimite; d.setDate(d.getDate() + 1)) {
+        const fecha = d.toISOString().split('T')[0];
+        const dia = normalizarDia(d.toLocaleDateString("es-AR", { weekday: "long" }));
+        
+        // Verificar si es un día permitido
+        if (!window._diasPermitidos.includes(dia)) {
+          continue;
+        }
+
+        // Obtener las agendas para ese día
+        const agendasDelDia = agendas.filter(agenda => {
+          // Parsear fechas correctamente para evitar problemas de zona horaria
+          const [yearInicio, monthInicio, dayInicio] = agenda.dia_inicio.split('T')[0].split('-').map(Number);
+          const diaInicio = new Date(yearInicio, monthInicio - 1, dayInicio);
+          
+          const [yearFin, monthFin, dayFin] = agenda.dia_fin.split('T')[0].split('-').map(Number);
+          const diaFin = new Date(yearFin, monthFin - 1, dayFin);
+          
+          const [year, month, day] = fecha.split('-').map(Number);
+          const fechaActual = new Date(year, month - 1, day);
+          
+          const enRango = fechaActual >= diaInicio && fechaActual <= diaFin;
+          
+          return (
+            agenda.dias.includes(dia) &&
+            enRango
+          );
+        });
+
+        if (agendasDelDia.length === 0) {
+          continue;
+        }
+
+        // Generar horarios para este día
+        let horariosDelDia = [];
+        agendasDelDia.forEach(agenda => {
+          const horarios = generarHorarios(
+            agenda.horario_inicio.substring(0, 5),
+            agenda.horario_fin.substring(0, 5),
+            agenda.tiempo_consulta
+          );
+          horariosDelDia = horariosDelDia.concat(horarios);
+        });
+
+        // Verificar estados de los horarios
+        try {
+          const res = await fetch(`/turnos/horarios/estado?profesionalId=${profesionalId}&fecha=${fecha}`);
+          const estados = await res.json();
+          const estadosConfirmados = estados.confirmados || [];
+          const estadosReservados = estados.reservados || [];
+
+          // Verificar si hay al menos un horario libre o con posibilidad de sobreturno
+          for (const hora of horariosDelDia) {
+            const estado = estadosConfirmados.includes(hora) ? "Confirmado" 
+                         : estadosReservados.includes(hora) ? "Reservada" 
+                         : null;
+
+            // Si está libre, hay disponibilidad
+            if (!estado) {
+              return true;
+            }
+
+            // Si está reservado, verificar si aún hay cupo de sobreturnos
+            if (estado === "Reservada") {
+              const cantidadSobreturnos = await verificarSobreturno(profesionalId, fecha);
+              const agenda = agendasDelDia.find(a => typeof a.max_sobreturnos === "number");
+              if (agenda && cantidadSobreturnos < agenda.max_sobreturnos) {
+                return true;
+              }
+            }
+          }
+        } catch (err) {
+          console.error("Error verificando disponibilidad:", err);
+        }
+      }
+
+      return false; // No hay horarios disponibles
+    } catch (err) {
+      console.error("Error en verificarDisponibilidadGeneral:", err);
+      return true; // En caso de error, asumir que hay disponibilidad
+    }
+  }
 
   function generarHorarios(horaInicio, horaFin, duracion) {
     const horarios = [];
@@ -107,6 +217,8 @@ const cantidadSobreturnos = await verificarSobreturno(profesionalId, fecha);
 const agenda = agendasDelDia.find(a => typeof a.max_sobreturnos === "number");
 const maxAlcanzado = agenda && cantidadSobreturnos >= agenda.max_sobreturnos;
 
+let horariosDisponibles = 0;
+
 for (const hora of horariosBase) {
   const estado =
     estadosConfirmados.includes(hora)
@@ -135,10 +247,19 @@ for (const hora of horariosBase) {
       option.style.backgroundColor = "gold";
       option.textContent += " (Sobreturno)";
       option.setAttribute("data-max-alcanzado", "false");
+      horariosDisponibles++;
     }
+  } else {
+    horariosDisponibles++;
   }
 
   selectHorario.appendChild(option);
+}
+
+// Verificar si no hay horarios disponibles
+if (horariosDisponibles === 0) {
+  selectHorario.innerHTML = "<option disabled selected>No hay horarios disponibles para este día</option>";
+  selectHorario.disabled = true;
 }
   } catch (error) {
     console.error("Error al cargar estados de turnos:", error);
@@ -198,9 +319,15 @@ for (const hora of horariosBase) {
     isLoadingAgendas = true;
     
     try {
-      const agendas = await obtenerAgendas(profesionalId);
+      // Obtener la sucursal seleccionada si existe el filtro
+      const sucursalSelect = document.getElementById('sucursal-filtro');
+      const sucursalId = sucursalSelect ? sucursalSelect.value : null;
+      
+      console.log('🏥 Cargando agendas con filtro de sucursal:', sucursalId);
+      
+      const agendas = await obtenerAgendas(profesionalId, sucursalId);
       if (!agendas.length) {
-        alert("El medico no tiene turnos en este momento");
+        alert("El medico no tiene turnos en este momento para la sucursal y especialidad seleccionadas");
         inputProfesionalId.value = "";
         selectHorario.value = "";
         selectHorario.disabled = true;
@@ -288,6 +415,23 @@ fp = flatpickr(inputFecha, {
     }
   ]
 });
+
+    // Verificar si hay horarios disponibles en alguna fecha
+    const tieneHorariosDisponibles = await verificarDisponibilidadGeneral(profesionalId, minFechaTurno, maxDate);
+    
+    if (!tieneHorariosDisponibles) {
+      alert("El médico no tiene más turnos disponibles en este momento");
+      inputProfesionalId.value = "";
+      selectHorario.value = "";
+      selectHorario.disabled = true;
+      inputFecha.value = "";
+      inputFecha.disabled = true;
+      window._agendas = [];
+      window._diasPermitidos = [];
+      if (fp) fp.destroy();
+      isLoadingAgendas = false;
+      return;
+    }
     
     // Marcar que terminamos de cargar
     isLoadingAgendas = false;

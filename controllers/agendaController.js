@@ -188,7 +188,18 @@ export const borrarAgendaC = async (req,res) => {
 export const obtenerAgendasActivasC = async (req, res) => {
   try {
     const { profesionalId } = req.params;
-    const agendas = await obtenerAgendasActivasPorProfesional(profesionalId);
+    const { sucursalId: sucursalQuery } = req.query; // Sucursal enviada como query param
+    
+    // Si es secretaria, usar SU sucursal (no puede ver otras)
+    // Si es paciente o admin, usar la sucursal del query param si existe
+    let sucursalFinal = null;
+    if (req.user?.rol === 'secretaria') {
+      sucursalFinal = req.user.sucursal_id;
+    } else if (sucursalQuery) {
+      sucursalFinal = sucursalQuery;
+    }
+    
+    const agendas = await obtenerAgendasActivasPorProfesional(profesionalId, sucursalFinal);
 
     res.json(agendas);
   } catch (error) {

@@ -174,15 +174,30 @@ export const obtenerAgendasActivasM = async (profesionalId) => {
   }
 };
 
-export const obtenerAgendasActivasPorProfesional = async (profesionalId) => {
+export const obtenerAgendasActivasPorProfesional = async (profesionalId, sucursalId = null) => {
   try {
     const connection = await connectDB();
-    const [agendas] = await connection.query(
-      `SELECT a.id, a.horario_inicio, a.horario_fin, a.tiempo_consulta, a.dia_inicio, a.dia_fin, a.max_sobreturnos
+    
+    let sql = `SELECT a.id, a.horario_inicio, a.horario_fin, a.tiempo_consulta, a.dia_inicio, a.dia_fin, a.max_sobreturnos, a.sucursal_id
        FROM agenda a
-       WHERE a.profesional_especialidad_id = ?`,
-      [profesionalId]
-    );
+       WHERE a.profesional_especialidad_id = ?
+       AND a.estado = 'Activo'`;
+    
+    const params = [profesionalId];
+    
+    // Si se proporciona sucursalId, filtrar por sucursal
+    if (sucursalId) {
+      sql += ` AND a.sucursal_id = ?`;
+      params.push(sucursalId);
+    }
+    
+    console.log('📋 SQL Query:', sql);
+    console.log('📋 Params:', params);
+    
+    const [agendas] = await connection.query(sql, params);
+    
+    console.log('📋 Agendas obtenidas de BD:', agendas.length);
+    agendas.forEach(a => console.log(`  - Agenda ${a.id}: sucursal_id=${a.sucursal_id}, horario=${a.horario_inicio}-${a.horario_fin}`));
 
     for (const agenda of agendas) {
       const [dias] = await connection.query(

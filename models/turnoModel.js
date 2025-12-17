@@ -193,26 +193,46 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
     const connection = await connectDB();
 
     let sql = `
-      SELECT DISTINCT
+      SELECT 
         t.id,
         p.nombre_completo AS paciente_nombre,
         CONCAT(pr.apellido, ', ', pr.nombre) AS nombre_medico,
         e.nombre AS especialidad,
         t.detalle_turno,
-        s.nombre AS sucursal,
+        MIN(s.nombre) AS sucursal,
         t.fecha,
         t.hora,
         t.estado,
-        t.dni_foto_url
+        t.dni_foto_url,
+        t.es_sobreturno
       FROM turnos t
       JOIN paciente p ON t.paciente_id = p.id
       JOIN profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
       JOIN profesional pr ON pe.profesional_id = pr.id
       JOIN especialidad e ON pe.especialidad_id = e.id
-      LEFT JOIN agenda a 
-        ON a.profesional_especialidad_id = pe.id
-        AND t.fecha BETWEEN a.dia_inicio AND a.dia_fin
-      LEFT JOIN sucursal s ON a.sucursal_id = s.id
+      LEFT JOIN (
+        SELECT 
+          a.id,
+          a.profesional_especialidad_id,
+          a.sucursal_id,
+          a.dia_inicio,
+          a.dia_fin,
+          ad.dia_semana
+        FROM agenda a
+        JOIN agenda_dias ad ON a.id = ad.agenda_id
+        WHERE a.estado = 'Activo'
+      ) a_info ON a_info.profesional_especialidad_id = pe.id
+        AND t.fecha BETWEEN a_info.dia_inicio AND a_info.dia_fin
+        AND CASE 
+          WHEN DAYNAME(t.fecha) = 'Monday' THEN 'lunes'
+          WHEN DAYNAME(t.fecha) = 'Tuesday' THEN 'martes'
+          WHEN DAYNAME(t.fecha) = 'Wednesday' THEN 'miercoles'
+          WHEN DAYNAME(t.fecha) = 'Thursday' THEN 'jueves'
+          WHEN DAYNAME(t.fecha) = 'Friday' THEN 'viernes'
+          WHEN DAYNAME(t.fecha) = 'Saturday' THEN 'sabado'
+          WHEN DAYNAME(t.fecha) = 'Sunday' THEN 'domingo'
+        END = a_info.dia_semana
+      LEFT JOIN sucursal s ON a_info.sucursal_id = s.id
       WHERE 1 = 1
     `;
 
@@ -223,7 +243,7 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
       sql += `
         AND (
           t.estado <> 'Confirmado'
-          OR a.sucursal_id = ?
+          OR a_info.sucursal_id = ?
         )
       `;
       params.push(filtros.sucursal_id);
@@ -242,6 +262,7 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
       params.push(`%${filtros.profesional.toLowerCase()}%`);
     }
 
+    sql += ` GROUP BY t.id, p.nombre_completo, pr.apellido, pr.nombre, e.nombre, t.detalle_turno, t.fecha, t.hora, t.estado, t.dni_foto_url, t.es_sobreturno`;
     sql += ` ORDER BY t.fecha DESC, t.hora DESC`;
 
     const [rows] = await connection.query(sql, params);
@@ -311,7 +332,7 @@ export const obtenerHorariosPorEstadoM = async (profesionalId, fecha) => {
   try {
     const connection = await connectDB();
     const [rows] = await connection.execute(
-      `SELECT hora, estado FROM turnos WHERE profesional_especialidad_id = ? AND fecha = ?`,
+      `SELECT hora, estado FROM turnos WHERE profesional_especialidad_id = ? AND fecha = ? AND estado NOT IN ('Cancelado')`,
       [profesionalId, fecha]
     );
     return rows;
@@ -327,7 +348,7 @@ export const verificarSobreturnosM = async (profesionalId, fecha, hora) => {
     SELECT COUNT(*) AS cantidad
     FROM turnos t
     JOIN profesional_especialidad pe ON pe.id = t.profesional_especialidad_id
-    WHERE pe.id = ? AND t.fecha = ? AND t.hora = ? AND t.estado = 'Reservada' AND t.es_sobreturno = 1
+    WHERE pe.id = ? AND t.fecha = ? AND t.hora = ? AND t.estado = 'Reservada' AND t.es_sobreturno = 1 AND t.estado NOT IN ('Cancelado')
   `, [profesionalId, fecha, hora]);
   return rows[0].cantidad;
 };
@@ -338,7 +359,7 @@ export const contarSobreturnosM = async (profesional_especialidad_id, fecha, hor
   const [rows] = await connection.execute(
     `SELECT COUNT(*) AS cantidad 
      FROM turnos 
-     WHERE profesional_especialidad_id = ? AND fecha = ? AND hora = ? AND es_sobreturno = 1`,
+     WHERE profesional_especialidad_id = ? AND fecha = ? AND hora = ? AND es_sobreturno = 1 AND estado NOT IN ('Cancelado')`,
     [profesional_especialidad_id, fecha, hora]
   );
   return rows[0].cantidad;
@@ -369,6 +390,7 @@ export const obtenerCantidadSobreturnos = async (profesionalId, fecha) => {
     WHERE profesional_especialidad_id = ? 
       AND fecha = ? 
       AND es_sobreturno = 1
+      AND estado NOT IN ('Cancelado')
   `;
 
   const [rows] = await connection.execute(sql, [profesionalId, fecha]);

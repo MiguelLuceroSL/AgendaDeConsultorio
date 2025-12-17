@@ -18,8 +18,14 @@ export const crearTurnoS = async (
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
 
-    const fechaTurno = new Date(fecha);
+    // Parsear la fecha correctamente para evitar problemas de zona horaria
+    const [year, month, day] = fecha.split('-').map(Number);
+    const fechaTurno = new Date(year, month - 1, day);
     fechaTurno.setHours(0, 0, 0, 0);
+
+    console.log('Fecha hoy:', hoy.toISOString());
+    console.log('Fecha turno:', fechaTurno.toISOString());
+    console.log('Comparación:', fechaTurno <= hoy);
 
     if (fechaTurno <= hoy) {
       throw new Error('No se pueden sacar turnos para hoy o fechas pasadas');

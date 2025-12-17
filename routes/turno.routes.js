@@ -1,5 +1,5 @@
 import express from 'express';
-import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC, crearTurnoPacienteC, traerTurnoPorId2C, editarEstadoTurnoC, obtenerTurnoYMedicosC, actualizarTurnoTrasladoC, verificarSobreturnos, obtenerHorariosPorEstadoC, obtenerTurnoParaReasignarC, reasignarTurnoC} 
+import {crearTurnoC, selTurnoC,borrarTurnoC, actualizarTurnoC ,confTurnoC, obtenerProfesionalesVistaC, traerTurnosC, getTurnosOcupadosController, traerTurnoPorIdC, crearTurnoPacienteC, traerTurnoPorId2C, editarEstadoTurnoC, obtenerTurnoYMedicosC, actualizarTurnoTrasladoC, verificarSobreturnos, obtenerHorariosPorEstadoC, obtenerTurnoParaReasignarC, reasignarTurnoC, obtenerSucursalesC} 
 from '../controllers/turnoController.js';
 import { authRequired } from '../middlewares/validateToken.js';
 import multer from 'multer';
@@ -64,6 +64,8 @@ router.post('/reasignar/:id', authRequired, reasignarTurnoC);
 router.get("/horarios/estado", obtenerHorariosPorEstadoC);
 
 router.get('/sobreturnos/verificar', verificarSobreturnos);
+
+router.get('/sucursales', obtenerSucursalesC);
 
 // Middleware para manejar errores de multer
 router.use((err, req, res, next) => {

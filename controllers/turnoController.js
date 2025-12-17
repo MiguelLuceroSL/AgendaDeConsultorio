@@ -390,5 +390,16 @@ export const reasignarTurnoC = async (req, res) => {
   }
 };
 
+// Obtener todas las sucursales (API endpoint para AJAX)
+export const obtenerSucursalesC = async (req, res) => {
+  try {
+    const sucursales = await obtenerTodasLasSucursales();
+    res.json(sucursales);
+  } catch (err) {
+    console.error('Error al obtener sucursales:', err);
+    res.status(500).json({ error: 'Error al obtener sucursales' });
+  }
+};
+
 //secretariaPanel
 

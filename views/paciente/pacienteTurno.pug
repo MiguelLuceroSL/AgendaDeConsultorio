@@ -22,10 +22,20 @@ html
         |  Hubo un error al reservar el turno
     main(class="mainPacienteTurno")
       h1 ¡Reserva tu turno ahora!
-      form(action="/turnos/crearPaciente" method="POST" class="formTurnos" enctype="multipart/form-data") 
+      form(action="/turnos/crearPaciente" method="POST" class="formTurnos" enctype="multipart/form-data")
+        h3 Seleccioná Sucursal y Especialidad
+        .filtros-container
+          div
+            label(for="sucursal-filtro") Sucursal: *
+            select(id="sucursal-filtro" class="filtro-select" required)
+              option(value="" selected disabled) Selecciona una sucursal
+          div
+            label(for="especialidad-filtro") Especialidad: *
+            select(id="especialidad-filtro" class="filtro-select" required)
+              option(value="" selected disabled) Selecciona una especialidad
         h3 Busca un Profesional
         .autocompletar_contenedor
-          input(type="text" id="profesional-search" class="autocompletar_input" placeholder="Buscar por apellido o nombre..." autocomplete="off")
+          input(type="text" id="profesional-search" class="autocompletar_input" placeholder="Primero seleccioná sucursal y especialidad..." autocomplete="off" disabled)
           input(type="hidden" name="profesional_especialidad_id" id="profesional-id" required)
         input(type="hidden" name="paciente_id" value=idPaciente)
         label(for="fecha") Selecciona la fecha:
@@ -73,5 +83,80 @@ html
         }
       });
       
-      //inicializar autocompletado
-      const autocompletarProfesional = new AutocompletarProfesional('profesional-search', 'profesional-id');
+      //inicializar autocompletado con filtros
+      const autocompletarProfesional = new AutocompletarProfesional('profesional-search', 'profesional-id', null, 'sucursal-filtro', 'especialidad-filtro');
+      
+      // Función para verificar si ambos filtros están seleccionados
+      function verificarFiltros() {
+        const sucursalSelect = document.getElementById('sucursal-filtro');
+        const especialidadSelect = document.getElementById('especialidad-filtro');
+        const profesionalInput = document.getElementById('profesional-search');
+        const profesionalHidden = document.getElementById('profesional-id');
+        
+        const ambosSeleccionados = sucursalSelect.value && especialidadSelect.value;
+        
+        if (ambosSeleccionados) {
+          profesionalInput.disabled = false;
+          profesionalInput.placeholder = 'Buscar por apellido o nombre...';
+        } else {
+          profesionalInput.disabled = true;
+          profesionalInput.placeholder = 'Primero seleccioná sucursal y especialidad...';
+          profesionalInput.value = '';
+          profesionalHidden.value = '';
+        }
+      }
+      
+      // Agregar listeners para verificar filtros
+      document.getElementById('sucursal-filtro').addEventListener('change', verificarFiltros);
+      document.getElementById('especialidad-filtro').addEventListener('change', verificarFiltros);
+      
+      // Cargar sucursales y especialidades
+      async function cargarFiltros() {
+        try {
+          // Cargar sucursales
+          const responseSucursales = await fetch('/turnos/sucursales', {
+            credentials: 'include'
+          });
+          
+          if (!responseSucursales.ok) {
+            console.error('Error al cargar sucursales:', responseSucursales.status);
+            return;
+          }
+          
+          const sucursales = await responseSucursales.json();
+          const sucursalSelect = document.getElementById('sucursal-filtro');
+          
+          sucursales.forEach(sucursal => {
+            const option = document.createElement('option');
+            option.value = sucursal.id;
+            option.textContent = sucursal.nombre;
+            sucursalSelect.appendChild(option);
+          });
+          
+          // Cargar especialidades
+          const responseEspecialidades = await fetch('/profesional/especialidades', {
+            credentials: 'include'
+          });
+          
+          if (!responseEspecialidades.ok) {
+            console.error('Error al cargar especialidades:', responseEspecialidades.status);
+            return;
+          }
+          
+          const especialidades = await responseEspecialidades.json();
+          const especialidadSelect = document.getElementById('especialidad-filtro');
+          
+          especialidades.forEach(especialidad => {
+            const option = document.createElement('option');
+            option.value = especialidad.id;
+            option.textContent = especialidad.nombre;
+            especialidadSelect.appendChild(option);
+          });
+          
+          console.log('Filtros cargados correctamente');
+        } catch (error) {
+          console.error('Error al cargar filtros:', error);
+        }
+      }
+      
+      cargarFiltros();

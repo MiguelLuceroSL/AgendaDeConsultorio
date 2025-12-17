@@ -11,6 +11,6 @@ router.get('/listar', obtenerProfesionalesC);
 router.get('/listar2', obtenerProfesionalesVistaC);
 router.get('/buscar', authRequired, buscarProfesionalesC); // Para crear TURNOS (solo con agendas)
 router.get('/buscar-para-agendas', authRequired, buscarProfesionalesParaAgendasC); // Para crear AGENDAS (todos)
-router.get('/especialidades', authRequired, obtenerEspecialidadesC);
+router.get('/especialidades', obtenerEspecialidadesC); // Público - usado en filtros de turnos
 
 export default router;
