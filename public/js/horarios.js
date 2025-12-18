@@ -407,6 +407,37 @@ if (horariosDisponibles === 0) {
     const minFechaTurno = new Date(hoy);
     minFechaTurno.setDate(minFechaTurno.getDate() + 1)
 
+    // Verificar si hay al menos un día válido (no bloqueado por ausencias y dentro de días permitidos)
+    let hayDiaValido = false;
+    const fechaActual = new Date(minFechaTurno);
+    const diasARevisar = 60; // Revisar los próximos 60 días
+    
+    for (let i = 0; i < diasARevisar && fechaActual <= maxDate; i++) {
+      const dia = normalizarDia(fechaActual.toLocaleDateString("es-AR", { weekday: "long" }));
+      const estaBloqueadaPorAusencia = fechasAusencias.some(ausencia => 
+        ausencia.toDateString() === fechaActual.toDateString()
+      );
+      
+      if (window._diasPermitidos.includes(dia) && !estaBloqueadaPorAusencia) {
+        hayDiaValido = true;
+        break;
+      }
+      fechaActual.setDate(fechaActual.getDate() + 1);
+    }
+    
+    if (!hayDiaValido) {
+      alert("El médico no tiene turnos disponibles en este momento (todas las fechas están bloqueadas por ausencias)");
+      inputProfesionalId.value = "";
+      selectHorario.value = "";
+      selectHorario.disabled = true;
+      inputFecha.value = "";
+      inputFecha.disabled = true;
+      window._agendas = [];
+      window._diasPermitidos = [];
+      isLoadingAgendas = false;
+      return;
+    }
+
 fp = flatpickr(inputFecha, {
   dateFormat: "Y-m-d",
   minDate: minFechaTurno,
@@ -426,7 +457,7 @@ fp = flatpickr(inputFecha, {
     const tieneHorariosDisponibles = await verificarDisponibilidadGeneral(profesionalId, minFechaTurno, maxDate);
     
     if (!tieneHorariosDisponibles) {
-      alert("El médico no tiene más turnos disponibles en este momento");
+      alert("El médico no tiene más turnos disponibles en este momento (todos los horarios están ocupados)");
       inputProfesionalId.value = "";
       selectHorario.value = "";
       selectHorario.disabled = true;

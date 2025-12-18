@@ -87,7 +87,11 @@ export const actualizarTurnoTrasladoC = async (req, res) => {
   const { profesional_especialidad_id, fecha, hora, detalle_turno, estado } = req.body;
 
   try {
-    await actualizarTurnoTrasladoS(fecha, hora, estado, turnoId, profesional_especialidad_id, detalle_turno)
+    // Verificar si en el nuevo horario ya hay un turno (entonces sería sobreturno)
+    const turnosEnHorario = await obtenerEstadosTurnoPorHorarioS(profesional_especialidad_id, fecha);
+    const esSobreturno = turnosEnHorario.some(t => t.hora === hora && t.estado !== 'Cancelado' && t.id != turnoId);
+    
+    await actualizarTurnoTrasladoS(fecha, hora, estado, turnoId, profesional_especialidad_id, detalle_turno, esSobreturno)
     res.redirect(`/turnos/listarTurnos`);
   } catch (err) {
     console.error('Error al trasladar turno: ', err)
@@ -391,8 +395,12 @@ export const reasignarTurnoC = async (req, res) => {
   const { profesional_especialidad_id, fecha, hora } = req.body;
   
   try {
-    // Actualizar el turno con la nueva agenda y cambiar estado a "Confirmado"
-    await actualizarTurnoTrasladoS(fecha, hora, 'Confirmado', id, profesional_especialidad_id, '');
+    // Verificar si en el nuevo horario ya hay un turno (entonces sería sobreturno)
+    const turnosEnHorario = await obtenerEstadosTurnoPorHorarioS(profesional_especialidad_id, fecha);
+    const esSobreturno = turnosEnHorario.some(t => t.hora === hora && t.estado !== 'Cancelado');
+    
+    // Actualizar el turno con la nueva agenda, cambiar estado a "Confirmado" y actualizar es_sobreturno
+    await actualizarTurnoTrasladoS(fecha, hora, 'Confirmado', id, profesional_especialidad_id, '', esSobreturno);
     
     res.redirect('/turnos/listarTurnos');
   } catch (error) {

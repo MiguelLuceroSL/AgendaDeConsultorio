@@ -1,4 +1,4 @@
-import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM, obtenerTurnosOcupados, traerTurnosFiltrados, traerTurnoPorIdM, actuEstadoTurnoM, actualizarTurnoTrasladoM, verificarSobreturnosM, obtenerHorariosPorEstadoM, obtenerCantidadSobreturnos } from '../models/turnoModel.js';
+import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurnos, verificarTurnoExistenteM, obtenerTurnosOcupados, traerTurnosFiltrados, traerTurnoPorIdM, actuEstadoTurnoM, actualizarTurnoTrasladoM, verificarSobreturnosM, obtenerHorariosPorEstadoM, obtenerCantidadSobreturnos, obtenerEstadosTurnoPorHorarioM } from '../models/turnoModel.js';
 
 
 
@@ -99,9 +99,9 @@ export const actualizarTurnoS = (fecha, hora, estado, id) => {
     })
 }
 
-export const actualizarTurnoTrasladoS = (fecha, hora, estado, turnoId, profesional_especialidad_id, detalle_turno) => {
+export const actualizarTurnoTrasladoS = (fecha, hora, estado, turnoId, profesional_especialidad_id, detalle_turno, es_sobreturno = false) => {
     return new Promise((resolve, reject) => {
-        actualizarTurnoTrasladoM(fecha, hora, estado, turnoId, profesional_especialidad_id, detalle_turno, (err, result) => {
+        actualizarTurnoTrasladoM(fecha, hora, estado, turnoId, profesional_especialidad_id, detalle_turno, es_sobreturno, (err, result) => {
             if (err) {
                 return reject(err)
             }

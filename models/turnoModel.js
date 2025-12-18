@@ -61,12 +61,12 @@ export const actuTurnoM = (fecha, hora, estado, id, callback) => {
     })
 }
 
-export const actualizarTurnoTrasladoM = async (fecha, hora, estado, turnoId, profesional_especialidad_id, detalle_turno, callback) => {
+export const actualizarTurnoTrasladoM = async (fecha, hora, estado, turnoId, profesional_especialidad_id, detalle_turno, es_sobreturno = false, callback) => {
 
     try {
         const connection = await connectDB();
-        const sql = `UPDATE turnos SET fecha = ?, hora = ?, estado = ?, profesional_especialidad_id = ?, detalle_turno = ? WHERE id = ?`;
-        const [rows] = await connection.query(sql, [fecha, hora, estado, profesional_especialidad_id, detalle_turno, turnoId]);
+        const sql = `UPDATE turnos SET fecha = ?, hora = ?, estado = ?, profesional_especialidad_id = ?, detalle_turno = ?, es_sobreturno = ? WHERE id = ?`;
+        const [rows] = await connection.query(sql, [fecha, hora, estado, profesional_especialidad_id, detalle_turno, es_sobreturno ? 1 : 0, turnoId]);
         callback(null, rows);
         return rows;
     } catch (error) {
