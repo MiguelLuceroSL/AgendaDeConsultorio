@@ -87,6 +87,16 @@ export const obtenerEspecialidadPorNombreS = (nombre) => {
   });
 };
 
+export const obtenerProfesionalPorDniS = async (dni) => {
+  try {
+    const { obtenerProfesionalPorDniM } = await import('../models/profesionalModel.js');
+    return await obtenerProfesionalPorDniM(dni);
+  } catch (error) {
+    console.error('Error en servicio obtenerProfesionalPorDniS:', error);
+    throw error;
+  }
+};
+
 export const actualizarMatriculaS = (matricula, nueva_matricula) => {
   return new Promise((resolve, reject) => {
     console.log("nueva_matricula service: ", nueva_matricula);

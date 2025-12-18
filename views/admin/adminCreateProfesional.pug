@@ -58,3 +58,105 @@ html
         include ../includes/footer
         script(src="/js/logout.js")
         script(src="/js/alerta.js")
+        script.
+            // Autocompletar datos del profesional cuando se ingresa un DNI existente
+            const dniInput = document.getElementById('dni');
+            const nombreInput = document.getElementById('nombre');
+            const apellidoInput = document.getElementById('apellido');
+            const fechaNacimientoInput = document.getElementById('fecha_nacimiento');
+            const telefonoInput = document.getElementById('telefono');
+            const emailInput = document.getElementById('email');
+            const domicilioInput = document.getElementById('domicilio_personal');
+            
+            let timeoutId = null;
+            
+            dniInput.addEventListener('input', function() {
+                const dni = this.value.trim();
+                
+                // Limpiar timeout anterior
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                }
+                
+                // Si el DNI tiene al menos 7 caracteres, buscar
+                if (dni.length >= 7) {
+                    timeoutId = setTimeout(async () => {
+                        try {
+                            const response = await fetch(`/profesional/buscar-por-dni/${dni}`);
+                            const data = await response.json();
+                            
+                            if (data.found && data.data) {
+                                const profesional = data.data;
+                                
+                                // Autocompletar campos
+                                nombreInput.value = profesional.nombre || '';
+                                apellidoInput.value = profesional.apellido || '';
+                                
+                                // Formatear fecha si existe
+                                if (profesional.fecha_nacimiento) {
+                                    const fecha = new Date(profesional.fecha_nacimiento);
+                                    const year = fecha.getFullYear();
+                                    const month = String(fecha.getMonth() + 1).padStart(2, '0');
+                                    const day = String(fecha.getDate()).padStart(2, '0');
+                                    fechaNacimientoInput.value = `${year}-${month}-${day}`;
+                                }
+                                
+                                telefonoInput.value = profesional.telefono || '';
+                                emailInput.value = profesional.email || '';
+                                domicilioInput.value = profesional.domicilio_personal || '';
+                                
+                                // Deshabilitar campos para evitar edición accidental
+                                nombreInput.disabled = true;
+                                apellidoInput.disabled = true;
+                                fechaNacimientoInput.disabled = true;
+                                telefonoInput.disabled = true;
+                                emailInput.disabled = true;
+                                domicilioInput.disabled = true;
+                                
+                                // Mostrar mensaje informativo
+                                nombreInput.style.backgroundColor = '#e8f5e9';
+                                apellidoInput.style.backgroundColor = '#e8f5e9';
+                                fechaNacimientoInput.style.backgroundColor = '#e8f5e9';
+                                telefonoInput.style.backgroundColor = '#e8f5e9';
+                                emailInput.style.backgroundColor = '#e8f5e9';
+                                domicilioInput.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                // Si no se encuentra, habilitar campos
+                                habilitarCampos();
+                            }
+                        } catch (error) {
+                            console.error('Error al buscar profesional:', error);
+                            habilitarCampos();
+                        }
+                    }, 500); // Esperar 500ms después de que el usuario deje de escribir
+                } else {
+                    // Si el DNI es muy corto, limpiar y habilitar campos
+                    limpiarYHabilitarCampos();
+                }
+            });
+            
+            function habilitarCampos() {
+                nombreInput.disabled = false;
+                apellidoInput.disabled = false;
+                fechaNacimientoInput.disabled = false;
+                telefonoInput.disabled = false;
+                emailInput.disabled = false;
+                domicilioInput.disabled = false;
+                
+                nombreInput.style.backgroundColor = '';
+                apellidoInput.style.backgroundColor = '';
+                fechaNacimientoInput.style.backgroundColor = '';
+                telefonoInput.style.backgroundColor = '';
+                emailInput.style.backgroundColor = '';
+                domicilioInput.style.backgroundColor = '';
+            }
+            
+            function limpiarYHabilitarCampos() {
+                nombreInput.value = '';
+                apellidoInput.value = '';
+                fechaNacimientoInput.value = '';
+                telefonoInput.value = '';
+                emailInput.value = '';
+                domicilioInput.value = '';
+                habilitarCampos();
+            }

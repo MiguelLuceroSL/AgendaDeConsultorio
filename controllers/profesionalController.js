@@ -199,17 +199,33 @@ export const buscarProfesionalesParaAgendasC = async (req, res) => {
     const profesionales = await buscarProfesionalesS(texto, especialidadId, null, false);
     res.json(profesionales);
   } catch (err) {
-    console.error('Error al buscar profesionales:', err);
+    console.error('Error al buscar profesionales para agendas:', err);
     res.status(500).json({ error: 'Error al buscar profesionales' });
   }
 };
 
-// Obtener todas las especialidades (API endpoint para AJAX)
+// Buscar profesional por DNI para autocompletar
+export const obtenerProfesionalPorDniC = async (req, res) => {
+  const { dni } = req.params;
+  
+  try {
+    const { obtenerProfesionalPorDniS } = await import('../services/profesionalService.js');
+    const profesional = await obtenerProfesionalPorDniS(dni);
+    
+    if (!profesional) {
+      return res.status(404).json({ found: false, message: 'Profesional no encontrado' });
+    }
+    
+    res.json({ found: true, data: profesional });
+  } catch (err) {
+    console.error('Error al buscar profesional por DNI:', err);
+    res.status(500).json({ error: 'Error al buscar profesional' });
+  }
+};
+
 export const obtenerEspecialidadesC = async (req, res) => {
   try {
-    console.log('API GET /profesional/especialidades llamada');
     const especialidades = await obtenerEspecialidadesS();
-    console.log('Especialidades obtenidas:', Array.isArray(especialidades) ? especialidades.length : typeof especialidades);
     res.json(especialidades);
   } catch (err) {
     console.error('Error al obtener especialidades:', err);

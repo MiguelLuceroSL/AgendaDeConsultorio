@@ -68,6 +68,18 @@ export const obtenerIdPorDniM = async (dni, callback) => {
   }
 };
 
+export const obtenerProfesionalPorDniM = async (dni) => {
+  try {
+    const connection = await connectDB();
+    const sql = 'SELECT id, dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal, estado FROM profesional WHERE dni = ?';
+    const [result] = await connection.query(sql, [dni]);
+    return result[0] || null;
+  } catch (error) {
+    console.error('Error al obtener profesional por DNI:', error);
+    throw error;
+  }
+};
+
 export const obtenerEspecialidadPorNombreM = async (especialidad, callback) => {
   try {
     const connection = await connectDB();
