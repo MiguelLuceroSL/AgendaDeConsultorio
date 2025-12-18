@@ -9,24 +9,27 @@ html
         link(rel="stylesheet" href="/css/adminRead.css")
         link(rel="stylesheet" href="/css/adminReadProfesional.css")
         link(rel="stylesheet" href="/css/footerNuevo.css")
+        link(rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css")
     body
         include ../includes/headerAdmin
         main(class="mainAdminReadProfesional")
             section(class="readContainer")
                 h1(class="mainTitle") Listado de Profesionales
-                form(action="/profesional/listar" method="get" class="filterForm")
-                    label(for="especialidad" class="filterLabel") Filtrar por Especialidad:
-                    select(name="especialidad" class="filterSelect")
-                        option(value="") Todas
-                        option(value="Cardiologia" selected=(especialidad === 'Cardiologia')) Cardiología
-                        option(value="Pediatria" selected=(especialidad === 'Pediatria')) Pediatría
-                        option(value="Kinesiologia" selected=(especialidad === 'Kinesiologia')) Kinesiología
-                        option(value="Psicologia" selected=(especialidad === 'Psicologia')) Psicología
-                        option(value="Odontologia" selected=(especialidad === 'Odontologia')) Odontología
-                    button(type="submit" class="filterButton") Filtrar
+                .filtros-container
+                    input#buscador-profesional(type="text" placeholder="Buscar por nombre" class="buscador-input")
+                    form(action="/profesional/listar" method="get" class="filterForm" style="display:inline-block; margin-left: 15px;")
+                        label(for="especialidad" class="filterLabel") Especialidad:
+                        select(name="especialidad" class="filterSelect")
+                            option(value="") Todas
+                            option(value="Cardiologia" selected=(especialidad === 'Cardiologia')) Cardiología
+                            option(value="Pediatria" selected=(especialidad === 'Pediatria')) Pediatría
+                            option(value="Kinesiologia" selected=(especialidad === 'Kinesiologia')) Kinesiología
+                            option(value="Psicologia" selected=(especialidad === 'Psicologia')) Psicología
+                            option(value="Odontologia" selected=(especialidad === 'Odontologia')) Odontología
+                        button(type="submit" class="filterButton") Filtrar
 
                 if profesionales && profesionales.length
-                    table
+                    table#tablaProfesionales
                         thead
                             tr
                                 th Prof-Esp ID
@@ -47,3 +50,36 @@ html
         include ../includes/footer
         script(src="/js/logout.js")
         script(src="/js/profesionales.js")
+        script(src="https://code.jquery.com/jquery-3.7.1.min.js")
+        script(src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js")
+        script.
+            $(document).ready(function() {
+                const table = $('#tablaProfesionales').DataTable({
+                    language: {
+                        search: "",
+                        lengthMenu: "Mostrar _MENU_ registros",
+                        info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                        infoEmpty: "Mostrando 0 a 0 de 0 registros",
+                        infoFiltered: "(filtrado de _MAX_ registros totales)",
+                        paginate: {
+                            first: "Primero",
+                            last: "Último",
+                            next: "Siguiente",
+                            previous: "Anterior"
+                        },
+                        zeroRecords: "No se encontraron resultados"
+                    },
+                    pageLength: 10,
+                    ordering: true,
+                    searching: true,
+                    dom: 'lrtip',
+                    columnDefs: [
+                        { targets: [0, 2, 3, 4], searchable: false },
+                        { targets: 1, searchable: true }
+                    ]
+                });
+                
+                $('#buscador-profesional').on('keyup', function() {
+                    table.search(this.value).draw();
+                });
+            });
