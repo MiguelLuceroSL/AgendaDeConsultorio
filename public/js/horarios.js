@@ -220,6 +220,8 @@ const maxAlcanzado = agenda && cantidadSobreturnos >= agenda.max_sobreturnos;
 
 let horariosDisponibles = 0;
 
+const esPaciente = !!window._esPaciente;
+
 for (const hora of horariosBase) {
   const estado =
     estadosConfirmados.includes(hora)
@@ -227,6 +229,11 @@ for (const hora of horariosBase) {
       : estadosReservados.includes(hora)
         ? "Reservada"
         : null;
+
+  // Para pacientes, no mostramos horarios reservados (solo libres)
+  if (esPaciente && estado === "Reservada") {
+    continue;
+  }
 
   if (["Confirmado", "No disponible", "Presente", "En consulta", "Atendido"].includes(estado)) {
     continue;
