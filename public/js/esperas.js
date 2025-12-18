@@ -14,7 +14,7 @@
 
         if (res.ok) {
           alert(data.message || "Espera eliminada correctamente.");
-          // Buscar el botón y eliminar su fila padre (tr)
+          //buscamos el boton y eliminamos su fila padre (tr)
           e.target.closest('tr')?.remove();
         } else {
           alert(data.error || "Error al eliminar la espera.");

@@ -9,17 +9,17 @@ export const profesionalCrearM = async (dni, nombre, apellido, fecha_nacimiento,
   try {
     const connection = await connectDB();
 
-    // Verificar si el profesional ya existe
+    //verificamos si el profesional ya existe
     const [existingProf] = await connection.query('SELECT id FROM profesional WHERE dni = ?', [dni]);
     
     let profesionalId;
     
     if (existingProf && existingProf.length > 0) {
-      // El profesional ya existe, usar su ID
+      //el profesional ya existe, usar su id
       profesionalId = existingProf[0].id;
       console.log(`Profesional con DNI ${dni} ya existe. Agregando nueva especialidad.`);
       
-      // Verificar si ya tiene esta especialidad
+      //verificamos si ya tiene esta especialidad
       const [existingEsp] = await connection.query(
         'SELECT id FROM profesional_especialidad WHERE profesional_id = ? AND especialidad_id = (SELECT id FROM especialidad WHERE nombre = ?)',
         [profesionalId, especialidad]
@@ -29,14 +29,14 @@ export const profesionalCrearM = async (dni, nombre, apellido, fecha_nacimiento,
         return callback(new Error(`El profesional ya tiene la especialidad ${especialidad} registrada`), null);
       }
     } else {
-      // El profesional no existe, crearlo
+      //el profesional no existe, crearlo
       const sqlProfesional = "INSERT INTO profesional (dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal) VALUES (?, ?, ?, ?, ?, ?, ?)";
       const [profResult] = await connection.query(sqlProfesional, [dni, nombre, apellido, fecha_nacimiento, telefono, email, domicilio_personal]);
       profesionalId = profResult.insertId;
       console.log(`Nuevo profesional creado con ID ${profesionalId}`);
     }
 
-    // Agregar la especialidad
+    //agregamos la especialidad
     const sqlEspecialidad = "INSERT INTO profesional_especialidad (profesional_id, especialidad_id, matricula) VALUES (?, (SELECT id FROM especialidad WHERE nombre = ?), ?)";
     const [espResult] = await connection.query(sqlEspecialidad, [profesionalId, especialidad, matricula]);
 
@@ -91,7 +91,7 @@ export const obtenerEspecialidadPorNombreM = async (especialidad, callback) => {
   }
 };
 
-// Dar de baja/alta una especialidad específica de un profesional
+//damos de baja/alta una especialidad específica de un profesional
 export const profesionalEspecialidadBorrarM = async (profesionalEspecialidadId, callback) => {
   try {
     const connection = await connectDB();
@@ -222,7 +222,7 @@ export const obtenerProfesionalesVistaM = async(sucursalId = null) => {
   
   const params = [];
   
-  // Si hay sucursalId, filtrar por profesionales que tengan agendas en esa sucursal
+  //si hay sucursalId, filtramos por profesionales que tengan agendas en esa sucursal
   if (sucursalId) {
     sql += `
     JOIN agenda a ON a.profesional_especialidad_id = pe.id
@@ -283,7 +283,7 @@ export const buscarProfesionalesM = async (texto, especialidadId = null, sucursa
   try {
     const connection = await connectDB();
     
-    // Si soloConAgendas es true o hay sucursalId, hacer JOIN con agenda
+    //si soloConAgendas es true o hay sucursalId, hacer JOIN con agenda
     const necesitaAgenda = soloConAgendas || sucursalId;
     
     let sql = `
@@ -305,7 +305,7 @@ export const buscarProfesionalesM = async (texto, especialidadId = null, sucursa
     
     const params = [];
     
-    // Solo filtrar por estado activo si no se solicita incluir inactivos
+    //solo filtramos por estado activo si no se solicita incluimos inactivos
     if (!incluirInactivos) {
       sql += ` AND pe.estado = 1`;
     }
@@ -321,7 +321,7 @@ export const buscarProfesionalesM = async (texto, especialidadId = null, sucursa
       params.push(especialidadId);
     }
     
-    // Filtrar por sucursal si se proporciona (para secretarias)
+    //filtramos por sucursal si se proporciona (para secretarias)
     if (sucursalId) {
       sql += ` AND a.sucursal_id = ?`;
       params.push(sucursalId);

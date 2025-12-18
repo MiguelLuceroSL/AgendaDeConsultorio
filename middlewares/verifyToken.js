@@ -6,7 +6,7 @@ const verifyToken = async (req, res, next) => {
     try {
         const authHeader = req.headers['authorization'];
 
-        // Si el token no está en el header `Authorization`, devuelve un error
+        //si el token no está en el header `Authorization`, devuelve un error
         if (!authHeader) {
             console.log("5B-Token no proporcionado.");
             return res.status(403).send('Token no proporcionado.');

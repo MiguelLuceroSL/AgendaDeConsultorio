@@ -44,7 +44,7 @@ export const crearProfesionalC = async (req, res) => {
   } catch (err) {
     console.error("Error al crear el profesional:", err);
     
-    // Si el error tiene status 400, es un error de validación controlado
+    //si el error tiene status 400 es un error de validacion controlado
     if (err.status === 400) {
       return res.status(400).render('admin/adminCreateProfesional', {
         error: err.message
@@ -63,20 +63,20 @@ export const borrarProfesionalEspecialidadC = async (req, res) => {
   }
   
   try {
-    // Primero verificar si tiene turnos pendientes antes de cambiar estado
+    //primero verificamos si tiene turnos pendientes antes de cambiar estado
     const verificacion = await verificarTurnosPendientesS(profesionalEspecialidadId);
     
-    // Cambiar estado de la especialidad del profesional
+    //cambiamos estado de la especialidad del profesional
     const resultado = await profesionalEspecialidadBorrarS(profesionalEspecialidadId);
     
-    // Si se dio de baja (1 -> 0)
+    //si se dio de baja 1 a 0
     if (resultado.estadoAnterior === 1 && resultado.nuevoEstado === 0) {
-      // Marcar turnos pendientes como "Por reasignar" si se confirmó
+      //marcamos turnos pendientes como "Por reasignar" si se confirmo
       if (confirmar === 'true' && verificacion.tieneTurnosPendientes) {
         await marcarTurnosPorReasignarS(profesionalEspecialidadId);
       }
       
-      // Eliminar todas las agendas de esta especialidad
+      //eliminamos todas las agendas de esta especialidad
       await eliminarAgendasProfesionalEspecialidadS(profesionalEspecialidadId);
       
       return res.json({ success: true, message: 'Especialidad desactivada correctamente' });
@@ -161,26 +161,26 @@ export const actualizarMatriculaC = async (req, res) => {
 export const buscarProfesionalesC = async (req, res) => {
   const { texto, especialidadId, sucursalId } = req.query;
   
-  // Si el usuario es secretaria, usar su sucursal
-  // Si es paciente, la sucursal y especialidad son OBLIGATORIAS
+  //si el usuario es secretaria, usar su sucursal
+  //si es paciente, la sucursal y especialidad son OBLIGATORIAS
   let sucursalFinal = null;
   let especialidadFinal = especialidadId;
   
   if (req.user?.rol === 'secretaria') {
-    sucursalFinal = req.user.sucursal_id; // Las secretarias solo ven su sucursal
+    sucursalFinal = req.user.sucursal_id; //las secretarias solo ven su sucursal
   } else if (req.user?.rol === 'paciente') {
-    // Para pacientes, sucursal y especialidad son OBLIGATORIAS
+    //para pacientes, sucursal y especialidad son OBLIGATORIAS
     if (!sucursalId || !especialidadId) {
       return res.status(400).json({ error: 'Sucursal y especialidad son obligatorias' });
     }
     sucursalFinal = sucursalId;
   } else {
-    // Para otros roles (admin), usar lo que envíen
+    //para otros roles (admin), usar lo que envien
     sucursalFinal = sucursalId || null;
   }
   
   try {
-    // soloConAgendas = true para crear turnos
+    //soloConAgendas = true para crear turnos
     const profesionales = await buscarProfesionalesS(texto, especialidadFinal, sucursalFinal, true);
     res.json(profesionales);
   } catch (err) {
@@ -189,13 +189,13 @@ export const buscarProfesionalesC = async (req, res) => {
   }
 };
 
-// Buscar profesionales para crear AGENDAS - todos los profesionales activos
+//buscamos profesionales para crear AGENDAS.. todos los profesionales activos
 export const buscarProfesionalesParaAgendasC = async (req, res) => {
   const { texto, especialidadId } = req.query;
-  // NO filtrar por sucursal para crear agendas - queremos ver TODOS los profesionales activos
+  //NO filtramos por sucursal para crear agendas.. queremos ver TODOS los profesionales activos
   
   try {
-    // soloConAgendas = false, sucursalId = null para traer todos
+    //soloConAgendas = false, sucursalId = null para traer todos
     const profesionales = await buscarProfesionalesS(texto, especialidadId, null, false);
     res.json(profesionales);
   } catch (err) {
@@ -204,7 +204,7 @@ export const buscarProfesionalesParaAgendasC = async (req, res) => {
   }
 };
 
-// Buscar profesional por DNI para autocompletar
+//buscamos profesional por dni para autocompletar
 export const obtenerProfesionalPorDniC = async (req, res) => {
   const { dni } = req.params;
   
@@ -233,7 +233,7 @@ export const obtenerEspecialidadesC = async (req, res) => {
   }
 };
 
-// Verificar turnos pendientes antes de borrar especialidad (API endpoint para AJAX)
+//verificar turnos pendientes antes de borrar especialidad API endpoint para AJAX
 export const verificarTurnosPendientesC = async (req, res) => {
   const { profesionalEspecialidadId } = req.query;
   
@@ -246,12 +246,12 @@ export const verificarTurnosPendientesC = async (req, res) => {
   }
 };
 
-// Buscar profesionales-especialidades con autocompletado (para admin)
+//buscamos profesionales-especialidades con autocompletado para el admin
 export const buscarProfesionalEspecialidadC = async (req, res) => {
   const { texto } = req.query;
   
   try {
-    // Buscar sin filtro de sucursal, sin filtro de agendas, y permitir inactivos (para admin)
+    //buscamos sin filtro de sucursal, sin filtro de agendas, y permitir inactivos para el admin
     const profesionales = await buscarProfesionalesS(texto, null, null, false, true);
     res.json(profesionales);
   } catch (err) {
@@ -260,5 +260,5 @@ export const buscarProfesionalEspecialidadC = async (req, res) => {
   }
 };
 
-// Alias para compatibilidad con rutas existentes
+//alias para compatibilidad con rutas existentes
 export const borrarProfesionalC = borrarProfesionalEspecialidadC;

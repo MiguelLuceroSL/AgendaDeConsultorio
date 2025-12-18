@@ -34,7 +34,7 @@ export const traerListaEsperaM = async (sucursalId = null) => {
         
         const params = [];
         
-        // Si hay sucursalId, filtrar por profesionales que tengan agendas en esa sucursal
+        //si hay sucursalId, filtramos por profesionales que tengan agendas en esa sucursal
         if (sucursalId) {
             sql += `
             JOIN agenda a ON a.profesional_especialidad_id = pe.id

@@ -186,7 +186,7 @@ html
             let especialidades = [];
             let datosOriginales = {};
             
-            // Cargar especialidades
+            //cargamos especialidades
             async function cargarEspecialidades() {
                 try {
                     const response = await fetch('/profesional/especialidades');
@@ -213,10 +213,10 @@ html
                 }
             }
             
-            // Inicializar autocompletador
+            //inicializamos autocompletador
             const autocompletar = new AutocompletarProfesionalEspecialidad('profesional-search', 'profesional-id');
             
-            // Sobrescribir el método seleccionar para cargar datos
+            //sobrescribimos el metodo seleccionar para cargar datos
             const seleccionarOriginal = autocompletar.seleccionar.bind(autocompletar);
             autocompletar.seleccionar = async function(index) {
                 seleccionarOriginal(index);
@@ -238,7 +238,7 @@ html
                     return;
                 }
                 
-                // Obtener todas las especialidades que ya tiene este médico
+                //obtenemos todas las especialidades que ya tiene este medico
                 const respProfesionales = await fetch(`/admin/profesionales`, { headers: { 'Accept': 'application/json' } });
                 const ct = respProfesionales.headers.get('content-type') || '';
                 if (!ct.includes('application/json')) {
@@ -253,12 +253,12 @@ html
                     .filter(p => p.profesional_id == profesional.profesional_id)
                     .map(p => p.especialidad_id);
                 
-                // Actualizar el select de especialidades, excluyendo las que ya tiene
+                //actualizamos el select de especialidades, excluyendo las que ya tiene
                 const select = document.getElementById('especialidad');
                 select.innerHTML = '<option value="">Seleccione una especialidad</option>';
                 
                 especialidades.forEach(esp => {
-                    // Mostrar solo si NO la tiene, o si es la especialidad actual
+                    //mostramos solo si NO la tiene, o si es la especialidad actual
                     const yaLaTiene = especialidadesDelMedico.includes(esp.id);
                     const esLaActual = esp.id == profesional.especialidad_id;
                     
@@ -279,12 +279,12 @@ html
                 document.getElementById('datos-profesional').classList.add('visible');
             }
             
-            // Convertir matrícula a mayúsculas al escribir
+            //convertimos matricula a mayusculas al escribir
             document.getElementById('matricula').addEventListener('input', function(e) {
                 e.target.value = e.target.value.toUpperCase();
             });
             
-            // Cancelar
+            //cancelamos
             document.getElementById('btn-cancelar').addEventListener('click', function() {
                 document.getElementById('profesional-search').value = '';
                 document.getElementById('profesional-id').value = '';
@@ -292,7 +292,7 @@ html
                 document.getElementById('form-actualizar').reset();
             });
             
-            // Guardar cambios
+            //guardamos cambios
             document.getElementById('form-actualizar').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
@@ -302,7 +302,7 @@ html
                 
                 const cambios = [];
                 
-                // Verificar qué cambió
+                //verificamos que cambio
                 if (nuevaEspecialidadId != datosOriginales.especialidad_id) {
                     cambios.push('especialidad');
                 }
@@ -319,7 +319,7 @@ html
                 if (!confirm(confirmMsg)) return;
                 
                 try {
-                    // Actualizar especialidad si cambió
+                    //actualizamos especialidad si cambio
                     if (cambios.includes('especialidad')) {
                         const respEsp = await fetch('/admin/actualizarEspecialidad', {
                             method: 'POST',
@@ -332,7 +332,7 @@ html
                         if (!respEsp.ok) throw new Error('Error al actualizar especialidad');
                     }
                     
-                    // Actualizar matrícula si cambió
+                    //actualizamos matricula si cambio
                     if (cambios.includes('matrícula')) {
                         const respMat = await fetch('/admin/actualizarMatricula', {
                             method: 'POST',
@@ -347,7 +347,7 @@ html
                     
                     alert('Datos actualizados correctamente');
                     
-                    // Limpiar formulario
+                    //limpiamos formulario
                     document.getElementById('profesional-search').value = '';
                     document.getElementById('profesional-id').value = '';
                     document.getElementById('datos-profesional').classList.remove('visible');
@@ -359,5 +359,5 @@ html
                 }
             });
             
-            // Cargar especialidades al inicio
+            //cargamos especialidades al inicio
             cargarEspecialidades();

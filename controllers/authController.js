@@ -7,7 +7,7 @@ import connectDB from '../config/db.js';
 export const login = async (req, res) => {
 
   try {
-    const db = await connectDB(); // Esperar la conexión
+    const db = await connectDB(); //esperamos la conexion
 
     const { email, password } = req.body;
     const [result] = await db.execute('SELECT * FROM usuario WHERE email = ?', [email]);
@@ -24,7 +24,7 @@ export const login = async (req, res) => {
     }
     if (!passwordIsValid) return res.status(401).send('Contraseña incorrecta');
 
-    // Incluir rol y sucursal_id en el token
+    //incluimos rol y sucursal_id en el token
     const token = await createAccessToken({ 
       id: user.usuario_id, 
       rol: user.rol,
@@ -73,13 +73,13 @@ export const register = async (req, res) => {
   try {
     const connection = await connectDB();
     
-    // Validar que las contraseñas coincidan
+    //validamos que las contraseñas coincidan
     if (password !== confirm_password) {
       return res.redirect('/auth/login?error=pw');
       return res.status(400).send('Las contraseñas no coinciden');
     }
     
-    // Validar que el email no exista
+    //validamos que el email no exista
     const [emailExists] = await connection.execute(
       'SELECT usuario_id FROM usuario WHERE email = ?',
       [email]
@@ -88,7 +88,7 @@ export const register = async (req, res) => {
       return res.redirect('/auth/login?error=email');
     }
     
-    // Validar que el DNI no exista
+    //validamos que el dni no exista
     const [dniExists] = await connection.execute(
       'SELECT id FROM paciente WHERE dni = ?',
       [dni]
@@ -97,30 +97,30 @@ export const register = async (req, res) => {
       return res.redirect('/auth/login?error=dni');
     }
     
-    // Validar formato de DNI (7-8 dígitos numéricos)
+    //validamos formato de dni 7-8 digitos numericos
     if (!/^\d{7,8}$/.test(dni)) {
       return res.redirect('/auth/login?error=dni78');
       return res.status(400).send('El DNI debe tener 7 u 8 dígitos numéricos');
     }
     
-    // Validar formato de teléfono (7-15 dígitos numéricos)
+    //validamos formato de telefono 7-15 digitos numericos
     if (!/^\d{7,15}$/.test(telefono)) {
       return res.redirect('/auth/login?error=tel');
       return res.status(400).send('El teléfono debe contener entre 7 y 15 dígitos numéricos');
     }
     
-    // Validar edad: entre 18 y 100 años
+    //validamos edad: entre 18 y 100 años
     const fechaNac = new Date(fecha_nacimiento);
     const hoy = new Date();
     
-    // Calcular edad
+    //calculamos edad
     let edad = hoy.getFullYear() - fechaNac.getFullYear();
     const mesActual = hoy.getMonth();
     const mesNacimiento = fechaNac.getMonth();
     const diaActual = hoy.getDate();
     const diaNacimiento = fechaNac.getDate();
     
-    // Ajustar edad si aún no cumplió años este año
+    //ajustamos edad si aun no cumplio años este año
     if (mesActual < mesNacimiento || (mesActual === mesNacimiento && diaActual < diaNacimiento)) {
       edad--;
     }
@@ -138,11 +138,11 @@ export const register = async (req, res) => {
     const passwordHash = bcrypt.hashSync(password, 8);
     const rol = "paciente";
     
-    // Inserta en la tabla usuario
+    //insertamos en la tabla usuario
     const insertUserQuery = 'INSERT INTO usuario(email, password, rol) VALUES (?, ?, ?)';
     await connection.execute(insertUserQuery, [email, passwordHash, rol]);
 
-    // Obtiene el usuario_id recién creado
+    //obtenemos el usuario_id recien creado
     const selectUserIdQuery = 'SELECT usuario_id FROM usuario WHERE email = ?';
     const [userResult] = await connection.execute(selectUserIdQuery, [email]);
 
@@ -153,7 +153,7 @@ export const register = async (req, res) => {
 
     const usuarioId = userResult[0].usuario_id;
 
-    // Inserta en la tabla paciente
+    //insertamos en la tabla paciente
     const insertPacienteQuery = `
       INSERT INTO paciente(
         nombre_completo, dni, obra_social, telefono, email, direccion, fecha_nacimiento, usuario_id, icon
@@ -161,7 +161,7 @@ export const register = async (req, res) => {
     `;
     await connection.execute(insertPacienteQuery, [nombre, dni, mutual, telefono, email, direccion, fecha_nacimiento, usuarioId]);
 
-    // Renderiza la vista de éxito
+    //renderizamos la vista de exito
     return res.redirect('/?msg=ok');
 
   } catch (error) {
@@ -177,12 +177,12 @@ export const registerSecretaria = async (req, res) => {
     const { email, password, confirm_password, sucursal_id } = req.body;
     const connection = await connectDB();
     
-    // Validar que las contraseñas coincidan
+    //validamos que las contraseñas coincidan
     if (password !== confirm_password) {
       return res.status(400).send('Las contraseñas no coinciden');
     }
     
-    // Validar que el email no exista
+    //validamos que el email no exista
     const [emailExists] = await connection.execute(
       'SELECT usuario_id FROM usuario WHERE email = ?',
       [email]
@@ -216,7 +216,7 @@ export const getRole = (req, res) => {
   });
 };
 
-// Nueva función para hacer logout
+//nueva funcion para hacer logout
 export const logout = (req, res) => {
   res.clearCookie('token');
   res.status(200).json({ message: 'Logout successful' });

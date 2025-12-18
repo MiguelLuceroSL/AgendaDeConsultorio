@@ -62,57 +62,57 @@ html
             const form = document.querySelector('.formCreate');
 
             form.addEventListener('submit', function (e) {
-                // Limpiar espacios
+                //limpiamos espacios
                 nombreInput.value = nombreInput.value.trim();
                 apellidoInput.value = apellidoInput.value.trim();
 
-                // ===== DNI =====
+                //dni
                 if (!/^\d{8,}$/.test(dniInput.value)) {
-                    alert('❌ El DNI debe tener solo números y mínimo 8 dígitos');
+                    alert('El DNI debe tener solo números y mínimo 8 dígitos');
                     dniInput.focus();
                     e.preventDefault();
                     return;
                 }
 
-                // ===== NOMBRE =====
+                //nombre
                 if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/.test(nombreInput.value)) {
-                    alert('❌ El nombre solo puede tener letras y sin espacios');
+                    alert('El nombre solo puede tener letras y sin espacios');
                     nombreInput.focus();
                     e.preventDefault();
                     return;
                 }
 
-                // ===== APELLIDO =====
+                //apellido
                 if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/.test(apellidoInput.value)) {
-                    alert('❌ El apellido solo puede tener letras y sin espacios');
+                    alert('El apellido solo puede tener letras y sin espacios');
                     apellidoInput.focus();
                     e.preventDefault();
                     return;
                 }
 
-                // ===== TELÉFONO =====
+                //telefono
                 if (!/^\d{10,}$/.test(telefonoInput.value)) {
-                    alert('❌ El teléfono debe tener solo números y mínimo 10 dígitos');
+                    alert('El teléfono debe tener solo números y mínimo 10 dígitos');
                     telefonoInput.focus();
                     e.preventDefault();
                     return;
                 }
 
-                // ===== FECHA NACIMIENTO =====
+                //fecha de nacimiento
                 const hoy = new Date();
                 hoy.setHours(0,0,0,0);
 
                 const fechaNac = new Date(fechaNacimientoInput.value);
 
                 if (fechaNac > hoy) {
-                    alert('❌ La fecha de nacimiento no puede ser futura');
+                    alert('La fecha de nacimiento no puede ser futura');
                     fechaNacimientoInput.focus();
                     e.preventDefault();
                     return;
                 }
             });
 
-            // ===== VALIDACIONES EN VIVO =====
+            //validaciones en vivo
             dniInput.addEventListener('input', () => {
                 dniInput.value = dniInput.value.replace(/\D/g, '');
             });
@@ -129,7 +129,7 @@ html
                 apellidoInput.value = apellidoInput.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ]/g, '');
             });
         script.
-            // Autocompletar datos del profesional cuando se ingresa un DNI existente
+            //autocompletamos datos del profesional cuando se ingresa un DNI existente
             const dniInput = document.getElementById('dni');
             const nombreInput = document.getElementById('nombre');
             const apellidoInput = document.getElementById('apellido');
@@ -143,12 +143,12 @@ html
             dniInput.addEventListener('input', function() {
                 const dni = this.value.trim();
                 
-                // Limpiar timeout anterior
+                //limpiamos timeout anterior
                 if (timeoutId) {
                     clearTimeout(timeoutId);
                 }
                 
-                // Si el DNI tiene al menos 7 caracteres, buscar
+                //si el dni tiene al menos 7 caracteres, buscamos
                 if (dni.length >= 7) {
                     timeoutId = setTimeout(async () => {
                         try {
@@ -158,11 +158,11 @@ html
                             if (data.found && data.data) {
                                 const profesional = data.data;
                                 
-                                // Autocompletar campos
+                                //autocompletamos campos
                                 nombreInput.value = profesional.nombre || '';
                                 apellidoInput.value = profesional.apellido || '';
                                 
-                                // Formatear fecha si existe
+                                //formateamos fecha si existe
                                 if (profesional.fecha_nacimiento) {
                                     const fecha = new Date(profesional.fecha_nacimiento);
                                     const year = fecha.getFullYear();
@@ -175,7 +175,7 @@ html
                                 emailInput.value = profesional.email || '';
                                 domicilioInput.value = profesional.domicilio_personal || '';
                                 
-                                // Deshabilitar campos para evitar edición accidental
+                                //deshabilitamos campos para evitar edicion accidental
                                 nombreInput.disabled = true;
                                 apellidoInput.disabled = true;
                                 fechaNacimientoInput.disabled = true;
@@ -183,7 +183,7 @@ html
                                 emailInput.disabled = true;
                                 domicilioInput.disabled = true;
                                 
-                                // Mostrar mensaje informativo
+                                //mostramos mensaje informativo
                                 nombreInput.style.backgroundColor = '#e8f5e9';
                                 apellidoInput.style.backgroundColor = '#e8f5e9';
                                 fechaNacimientoInput.style.backgroundColor = '#e8f5e9';
@@ -191,16 +191,16 @@ html
                                 emailInput.style.backgroundColor = '#e8f5e9';
                                 domicilioInput.style.backgroundColor = '#e8f5e9';
                             } else {
-                                // Si no se encuentra, habilitar campos
+                                //si no se encuentra, habilitamos campos
                                 habilitarCampos();
                             }
                         } catch (error) {
                             console.error('Error al buscar profesional:', error);
                             habilitarCampos();
                         }
-                    }, 500); // Esperar 500ms después de que el usuario deje de escribir
+                    }, 500); //esperamos 500ms despues de que el usuario deje de escribir
                 } else {
-                    // Si el DNI es muy corto, limpiar y habilitar campos
+                    //si el dni es muy corto, limpiamos y habilitamos campos
                     limpiarYHabilitarCampos();
                 }
             });

@@ -31,7 +31,7 @@ html
                 }
                 
                 try {
-                    // Verificar si tiene turnos pendientes
+                    //verificamos si tiene turnos pendientes
                     const response = await fetch(`/admin/verificarTurnosPendientes?profesionalEspecialidadId=${profesionalEspecialidadId}`);
                     const data = await response.json();
                     

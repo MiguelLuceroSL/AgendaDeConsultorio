@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Intentar con ambos IDs: para pacientes (select) y secretaria (input hidden)
+  //intentamos con ambos IDs: para pacientes (select) y secretaria (input hidden)
   const inputProfesionalId = document.getElementById("profesional-select") || document.getElementById("profesional-id");
   const inputFecha = document.getElementById("fecha");
   const selectHorario = document.getElementById("horario");
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return dia
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "") // separa las tildes de la letra y elimina tildes
+      .replace(/[\u0300-\u036f]/g, "") //separa las tildes de la letra y elimina tildes
       .trim();
   }
 
@@ -28,12 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
       
       const res = await fetch(url);
       if (!res.ok) {
-        console.error(`❌ Error HTTP al obtener agendas: ${res.status}`);
+        console.error(`Error HTTP al obtener agendas: ${res.status}`);
         return [];
       }
       const agendas = await res.json();
-      console.log(`✅ Agendas recibidas del servidor (cantidad: ${agendas.length}):`, agendas);
-      console.log('📋 Detalles de agendas:', agendas.map(a => ({
+      console.log(`Agendas recibidas del servidor (cantidad: ${agendas.length}):`, agendas);
+      console.log('Detalles de agendas:', agendas.map(a => ({
         id: a.id,
         sucursal_id: a.sucursal_id,
         horario: `${a.horario_inicio}-${a.horario_fin}`,
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })));
       return agendas;
     } catch (err) {
-      console.error("❌ Error al obtener las agendas:", err);
+      console.error("Error al obtener las agendas:", err);
       return [];
     }
   }
@@ -66,31 +66,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function verificarDisponibilidadGeneral(profesionalId, fechaInicio, fechaFin) {
     try {
-      // Verificar horarios disponibles en un rango de fechas representativo
+      //verificamos horarios disponibles en un rango de fechas representativo
       const agendas = window._agendas || [];
       if (agendas.length === 0) {
         return false;
       }
 
-      // Verificar las próximas 2 semanas o hasta el fin de la agenda
+      //verificamos las proximas 2 semanas o hasta el fin de la agenda
       const hoy = new Date(fechaInicio);
       const limite = new Date(hoy);
       limite.setDate(limite.getDate() + 14);
       const fechaLimite = limite < new Date(fechaFin) ? limite : new Date(fechaFin);
 
-      // Revisar cada día en el rango
+      //revisamos cada día en el rango
       for (let d = new Date(hoy); d <= fechaLimite; d.setDate(d.getDate() + 1)) {
         const fecha = d.toISOString().split('T')[0];
         const dia = normalizarDia(d.toLocaleDateString("es-AR", { weekday: "long" }));
         
-        // Verificar si es un día permitido
+        //verificamos si es un día permitido
         if (!window._diasPermitidos.includes(dia)) {
           continue;
         }
 
-        // Obtener las agendas para ese día
+        //obtenemos las agendas para ese día
         const agendasDelDia = agendas.filter(agenda => {
-          // Parsear fechas correctamente para evitar problemas de zona horaria
+          //parseamos fechas correctamente para evitar problemas de zona horaria
           const [yearInicio, monthInicio, dayInicio] = agenda.dia_inicio.split('T')[0].split('-').map(Number);
           const diaInicio = new Date(yearInicio, monthInicio - 1, dayInicio);
           
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
           continue;
         }
 
-        // Generar horarios para este día
+        //generamos horarios para este día
         let horariosDelDia = [];
         agendasDelDia.forEach(agenda => {
           const horarios = generarHorarios(
@@ -123,25 +123,25 @@ document.addEventListener("DOMContentLoaded", () => {
           horariosDelDia = horariosDelDia.concat(horarios);
         });
 
-        // Verificar estados de los horarios
+        //verificamos estados de los horarios
         try {
           const res = await fetch(`/turnos/horarios/estado?profesionalId=${profesionalId}&fecha=${fecha}`);
           const estados = await res.json();
           const estadosConfirmados = estados.confirmados || [];
           const estadosReservados = estados.reservados || [];
 
-          // Verificar si hay al menos un horario libre o con posibilidad de sobreturno
+          //verificamos si hay al menos un horario libre o con posibilidad de sobreturno
           for (const hora of horariosDelDia) {
             const estado = estadosConfirmados.includes(hora) ? "Confirmado" 
                          : estadosReservados.includes(hora) ? "Reservada" 
                          : null;
 
-            // Si está libre, hay disponibilidad
+            //si esta libre, hay disponibilidad
             if (!estado) {
               return true;
             }
 
-            // Si está reservado, verificar si aún hay cupo de sobreturnos
+            //si esta reservado, verificamos si aun hay cupo de sobreturnos
             if (estado === "Reservada") {
               const cantidadSobreturnos = await verificarSobreturno(profesionalId, fecha);
               const agenda = agendasDelDia.find(a => typeof a.max_sobreturnos === "number");
@@ -155,10 +155,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      return false; // No hay horarios disponibles
+      return false; //no hay horarios disponibles
     } catch (err) {
       console.error("Error en verificarDisponibilidadGeneral:", err);
-      return true; // En caso de error, asumir que hay disponibilidad
+      return true; //en caso de error, asumir que hay disponibilidad
     }
   }
 
@@ -167,13 +167,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let inicio = new Date(`2025-05-05T${horaInicio}`);
     const fin = new Date(`2025-05-05T${horaFin}`);
     
-    // Parsear la duración correctamente (HH:MM:SS)
+    //parseamos la duracion correctamente (HH:MM:SS)
     const partiesDuracion = duracion.split(":");
     const horas = parseInt(partiesDuracion[0]) || 0;
     const minutos = parseInt(partiesDuracion[1]) || 0;
     const totalMinutos = (horas * 60) + minutos;
     
-    // Validación: evitar bucle infinito si la duración es 0 o inválida
+    //validacion: evitamos bucle infinito si la duración es 0 o inválida
     if (totalMinutos <= 0) {
       console.error("Duración inválida:", duracion, "- Total minutos:", totalMinutos);
       return [];
@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const res = await fetch(`/turnos/horarios/estado?profesionalId=${profesionalId}&fecha=${fecha}`);
     const estados = await res.json();
 
-    // Combinar confirmados y reservados en un solo array para buscar estado por hora
+    //combinamos confirmados y reservados en un solo array para buscar estado por hora
     const estadosConfirmados = estados.confirmados || [];
 const estadosReservados = estados.reservados || [];
 
@@ -263,25 +263,25 @@ for (const hora of horariosBase) {
   selectHorario.appendChild(option);
 }
 
-// Verificar si no hay horarios disponibles
+//verificamos si no hay horarios disponibles
 if (horariosDisponibles === 0) {
   selectHorario.innerHTML = "<option disabled selected>No hay horarios disponibles para este día</option>";
   selectHorario.disabled = true;
 }
   } catch (error) {
     console.error("Error al cargar estados de turnos:", error);
-    // En caso de error, mostrar horarios sin estados especiales
+    //en caso de error, mostramos horarios sin estados especiales
     selectHorario.innerHTML = "<option disabled selected>Error al cargar horarios</option>";
   }
 }
 
-  // Cuando seleccionan un profesional (puede ser select para pacientes o input hidden para secretaria)
+  //cuando seleccionan un profesional (puede ser select para pacientes o input hidden para secretaria)
   let previousProfesionalId = null;
-  let isLoadingAgendas = false; // Flag para evitar llamadas múltiples
+  let isLoadingAgendas = false; //flag para evitar llamadas múltiples
   let debounceTimeout = null;
   let observer = null;
   
-  // Función para manejar el cambio de profesional
+  //funcion para manejar el cambio de profesional
   function handleProfesionalChange() {
     if (isLoadingAgendas || isLoadingHorarios) {
       console.log("Bloqueando cambio de profesional porque hay una carga en progreso");
@@ -299,7 +299,7 @@ if (horariosDisponibles === 0) {
         previousProfesionalId = profesionalId;
         cargarAgendasProfesional(profesionalId);
       } else if (!profesionalId && previousProfesionalId && !isLoadingAgendas) {
-        // Si se limpia el profesional, resetear todo
+        //si se limpia el profesional, resetear todo
         previousProfesionalId = null;
         resetearSeleccion();
       }
@@ -307,11 +307,11 @@ if (horariosDisponibles === 0) {
   }
   
   if (inputProfesionalId) {
-    // Si es un select (pacientes), usar evento change
+    //si es un select (pacientes), usar evento change
     if (inputProfesionalId.tagName === 'SELECT') {
       inputProfesionalId.addEventListener('change', handleProfesionalChange);
     } else {
-      // Si es un input hidden (secretaria con autocompletado), usar MutationObserver
+      //si es un input hidden (secretaria con autocompletado), usar MutationObserver
       observer = new MutationObserver(() => {
         handleProfesionalChange();
       });
@@ -321,17 +321,17 @@ if (horariosDisponibles === 0) {
         attributeFilter: ['value'] 
       });
       
-      // También escuchar el evento input como respaldo
+      //tambien escuchar el evento input como respaldo
       inputProfesionalId.addEventListener('input', handleProfesionalChange);
     }
   }
   
   async function cargarAgendasProfesional(profesionalId) {
-    // Marcar que estamos cargando para evitar llamadas múltiples
+    //marcar que estamos cargando para evitar llamadas múltiples
     isLoadingAgendas = true;
     
     try {
-      // Obtener la sucursal seleccionada si existe el filtro
+      //obtener la sucursal seleccionada si existe el filtro
       const sucursalSelect = document.getElementById('sucursal-filtro');
       const sucursalId = sucursalSelect ? sucursalSelect.value : null;
       

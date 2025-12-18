@@ -25,7 +25,7 @@ html
         script(src="/js/logout.js")
         script(src="/js/autocompletar_profesional_especialidad.js")
         script.
-            // Inicializar autocompletador
+            //inicializamos autocompletador
             const autocompletar = new AutocompletarProfesionalEspecialidad('profesional-search', 'profesional-id');
             
             document.getElementById('btnCambiarEstado').addEventListener('click', async function(e) {
@@ -38,7 +38,7 @@ html
                 }
                 
                 try {
-                    // Verificar si tiene turnos pendientes
+                    //verificamos si tiene turnos pendientes
                     const response = await fetch(`/admin/verificarTurnosPendientes?profesionalEspecialidadId=${profesionalEspecialidadId}`);
                     const data = await response.json();
                     
@@ -51,7 +51,7 @@ html
                     mensaje += '\n\n¿Desea continuar?';
                     
                     if (confirm(mensaje)) {
-                        // Enviar el cambio de estado
+                        //enviamos el cambio de estado
                         const confirmarValue = data.tieneTurnosPendientes ? 'true' : 'false';
                         
                         const cambiarResponse = await fetch('/admin/cambiarEstadoEspecialidad', {
@@ -69,7 +69,7 @@ html
                         
                         if (resultado.success) {
                             alert(resultado.message);
-                            // Limpiar el formulario
+                            //limpiamos el formulario
                             document.getElementById('profesional-search').value = '';
                             document.getElementById('profesional-id').value = '';
                             document.getElementById('confirmarInput').value = 'false';

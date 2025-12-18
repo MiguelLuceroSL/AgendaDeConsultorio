@@ -11,16 +11,16 @@ class AutocompletarPaciente {
     }
     
     init() {
-        // Crear contenedor de resultados
+        //creamos contenedor de resultados
         this.resultsDiv = document.createElement('div');
         this.resultsDiv.className = 'autocompletar_resultados';
         this.input.parentNode.appendChild(this.resultsDiv);
         
-        // Event listeners
+        //event listeners
         this.input.addEventListener('input', (e) => this.handleInput(e));
         this.input.addEventListener('keydown', (e) => this.handleKeydown(e));
         
-        // Cerrar resultados al hacer clic fuera
+        //cerramos resultados al hacer clic fuera
         document.addEventListener('click', (e) => {
             if (!this.input.parentNode.contains(e.target)) {
                 this.hideResults();
@@ -31,14 +31,14 @@ class AutocompletarPaciente {
     handleInput(e) {
         const texto = e.target.value.trim();
         
-        // Limpiar el input oculto si se borra el texto
+        //limpiamos el input oculto si se borra el texto
         if (!texto) {
             this.hiddenInput.value = '';
             this.hideResults();
             return;
         }
         
-        // Debounce
+        //debounce
         clearTimeout(this.debounceTimer);
         this.debounceTimer = setTimeout(() => {
             this.buscarPacientes(texto);
@@ -72,7 +72,7 @@ class AutocompletarPaciente {
             </div>
         `).join('');
         
-        // Agregar event listeners a cada item
+        //agregamos event listeners a cada item
         this.resultsDiv.querySelectorAll('.autocompletar_item').forEach(item => {
             item.addEventListener('click', () => this.selectItem(item));
         });
@@ -130,7 +130,7 @@ class AutocompletarPaciente {
             item.classList.toggle('activo', index === this.selectedIndex);
         });
         
-        // Scroll al item seleccionado
+        //scroll al item seleccionado
         if (items[this.selectedIndex]) {
             items[this.selectedIndex].scrollIntoView({ block: 'nearest' });
         }

@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded',() =>{
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // Construir el objeto completo, por ejemplo:
+  //construimos el objeto completo, por ejemplo:
   const profesional_especialidad_id = form.profesional_especialidad_id.value;
   const dia_inicio = form.dia_inicio.value;
   const dia_fin = form.dia_fin.value;

@@ -3,13 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('buscador-profesional');
   const profesionalCards = document.querySelectorAll('.profesional-card');
 
-  // Funcionalidad de eliminación
+  //funcionalidad de eliminación
   botonesEliminar.forEach(boton => {
     boton.addEventListener('click', async (e) => {
       const agendaId = e.target.getAttribute('data-agenda-id');
       
       try {
-        // Primera llamada: verificar si tiene turnos
+        //primera llamada: verificamos si tiene turnos
         const response = await fetch(`/agendas/${agendaId}`, {
           method: 'DELETE',
           headers: {
@@ -21,12 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await response.json();
 
         if (data.requiereConfirmacion) {
-          // Si tiene turnos, mostrar confirmación personalizada
+          //si tiene turnos, mostramos confirmacion personalizada
           const confirmar = confirm(`${data.mensaje}\n\n¿Desea continuar con la eliminación?`);
           
           if (!confirmar) return;
 
-          // Segunda llamada: eliminar con confirmación
+          //segunda llamada: eliminamos con confirmacion
           const responseConfirmado = await fetch(`/agendas/${agendaId}`, {
             method: 'DELETE',
             headers: {
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(dataConfirmado.error || 'No se pudo eliminar la agenda');
           }
         } else if (response.ok) {
-          // Si no tiene turnos, eliminar directamente
+          //si no tiene turnos, eliminamos directamente
           alert(data.message || 'Agenda eliminada correctamente');
           window.location.reload();
         } else {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Funcionalidad de búsqueda
+  //funcionalidad de busqueda
   if (buscador) {
     buscador.addEventListener('input', (e) => {
       const textoBusqueda = e.target.value.toLowerCase().trim();

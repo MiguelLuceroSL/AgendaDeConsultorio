@@ -10,16 +10,16 @@ class AutocompletarProfesionalEspecialidad {
   }
 
   init() {
-    // Crear el div de resultados
+    //creamos el div de resultados
     this.resultadosDiv = document.createElement('div');
     this.resultadosDiv.className = 'autocompletar_resultados';
     this.input.parentNode.insertBefore(this.resultadosDiv, this.input.nextSibling);
     
-    // Event listeners
+    //event listeners
     this.input.addEventListener('input', () => this.buscar());
     this.input.addEventListener('keydown', (e) => this.manejarTeclas(e));
     
-    // Cerrar resultados al hacer clic fuera
+    //cerramos resultados al hacer clic fuera
     document.addEventListener('click', (e) => {
       if (!this.input.contains(e.target) && !this.resultadosDiv.contains(e.target)) {
         this.cerrarResultados();

@@ -3,7 +3,7 @@ import connectDB from '../config/db.js';
 export const validarConflictoHorariosM = async (profesionalId, sucursalId, horarioInicio, horarioFin, diasSemana, diaInicio, diaFin, agendaIdExcluir = null) => {
   const connection = await connectDB();
   try {
-    // Obtener todas las especialidades del profesional
+    //obtenemos todas las especialidades del profesional
     const [especialidades] = await connection.query(
       'SELECT id FROM profesional_especialidad WHERE profesional_id = ?',
       [profesionalId]
@@ -15,7 +15,7 @@ export const validarConflictoHorariosM = async (profesionalId, sucursalId, horar
 
     const especialidadIds = especialidades.map(e => e.id);
 
-    // Verificar conflictos de horarios en la misma sucursal y días
+    //verificamos conflictos de horarios en la misma sucursal y dias
     for (const dia of diasSemana) {
       const sql = `
         SELECT 
@@ -70,7 +70,7 @@ export const validarConflictoHorariosM = async (profesionalId, sucursalId, horar
 export const crearAgendaM = async (agendaData, diasSemana) => {
   const connection = await connectDB();
   try {
-    // Obtener el profesional_id desde profesional_especialidad
+    //obtenemos el profesional_id desde profesional_especialidad
     const [profEsp] = await connection.query(
       'SELECT profesional_id FROM profesional_especialidad WHERE id = ?',
       [agendaData.profesional_especialidad_id]
@@ -82,7 +82,7 @@ export const crearAgendaM = async (agendaData, diasSemana) => {
 
     const profesionalId = profEsp[0].profesional_id;
 
-    // Validar conflictos de horarios y fechas
+    //validamos conflictos de horarios y fechas
     const validacion = await validarConflictoHorariosM(
       profesionalId,
       agendaData.sucursal_id,
@@ -97,7 +97,7 @@ export const crearAgendaM = async (agendaData, diasSemana) => {
       throw new Error(validacion.mensaje);
     }
 
-    // Insert de la agenda
+    //insert de la agenda
     const sqlAgenda = `
       INSERT INTO agenda (
         profesional_especialidad_id,
@@ -126,7 +126,7 @@ export const crearAgendaM = async (agendaData, diasSemana) => {
 
     const agendaId = result.insertId;
 
-    // Insert de los dias de la agenda
+    //insert de los dias de la agenda
     const sqlDia = `INSERT INTO agenda_dias (agenda_id, dia_semana) VALUES (?, ?)`;
     for (const dia of diasSemana) {
       await connection.execute(sqlDia, [agendaId, dia]);
@@ -185,7 +185,7 @@ export const obtenerAgendasActivasPorProfesional = async (profesionalId, sucursa
     
     const params = [profesionalId];
     
-    // Si se proporciona sucursalId, filtrar por sucursal
+    //si se proporciona sucursalId, filtramos por sucursal
     if (sucursalId) {
       sql += ` AND a.sucursal_id = ?`;
       params.push(sucursalId);
@@ -259,7 +259,7 @@ export const registrarAusenciaM = async ({ profesional_especialidad_id, fecha_in
   try {
     const connection = await connectDB();
 
-    // Verificar si hay turnos activos en el rango de fechas
+    //verificamos si hay turnos activos en el rango de fechas
     const [turnos] = await connection.execute(
       `SELECT t.id, t.fecha, t.hora, p.nombre_completo AS paciente_nombre
        FROM turnos t
@@ -272,7 +272,7 @@ export const registrarAusenciaM = async ({ profesional_especialidad_id, fecha_in
 
     if (turnos.length > 0) {
       if (!confirmarRegistro) {
-        // Retornar información sobre los turnos para que el frontend pueda preguntar
+        //retornamos información sobre los turnos para que el frontend pueda preguntar
         return {
           tieneTurnos: true,
           cantidadTurnos: turnos.length,
@@ -281,7 +281,7 @@ export const registrarAusenciaM = async ({ profesional_especialidad_id, fecha_in
         };
       }
 
-      // Si se confirma el registro, marcar los turnos como "Por reasignar"
+      //si se confirma el registro, marcar los turnos como "Por reasignar"
       const turnoIds = turnos.map(t => t.id);
       const placeholders = turnoIds.map(() => '?').join(',');
       await connection.execute(
@@ -290,7 +290,7 @@ export const registrarAusenciaM = async ({ profesional_especialidad_id, fecha_in
       );
     }
 
-    // Registrar la ausencia
+    //registramos la ausencia
     const sql = `
       INSERT INTO ausencias (profesional_especialidad_id, fecha_inicio, fecha_fin, tipo)
       VALUES (?, ?, ?, ?)
@@ -357,7 +357,7 @@ export const mostarAusenciasM = async (sucursalId = null) =>{
     
     const params = [];
     
-    // Si hay sucursalId, filtrar por profesionales que tengan agendas en esa sucursal
+    //si hay sucursalId, filtrar por profesionales que tengan agendas en esa sucursal
     if (sucursalId) {
       sql += `
       JOIN agenda ag ON ag.profesional_especialidad_id = pe.id
@@ -448,7 +448,7 @@ export const eliminarAgendaM = async (agendaId, confirmarEliminacion = false) =>
   try {
     const connection = await connectDB();
     
-    // Verificar si la agenda tiene turnos asociados
+    //verificamos si la agenda tiene turnos asociados
     const [turnos] = await connection.execute(
       `SELECT t.id
        FROM turnos t
@@ -460,7 +460,7 @@ export const eliminarAgendaM = async (agendaId, confirmarEliminacion = false) =>
     
     if (turnos.length > 0) {
       if (!confirmarEliminacion) {
-        // Retornar información sobre los turnos para que el frontend pueda preguntar
+        //retornamos informacion sobre los turnos para que el frontend pueda preguntar
         return {
           tieneTurnos: true,
           cantidadTurnos: turnos.length,
@@ -468,7 +468,7 @@ export const eliminarAgendaM = async (agendaId, confirmarEliminacion = false) =>
         };
       }
       
-      // Si se confirma la eliminación, marcar los turnos como "Por reasignar"
+      //si se confirma la eliminacion, marcamos los turnos como "Por reasignar"
       const turnoIds = turnos.map(t => t.id);
       const placeholders = turnoIds.map(() => '?').join(',');
       await connection.execute(
@@ -477,13 +477,13 @@ export const eliminarAgendaM = async (agendaId, confirmarEliminacion = false) =>
       );
     }
     
-    // Primero eliminar los días asociados
+    //primero eliminamos los dias asociados
     await connection.execute(
       `DELETE FROM agenda_dias WHERE agenda_id = ?`,
       [agendaId]
     );
     
-    // Luego eliminar la agenda
+    //luego eliminamos la agenda
     const [result] = await connection.execute(
       `DELETE FROM agenda WHERE id = ?`,
       [agendaId]

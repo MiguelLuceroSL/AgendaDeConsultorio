@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("form");
 
   form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // Siempre prevenir el submit por defecto
+    e.preventDefault(); //siempre prevenimos el submit por defecto
     
     const fechaInicio = fechaInicioInput.value.trim();
     const fechaFin = fechaFinInput.value.trim();
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tipo = document.querySelector('select[name="tipo"]').value;
 
     try {
-      // Primera llamada: verificar si hay turnos
+      //primera llamada: verificamos si hay turnos
       const formData = new FormData(form);
       const response = await fetch('/agendas/ausencias/registrar', {
         method: 'POST',
@@ -37,9 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const contentType = response.headers.get("content-type");
       
-      // Si la respuesta es HTML, significa que se registró exitosamente sin turnos
+      //si la respuesta es HTML, significa que se registró exitosamente sin turnos
       if (contentType && contentType.includes("text/html")) {
-        // Recargar la página para mostrar la vista de éxito
+        //recargamos la pagina para mostrar la vista de exito
         window.location.reload();
         return;
       }
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         if (!confirmar) return;
 
-        // Segunda llamada: registrar con confirmación
+        //segunda llamada: registramos con confirmación
         const responseConfirmado = await fetch('/agendas/ausencias/registrar', {
           method: 'POST',
           headers: {
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let fpInicio = null;
   let fpFin = null;
 
-  // Observar cambios en el campo oculto del autocomplete
+  //observamos cambios en el campo oculto del autocomplete
   const observer = new MutationObserver(async () => {
     const profesionalId = profesionalIdInput.value;
     if (!profesionalId) return;
@@ -154,13 +154,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Observar cambios en el valor del input oculto
+  //observamos cambios en el valor del input oculto
   observer.observe(profesionalIdInput, {
     attributes: true,
     attributeFilter: ['value']
   });
 
-  // También escuchar el evento input
+  //tambien escuchamos el evento input
   profesionalIdInput.addEventListener('input', async () => {
     const profesionalId = profesionalIdInput.value;
     if (!profesionalId) return;

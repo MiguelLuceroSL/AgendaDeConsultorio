@@ -12,16 +12,16 @@ class AutocompletarProfesionalAgenda {
     }
     
     init() {
-        // Crear contenedor de resultados
+        //creamos contenedor de resultados
         this.resultsDiv = document.createElement('div');
         this.resultsDiv.className = 'autocompletar_resultados';
         this.input.parentNode.appendChild(this.resultsDiv);
         
-        // Event listeners
+        //event listeners
         this.input.addEventListener('input', (e) => this.handleInput(e));
         this.input.addEventListener('keydown', (e) => this.handleKeydown(e));
         
-        // Si hay select de especialidad, escuchar cambios
+        //si hay select de especialidad, escuchar cambios
         if (this.especialidadSelect) {
             this.especialidadSelect.addEventListener('change', () => {
                 if (this.input.value.trim()) {
@@ -30,7 +30,7 @@ class AutocompletarProfesionalAgenda {
             });
         }
         
-        // Cerrar resultados al hacer clic fuera
+        //cerramos resultados al hacer clic fuera
         document.addEventListener('click', (e) => {
             if (!this.input.parentNode.contains(e.target)) {
                 this.hideResults();
@@ -41,14 +41,14 @@ class AutocompletarProfesionalAgenda {
     handleInput(e) {
         const texto = e.target.value.trim();
         
-        // Limpiar el input oculto si se borra el texto
+        //limpiamos el input oculto si se borra el texto
         if (!texto) {
             this.hiddenInput.value = '';
             this.hideResults();
             return;
         }
         
-        // Debounce
+        //debounce
         clearTimeout(this.debounceTimer);
         this.debounceTimer = setTimeout(() => {
             this.buscarProfesionales(texto);
@@ -57,10 +57,10 @@ class AutocompletarProfesionalAgenda {
     
     async buscarProfesionales(texto) {
         try {
-            // Usar ruta específica para agendas que trae TODOS los profesionales activos
+            //usamos ruta especifica para agendas que trae TODOS los profesionales activos
             let url = `/profesional/buscar-para-agendas?texto=${encodeURIComponent(texto)}`;
             
-            // Agregar filtro de especialidad si existe
+            //agregamos filtro de especialidad si existe
             if (this.especialidadSelect && this.especialidadSelect.value) {
                 url += `&especialidadId=${this.especialidadSelect.value}`;
             }
@@ -90,7 +90,7 @@ class AutocompletarProfesionalAgenda {
             </div>
         `).join('');
         
-        // Agregar event listeners a cada item
+        //agregamos event listeners a cada item
         this.resultsDiv.querySelectorAll('.autocompletar_item').forEach(item => {
             item.addEventListener('click', () => this.selectItem(item));
         });

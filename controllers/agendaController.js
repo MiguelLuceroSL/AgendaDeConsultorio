@@ -9,19 +9,19 @@ export const crearAgendaC = async (req, res) => {
   try {
     const { profesional_especialidad_id, dia_inicio, dia_fin, tiempo_consulta, dias, max_sobreturnos } = req.body;
     
-    // Obtener la sucursal del usuario logueado (secretaria)
+    //obtenemos la sucursal del usuario logueado.. secretaria
     const sucursal_id = req.user?.sucursal_id;
 
     if (!profesional_especialidad_id || !sucursal_id || !dia_inicio || !dia_fin || !tiempo_consulta) {
       return res.status(400).json({ error: "Todos los campos son requeridos" });
     }
     
-    // Verificar que el usuario tenga una sucursal asignada
+    //verificamos que el usuario tenga una sucursal asignada
     if (!sucursal_id) {
       return res.status(400).json({ error: "El usuario no tiene una sucursal asignada" });
     }
     
-    // Validar que dia_fin sea posterior a dia_inicio
+    //validamos que dia_fin sea posterior a dia_inicio
     const fechaInicio = new Date(dia_inicio);
     const fechaFin = new Date(dia_fin);
     if (fechaFin <= fechaInicio) {
@@ -35,12 +35,12 @@ export const crearAgendaC = async (req, res) => {
 
     const agendasCreadas = [];
 
-    // Procesar cada día
+    //procesamos cada dia
     for (const [dia, datos] of Object.entries(dias)) {
       if (datos.activo) {
         const franjas = [];
 
-        // Verificar y agregar turno mañana
+        //verificamos y agregamos turno mañana
         if (datos.manana_inicio && datos.manana_fin) {
           if (datos.manana_inicio >= datos.manana_fin) {
             return res.status(400).json({ 
@@ -54,7 +54,7 @@ export const crearAgendaC = async (req, res) => {
           });
         }
 
-        // Verificar y agregar turno tarde
+        //verificamos y agregamos turno tarde
         if (datos.tarde_inicio && datos.tarde_fin) {
           if (datos.tarde_inicio >= datos.tarde_fin) {
             return res.status(400).json({ 
@@ -68,7 +68,7 @@ export const crearAgendaC = async (req, res) => {
           });
         }
 
-        // Verificar que no se solapen los turnos del mismo día
+        //verificamos que no se solapen los turnos del mismo dia
         if (franjas.length === 2) {
           const [mañana, tarde] = franjas;
           if (mañana.fin > tarde.inicio) {
@@ -78,7 +78,7 @@ export const crearAgendaC = async (req, res) => {
           }
         }
 
-        // Crear agenda para cada franja horaria
+        //creamos agenda para cada franja horaria
         for (const franja of franjas) {
           try {
             const resultado = await crearAgendaS(
@@ -92,7 +92,7 @@ export const crearAgendaC = async (req, res) => {
                 dia_fin,
                 max_sobreturnos
               },
-              [dia] // lista de días asociados a esa franja
+              [dia] //lista de dias asociados a esa franja
             );
             
             agendasCreadas.push({
@@ -139,7 +139,7 @@ export const obtenerSucursalesC = async (req, res) => {
 export const FormCrearAgendaVista = async (req, res) => {
   try {
     const profesionales = await obtenerProfesionalesVistaM();
-    // Ya no se necesitan las sucursales porque se usa la del usuario logueado
+    //ya no se necesitan las sucursales porque se usa la del usuario logueado
     res.render('secretaria/secretariaCrearAgenda', { profesionales });
   } catch (error) {
     console.error('Error al mostrar el formulario de agenda:', error);
@@ -188,10 +188,10 @@ export const borrarAgendaC = async (req,res) => {
 export const obtenerAgendasActivasC = async (req, res) => {
   try {
     const { profesionalId } = req.params;
-    const { sucursalId: sucursalQuery } = req.query; // Sucursal enviada como query param
+    const { sucursalId: sucursalQuery } = req.query; //sucursal enviada como query param
     
-    // Si es secretaria, usar SU sucursal (no puede ver otras)
-    // Si es paciente o admin, usar la sucursal del query param si existe
+    //si es secretaria, usar SU sucursal (no puede ver otras)
+    //si es paciente o admin, usar la sucursal del query param si existe
     let sucursalFinal = null;
     if (req.user?.rol === 'secretaria') {
       sucursalFinal = req.user.sucursal_id;
@@ -208,7 +208,6 @@ export const obtenerAgendasActivasC = async (req, res) => {
   }
 };
 
-/*a*/
 export const registrarAusenciaC = async (req, res) => {
   try {
     const { profesional_especialidad_id, fecha_inicio, fecha_fin, tipo, confirmar } = req.body;
@@ -221,7 +220,7 @@ export const registrarAusenciaC = async (req, res) => {
       confirmarRegistro: confirmar === 'true' || confirmar === true
     });
 
-    // Si tiene turnos y no se confirmó, devolver información para confirmación
+    //si tiene turnos y no se confirmo, devolvemos informacion para confirmacion
     if (resultado.tieneTurnos && !confirmar) {
       return res.status(200).json({
         requiereConfirmacion: true,
@@ -231,7 +230,7 @@ export const registrarAusenciaC = async (req, res) => {
       });
     }
 
-    // Si se registró exitosamente, renderizar la vista de éxito
+    //si se registro exitosamente, renderizamos la vista de exito
     const sucursalId = req.user?.sucursal_id;
     const profesionales = await obtenerProfesionalesVistaM(sucursalId);
     const ausencias = await mostarAusenciasM(sucursalId);
@@ -279,7 +278,6 @@ export const obtenerAusenciasTotalesC = async (req, res) => {
   }
 };
 
-/*b*/
 export const eliminarAusenciaC = async (req, res) => {
   try {
     const { id } = req.params;
@@ -296,7 +294,7 @@ export const listarAgendasActivasC = async (req, res) => {
     const sucursalId = req.user?.sucursal_id;
     const agendas = await obtenerAgendasActivasAgrupadasS(sucursalId);
     
-    // Agrupar agendas por profesional
+    //agrupamos agendas por profesional
     const profesionales = {};
     agendas.forEach(agenda => {
       if (!profesionales[agenda.profesional_id]) {
@@ -338,11 +336,11 @@ export const listarAgendasActivasC = async (req, res) => {
 export const eliminarAgendaC = async (req, res) => {
   try {
     const { id } = req.params;
-    const { confirmar } = req.body; // El frontend enviará confirmar: true si el usuario confirmó
+    const { confirmar } = req.body; //el frontend enviará confirmar: true si el usuario confirmó
     
     const resultado = await eliminarAgendaS(id, confirmar);
     
-    // Si tiene turnos y no se confirmó, devolver información
+    //si tiene turnos y no se confirmo, devolvemos informacion
     if (resultado.tieneTurnos && !confirmar) {
       return res.status(200).json({
         requiereConfirmacion: true,
@@ -358,13 +356,13 @@ export const eliminarAgendaC = async (req, res) => {
   }
 };
 
-// Buscar sucursales para autocompletado
+//buscamos sucursales para autocompletado
 export const buscarSucursalesC = async (req, res) => {
   try {
     const { texto } = req.query;
     const sucursales = await obtenerSucursalesS();
     
-    // Filtrar sucursales por texto (manejar valores NULL)
+    //filtramos sucursales por texto (manejar valores NULL)
     const resultados = sucursales.filter(sucursal => {
       const textoLower = texto.toLowerCase();
       const nombreMatch = sucursal.nombre && sucursal.nombre.toLowerCase().includes(textoLower);

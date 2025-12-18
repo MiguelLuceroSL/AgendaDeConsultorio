@@ -13,9 +13,9 @@ export const crearTurnoC = async (req, res) => {
   console.log("🚀 ~ crearTurnoC ~ es_sobreturno:", es_sobreturno)
   const estado ="Confirmado";
   console.log("🚀 ~ crearTurnoC ~ estado:", estado)
-  const dniFotoUrl = req.file ? req.file.path : null; //obtener la ruta de la foto del DNI si se subió 
+  const dniFotoUrl = req.file ? req.file.path : null; //obtenemos la ruta de la foto del dni si se subio
   
-  // Las secretarias usan su sucursal asignada
+  //las secretarias usan su sucursal asignada
   console.log('🔍 Usuario completo:', req.user);
   console.log('🔍 Sucursal ID del usuario:', req.user?.sucursal_id);
   const sucursal_id = req.user?.sucursal_id || null;
@@ -33,7 +33,7 @@ export const crearTurnoC = async (req, res) => {
 export const crearTurnoPacienteC = async (req, res) => {
   const { paciente_id, profesional_especialidad_id, sucursal_id, detalle_turno, fecha, hora } = req.body;
   const estado = "Reservada";
-  const dniFotoUrl = req.file ? req.file.path : null; //obtener la ruta de la foto del DNI si se subió 
+  const dniFotoUrl = req.file ? req.file.path : null; //obtenemos la ruta de la foto del dni si se subio 
 
   try {
     await crearTurnoS(paciente_id, profesional_especialidad_id, sucursal_id, detalle_turno, fecha, hora, estado, dniFotoUrl);
@@ -87,7 +87,7 @@ export const actualizarTurnoTrasladoC = async (req, res) => {
   const { profesional_especialidad_id, fecha, hora, detalle_turno, estado } = req.body;
 
   try {
-    // Verificar si en el nuevo horario ya hay un turno (entonces sería sobreturno)
+    //verificamos si en el nuevo horario ya hay un turno entonces seria sobreturno
     const turnosEnHorario = await obtenerEstadosTurnoPorHorarioS(profesional_especialidad_id, fecha);
     const esSobreturno = turnosEnHorario.some(t => t.hora === hora && t.estado !== 'Cancelado' && t.id != turnoId);
     
@@ -114,7 +114,7 @@ export const confTurnoC = async (req, res) => {
 
 export const obtenerProfesionalesVistaC = async (req, res) => {
   try {
-    const sucursalId = req.user?.sucursal_id; // Obtener sucursal del usuario logueado
+    const sucursalId = req.user?.sucursal_id; //obtenemos sucursal del usuario logueado
     const profesionales = await obtenerProfesionalesVistaS(sucursalId);
     const pacientes = await obtenerPacientesVistaS()
     const msg = req.query.msg || null;
@@ -146,10 +146,10 @@ export const obtenerProfesionalesVistaC = async (req, res) => {
 
 export const traerTurnosC = async (req, res) => {
   try {
-    const sucursalIdUsuario = req.user?.sucursal_id; // Sucursal del usuario logueado
+    const sucursalIdUsuario = req.user?.sucursal_id; //sucursal del usuario logueado
     const msg = req.query.msg || null;
-    // Si es secretaria, SIEMPRE filtrar por su sucursal (no permitir cambiar)
-    // Si es admin (sin sucursal_id), permitir filtrar
+    //si es secretaria, SIEMPRE filtrar por su sucursal no permitir cambiar
+    //si es admin (sin sucursal_id), permitimos filtrar
     const sucursalFiltro = sucursalIdUsuario || req.query.sucursal || null;
     
     const filtros = {
@@ -169,7 +169,7 @@ export const traerTurnosC = async (req, res) => {
     res.render('secretaria/secretariaTurnos', { 
       turnos, 
       sucursales,
-      sucursalUsuario: sucursalIdUsuario // Pasar al template para pre-seleccionar
+      sucursalUsuario: sucursalIdUsuario //pasamos al template para pre-seleccionar
     });
   } catch (err) {
     console.error('Error al obtener Turnos:', err);
@@ -264,7 +264,7 @@ export const editarEstadoTurnoC = async (req, res) => {
     console.log("por editar el estado en controller");
     await actualizarEstadoTurnoS(estado, id);
     console.log("estado editado correctamente");
-    res.redirect('/turnos/listarTurnos'); // Redirigir a la lista de turnos después de actualizar
+    res.redirect('/turnos/listarTurnos'); //redirigimos a la lista de turnos despues de actualizar
   } catch (err) {
     console.error('Error al actualizar estado del turno: ', err);
     res.status(500).send('Hubo un error al actualizar el estado del turno');
@@ -359,16 +359,16 @@ export const obtenerTurnoParaReasignarC = async (req, res) => {
       return res.status(400).send('Este turno no está marcado para reasignar');
     }
     
-    // Formatear la fecha
+    //formateamos la fecha
     const fecha = new Date(turno.fecha);
     turno.fechaFormateada = fecha.toLocaleDateString('es-AR');
     
-    // Obtener profesionales con la misma especialidad que TENGAN AGENDAS ACTIVAS
-    // Usamos sucursalId para filtrar por sucursal (si no hay sucursal_id en turno, usar la del user)
+    //obtenemos profesionales con la misma especialidad que TENGAN AGENDAS ACTIVAS
+    //usamos sucursalId para filtrar por sucursal si no hay sucursal_id en turno, usamos la del user
     const sucursalId = turno.sucursal_id || req.user?.sucursal_id;
     const profesionales = await obtenerProfesionalesVistaS(sucursalId);
     
-    // Filtrar solo profesionales con la misma especialidad del turno y que estén activos
+    //filtramos solo profesionales con la misma especialidad del turno y que estén activos
     const profesionalesFiltrados = profesionales.filter(p => 
       p.especialidad === turno.especialidad && p.estado === 1
     );
@@ -396,11 +396,11 @@ export const reasignarTurnoC = async (req, res) => {
   const { profesional_especialidad_id, fecha, hora } = req.body;
   
   try {
-    // Verificar si en el nuevo horario ya hay un turno (entonces sería sobreturno)
+    //verificamos si en el nuevo horario ya hay un turno entonces seria sobreturno
     const turnosEnHorario = await obtenerEstadosTurnoPorHorarioS(profesional_especialidad_id, fecha);
     const esSobreturno = turnosEnHorario.some(t => t.hora === hora && t.estado !== 'Cancelado');
     
-    // Actualizar el turno con la nueva agenda, cambiar estado a "Confirmado" y actualizar es_sobreturno
+    //actualizamos el turno con la nueva agenda, cambiamos estado a "Confirmado" y actualizamos es_sobreturno
     await actualizarTurnoTrasladoS(fecha, hora, 'Confirmado', id, profesional_especialidad_id, '', esSobreturno);
     
     res.redirect('/turnos/listarTurnos');
@@ -410,7 +410,7 @@ export const reasignarTurnoC = async (req, res) => {
   }
 };
 
-// Obtener todas las sucursales (API endpoint para AJAX)
+//obtenemos todas las sucursales API endpoint para AJAX
 export const obtenerSucursalesC = async (req, res) => {
   try {
     const sucursales = await obtenerTodasLasSucursales();
@@ -420,6 +420,3 @@ export const obtenerSucursalesC = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener sucursales' });
   }
 };
-
-//secretariaPanel
-

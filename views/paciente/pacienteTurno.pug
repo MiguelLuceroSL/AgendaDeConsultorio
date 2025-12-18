@@ -87,6 +87,7 @@ html
       });
       
       // Función para cargar profesionales según sucursal y especialidad
+      //funcion para cargar profesionales segun sucursal y especialidad
       async function cargarProfesionales() {
         const sucursalSelect = document.getElementById('sucursal-filtro');
         const especialidadSelect = document.getElementById('especialidad-filtro');
@@ -95,10 +96,10 @@ html
         const sucursalId = sucursalSelect.value;
         const especialidadId = especialidadSelect.value;
         
-        // Limpiar select de profesionales
+        //limpiamos select de profesionales
         profesionalSelect.innerHTML = '<option value="" selected disabled>Selecciona un profesional</option>';
         
-        // Si no hay ambos filtros seleccionados, deshabilitar
+        //si no hay ambos filtros seleccionados, deshabilitamos
         if (!sucursalId || !especialidadId) {
           profesionalSelect.disabled = true;
           profesionalSelect.innerHTML = '<option value="" selected disabled>Primero seleccioná sucursal y especialidad</option>';
@@ -106,7 +107,7 @@ html
         }
         
         try {
-          // Cargar profesionales filtrados
+          //cargamos profesionales filtrados
           const response = await fetch(`/profesional/buscar?sucursalId=${sucursalId}&especialidadId=${especialidadId}`, {
             credentials: 'include'
           });
@@ -136,18 +137,18 @@ html
         }
       }
       
-      // Agregar listeners para cargar profesionales cuando cambien los filtros
+      //agregamos listeners para cargar profesionales cuando cambien los filtros
       document.getElementById('sucursal-filtro').addEventListener('change', function() {
         cargarProfesionales();
-        // Actualizar el input hidden con la sucursal seleccionada
+        //actualizamos el input hidden con la sucursal seleccionada
         document.getElementById('sucursal-id-hidden').value = this.value;
       });
       document.getElementById('especialidad-filtro').addEventListener('change', cargarProfesionales);
       
-      // Cargar sucursales y especialidades
+      //cargamos sucursales y especialidades
       async function cargarFiltros() {
         try {
-          // Cargar sucursales
+          //cargamos sucursales
           const responseSucursales = await fetch('/turnos/sucursales', {
             credentials: 'include'
           });
@@ -167,7 +168,7 @@ html
             sucursalSelect.appendChild(option);
           });
           
-          // Cargar especialidades
+          //cargamos especialidades
           const responseEspecialidades = await fetch('/profesional/especialidades', {
             credentials: 'include'
           });
