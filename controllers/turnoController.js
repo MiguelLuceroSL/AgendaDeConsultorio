@@ -23,7 +23,7 @@ export const crearTurnoC = async (req, res) => {
 
   try {
     await crearTurnoS(paciente_id, profesional_especialidad_id, sucursal_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno);
-    res.redirect('secretaria/secretariaTurnoSuccess');
+    return res.redirect('/secretaria/gestionTurno?msg=ok');
   } catch (err) {
     console.error('Error al crear turno:', err.message);
     res.status(500).json({ message: err.message });
@@ -117,11 +117,12 @@ export const obtenerProfesionalesVistaC = async (req, res) => {
     const sucursalId = req.user?.sucursal_id; // Obtener sucursal del usuario logueado
     const profesionales = await obtenerProfesionalesVistaS(sucursalId);
     const pacientes = await obtenerPacientesVistaS()
+    const msg = req.query.msg || null;
 
     console.log('Profesionales:', profesionales?.length);
     console.log('Pacientes:', pacientes?.length);
     //const horarios = await traerTurnosPorFechaS()
-    res.render('secretaria/secretariaGestionTurno', { profesionales, pacientes });
+    res.render('secretaria/secretariaGestionTurno', { profesionales, pacientes, msg });
   } catch (err) {
     console.error('Error al obtener los profesionales:', err);
     res.status(500).json({ message: 'Hubo un error al obtener los profesionales.' });
@@ -146,7 +147,7 @@ export const obtenerProfesionalesVistaC = async (req, res) => {
 export const traerTurnosC = async (req, res) => {
   try {
     const sucursalIdUsuario = req.user?.sucursal_id; // Sucursal del usuario logueado
-    
+    const msg = req.query.msg || null;
     // Si es secretaria, SIEMPRE filtrar por su sucursal (no permitir cambiar)
     // Si es admin (sin sucursal_id), permitir filtrar
     const sucursalFiltro = sucursalIdUsuario || req.query.sucursal || null;

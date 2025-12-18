@@ -12,19 +12,19 @@ html
         if msg == 'ok'
             div.alert.alert-success
                 span.icon ✓
-                |  Datos editados exitosamente
+                |  Médico cargado exitosamente
 
         if msg == 'error'
             div.alert.alert-error
                 span.icon ⚠
-                |  Hubo un error al editar tus datos
+                |  Hubo un error al cargar el médico. Inténtalo de nuevo.
         main(class="mainAdminCreateProfesional")
             form(action="/profesional/crear", method="POST" class="formCreate")
                 span(class="spanCreate") Cargar un médico
                 p(class="infoCreate") Si el médico ya existe, se le agregará la especialidad seleccionada sin importar los demás datos.
                 fieldset(class="dni") 
                     label(for="dni" class="lbDNI") DNI: 
-                    input(type="text", id="dni", name="dni", required, placeholder="DNI" class="inputDNI")
+                    input(type="number", id="dni", name="dni", required, placeholder="DNI" class="inputDNI")
                 fieldset(class="nombre") 
                     label(for="nombre" class="lbNombre") Nombre: 
                     input(type="text", id="nombre", name="nombre", required, placeholder="Nombre" class="inputNombre")
@@ -36,7 +36,7 @@ html
                     input(type="date", id="fecha_nacimiento", name="fecha_nacimiento", required class="inputFechaNacimiento")
                 fieldset(class="telefono") 
                     label(for="telefono" class="lbTelefono") Teléfono: 
-                    input(type="text", id="telefono", name="telefono", required, placeholder="Teléfono" class="inputTelefono")
+                    input(type="number", id="telefono", name="telefono", required, placeholder="Teléfono" class="inputTelefono")
                 fieldset(class="email") 
                     label(for="email" class="lbEmail") Email: 
                     input(type="email", id="email", name="email", required, placeholder="Email" class="inputEmail")
@@ -58,6 +58,76 @@ html
         include ../includes/footer
         script(src="/js/logout.js")
         script(src="/js/alerta.js")
+        script.
+            const form = document.querySelector('.formCreate');
+
+            form.addEventListener('submit', function (e) {
+                // Limpiar espacios
+                nombreInput.value = nombreInput.value.trim();
+                apellidoInput.value = apellidoInput.value.trim();
+
+                // ===== DNI =====
+                if (!/^\d{8,}$/.test(dniInput.value)) {
+                    alert('❌ El DNI debe tener solo números y mínimo 8 dígitos');
+                    dniInput.focus();
+                    e.preventDefault();
+                    return;
+                }
+
+                // ===== NOMBRE =====
+                if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/.test(nombreInput.value)) {
+                    alert('❌ El nombre solo puede tener letras y sin espacios');
+                    nombreInput.focus();
+                    e.preventDefault();
+                    return;
+                }
+
+                // ===== APELLIDO =====
+                if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/.test(apellidoInput.value)) {
+                    alert('❌ El apellido solo puede tener letras y sin espacios');
+                    apellidoInput.focus();
+                    e.preventDefault();
+                    return;
+                }
+
+                // ===== TELÉFONO =====
+                if (!/^\d{10,}$/.test(telefonoInput.value)) {
+                    alert('❌ El teléfono debe tener solo números y mínimo 10 dígitos');
+                    telefonoInput.focus();
+                    e.preventDefault();
+                    return;
+                }
+
+                // ===== FECHA NACIMIENTO =====
+                const hoy = new Date();
+                hoy.setHours(0,0,0,0);
+
+                const fechaNac = new Date(fechaNacimientoInput.value);
+
+                if (fechaNac > hoy) {
+                    alert('❌ La fecha de nacimiento no puede ser futura');
+                    fechaNacimientoInput.focus();
+                    e.preventDefault();
+                    return;
+                }
+            });
+
+            // ===== VALIDACIONES EN VIVO =====
+            dniInput.addEventListener('input', () => {
+                dniInput.value = dniInput.value.replace(/\D/g, '');
+            });
+
+            telefonoInput.addEventListener('input', () => {
+                telefonoInput.value = telefonoInput.value.replace(/\D/g, '');
+            });
+
+            nombreInput.addEventListener('input', () => {
+                nombreInput.value = nombreInput.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ]/g, '');
+            });
+
+            apellidoInput.addEventListener('input', () => {
+                apellidoInput.value = apellidoInput.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ]/g, '');
+            });
         script.
             // Autocompletar datos del profesional cuando se ingresa un DNI existente
             const dniInput = document.getElementById('dni');
