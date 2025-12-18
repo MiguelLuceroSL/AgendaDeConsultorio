@@ -1,12 +1,12 @@
 import connectDB from '../config/db.js';
 
-export const crearTurnoM = async (paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno) => {
+export const crearTurnoM = async (paciente_id, profesional_especialidad_id, sucursal_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno) => {
     try {
         const connection = await connectDB();
-        const sql = 'INSERT INTO turnos(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dni_foto_url, es_sobreturno) VALUES (?,?,?,?,?,?,?,?)'
-        console.log('Datos para crear turno:', paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno);
+        const sql = 'INSERT INTO turnos(paciente_id, profesional_especialidad_id, sucursal_id, detalle_turno, fecha, hora, estado, dni_foto_url, es_sobreturno) VALUES (?,?,?,?,?,?,?,?,?)'
+        console.log('Datos para crear turno:', paciente_id, profesional_especialidad_id, sucursal_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno);
         console.log('SQL:', sql);
-        const [result] = await connection.execute(sql, [paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno ? 1 : 0]);
+        const [result] = await connection.execute(sql, [paciente_id, profesional_especialidad_id, sucursal_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno ? 1 : 0]);
         return result;
     } catch (error) {
         console.error('Error al crear turno:', error);
@@ -103,7 +103,7 @@ export const traerTurnos = async (callback) => {
     try {
         const connection = await connectDB();
         const sql = `
-    SELECT DISTINCT
+    SELECT 
         t.id, 
         p.nombre_completo AS paciente_nombre,
         CONCAT(pr.apellido, ', ', pr.nombre) AS nombre_medico,
@@ -124,10 +124,8 @@ export const traerTurnos = async (callback) => {
         profesional pr ON pe.profesional_id = pr.id
     JOIN 
         especialidad e ON pe.especialidad_id = e.id
-    JOIN
-    	agenda a ON a.profesional_especialidad_id = pe.id
-    JOIN
-    	sucursal s ON a.sucursal_id = s.id
+    LEFT JOIN
+    	sucursal s ON t.sucursal_id = s.id
     ORDER BY t.fecha DESC, t.hora DESC, pr.apellido, pr.nombre
     `;
 
@@ -145,7 +143,7 @@ export const traerTurnoPorIdM = async (id, callback) => {
     try {
         const connection = await connectDB();
         const sql = `
-    SELECT DISTINCT
+    SELECT 
         t.id, 
         p.nombre_completo AS paciente_nombre,
         p.dni,
@@ -170,10 +168,7 @@ export const traerTurnoPorIdM = async (id, callback) => {
     JOIN 
         especialidad e ON pe.especialidad_id = e.id
     LEFT JOIN
-    	agenda a ON a.profesional_especialidad_id = pe.id 
-        AND t.fecha BETWEEN a.dia_inicio AND a.dia_fin
-    LEFT JOIN
-    	sucursal s ON a.sucursal_id = s.id
+    	sucursal s ON t.sucursal_id = s.id
     WHERE t.id = ?
     `;
 
@@ -199,7 +194,7 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
         CONCAT(pr.apellido, ', ', pr.nombre) AS nombre_medico,
         e.nombre AS especialidad,
         t.detalle_turno,
-        MIN(s.nombre) AS sucursal,
+        s.nombre AS sucursal,
         t.fecha,
         t.hora,
         t.estado,
@@ -210,42 +205,15 @@ export const traerTurnosFiltrados = async (filtros, callback) => {
       JOIN profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
       JOIN profesional pr ON pe.profesional_id = pr.id
       JOIN especialidad e ON pe.especialidad_id = e.id
-      LEFT JOIN (
-        SELECT 
-          a.id,
-          a.profesional_especialidad_id,
-          a.sucursal_id,
-          a.dia_inicio,
-          a.dia_fin,
-          ad.dia_semana
-        FROM agenda a
-        JOIN agenda_dias ad ON a.id = ad.agenda_id
-        WHERE a.estado = 'Activo'
-      ) a_info ON a_info.profesional_especialidad_id = pe.id
-        AND t.fecha BETWEEN a_info.dia_inicio AND a_info.dia_fin
-        AND CASE 
-          WHEN DAYNAME(t.fecha) = 'Monday' THEN 'lunes'
-          WHEN DAYNAME(t.fecha) = 'Tuesday' THEN 'martes'
-          WHEN DAYNAME(t.fecha) = 'Wednesday' THEN 'miercoles'
-          WHEN DAYNAME(t.fecha) = 'Thursday' THEN 'jueves'
-          WHEN DAYNAME(t.fecha) = 'Friday' THEN 'viernes'
-          WHEN DAYNAME(t.fecha) = 'Saturday' THEN 'sabado'
-          WHEN DAYNAME(t.fecha) = 'Sunday' THEN 'domingo'
-        END = a_info.dia_semana
-      LEFT JOIN sucursal s ON a_info.sucursal_id = s.id
+      LEFT JOIN sucursal s ON t.sucursal_id = s.id
       WHERE 1 = 1
     `;
 
     const params = [];
 
-    //filtro por sucursal sin perder reservados
+    //filtro por sucursal
     if (filtros.sucursal_id) {
-      sql += `
-        AND (
-          t.estado <> 'Confirmado'
-          OR a_info.sucursal_id = ?
-        )
-      `;
+      sql += ` AND t.sucursal_id = ?`;
       params.push(filtros.sucursal_id);
     }
 

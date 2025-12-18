@@ -25,8 +25,8 @@ const upload = multer({
 
 const router = express.Router()
 
-router.post('/crear', upload.single('dni_foto'), crearTurnoC);
-router.post('/crearPaciente', upload.single('dni_foto'), crearTurnoPacienteC);
+router.post('/crear', authRequired, upload.single('dni_foto'), crearTurnoC);
+router.post('/crearPaciente', authRequired, upload.single('dni_foto'), crearTurnoPacienteC);
 router.get('/secretaria/secretariaTurnoSuccess', (req, res) => {
     res.render('secretaria/secretariaTurnoSuccess')
 })

@@ -14,9 +14,15 @@ export const crearTurnoC = async (req, res) => {
   const estado ="Confirmado";
   console.log("🚀 ~ crearTurnoC ~ estado:", estado)
   const dniFotoUrl = req.file ? req.file.path : null; //obtener la ruta de la foto del DNI si se subió 
+  
+  // Las secretarias usan su sucursal asignada
+  console.log('🔍 Usuario completo:', req.user);
+  console.log('🔍 Sucursal ID del usuario:', req.user?.sucursal_id);
+  const sucursal_id = req.user?.sucursal_id || null;
+  console.log('🔍 Sucursal ID a usar:', sucursal_id);
 
   try {
-    await crearTurnoS(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno);
+    await crearTurnoS(paciente_id, profesional_especialidad_id, sucursal_id, detalle_turno, fecha, hora, estado, dniFotoUrl, es_sobreturno);
     res.redirect('secretaria/secretariaTurnoSuccess');
   } catch (err) {
     console.error('Error al crear turno:', err.message);
@@ -25,12 +31,12 @@ export const crearTurnoC = async (req, res) => {
 };
 
 export const crearTurnoPacienteC = async (req, res) => {
-  const { paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora } = req.body;
+  const { paciente_id, profesional_especialidad_id, sucursal_id, detalle_turno, fecha, hora } = req.body;
   const estado = "Reservada";
   const dniFotoUrl = req.file ? req.file.path : null; //obtener la ruta de la foto del DNI si se subió 
 
   try {
-    await crearTurnoS(paciente_id, profesional_especialidad_id, detalle_turno, fecha, hora, estado, dniFotoUrl);
+    await crearTurnoS(paciente_id, profesional_especialidad_id, sucursal_id, detalle_turno, fecha, hora, estado, dniFotoUrl);
     return res.redirect('../pacientes/turno?msg=ok');
   } catch (err) {
     console.error('Error al crear turno:', err.message);

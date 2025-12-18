@@ -5,6 +5,7 @@ import { crearTurnoM, borrarTurnoM, actuTurnoM, confTurnoM, selTurnoM, traerTurn
 export const crearTurnoS = async (
   paciente_id,
   profesional_especialidad_id,
+  sucursal_id,
   detalle_turno,
   fecha,
   hora,
@@ -45,6 +46,7 @@ export const crearTurnoS = async (
     const resultado = await crearTurnoM(
       paciente_id,
       profesional_especialidad_id,
+      sucursal_id,
       detalle_turno,
       fecha,
       hora,

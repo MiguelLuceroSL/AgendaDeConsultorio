@@ -33,11 +33,13 @@ html
             label(for="especialidad-filtro") Especialidad: *
             select(id="especialidad-filtro" class="filtro-select" required)
               option(value="" selected disabled) Selecciona una especialidad
-        h3 Busca un Profesional
-        .autocompletar_contenedor
-          input(type="text" id="profesional-search" class="autocompletar_input" placeholder="Primero seleccioná sucursal y especialidad..." autocomplete="off" disabled)
-          input(type="hidden" name="profesional_especialidad_id" id="profesional-id" required)
+        h3 Seleccioná un Profesional
+        div.divFiltro
+          label(for="profesional-select") Profesional: *
+          select(id="profesional-select" name="profesional_especialidad_id" class="filtro-select" required disabled)
+            option(value="" selected disabled) Primero seleccioná sucursal y especialidad
         input(type="hidden" name="paciente_id" value=idPaciente)
+        input(type="hidden" name="sucursal_id" id="sucursal-id-hidden")
         label(for="fecha") Selecciona la fecha:
         input(type="text" name="fecha" id="fecha" required)
         label(for="horario") Selecciona un horario:
@@ -52,7 +54,6 @@ html
     include ../includes/footer
     script(src="/js/logout.js")
     script(src="/js/horarios.js")
-    script(src="/js/autocompletar_profesional.js")
     script(src="https://cdn.jsdelivr.net/npm/flatpickr")
     script(src="/js/alerta.js")
     script.
@@ -83,32 +84,63 @@ html
         }
       });
       
-      //inicializar autocompletado con filtros
-      const autocompletarProfesional = new AutocompletarProfesional('profesional-search', 'profesional-id', null, 'sucursal-filtro', 'especialidad-filtro');
-      
-      // Función para verificar si ambos filtros están seleccionados
-      function verificarFiltros() {
+      // Función para cargar profesionales según sucursal y especialidad
+      async function cargarProfesionales() {
         const sucursalSelect = document.getElementById('sucursal-filtro');
         const especialidadSelect = document.getElementById('especialidad-filtro');
-        const profesionalInput = document.getElementById('profesional-search');
-        const profesionalHidden = document.getElementById('profesional-id');
+        const profesionalSelect = document.getElementById('profesional-select');
         
-        const ambosSeleccionados = sucursalSelect.value && especialidadSelect.value;
+        const sucursalId = sucursalSelect.value;
+        const especialidadId = especialidadSelect.value;
         
-        if (ambosSeleccionados) {
-          profesionalInput.disabled = false;
-          profesionalInput.placeholder = 'Buscar por apellido o nombre...';
-        } else {
-          profesionalInput.disabled = true;
-          profesionalInput.placeholder = 'Primero seleccioná sucursal y especialidad...';
-          profesionalInput.value = '';
-          profesionalHidden.value = '';
+        // Limpiar select de profesionales
+        profesionalSelect.innerHTML = '<option value="" selected disabled>Selecciona un profesional</option>';
+        
+        // Si no hay ambos filtros seleccionados, deshabilitar
+        if (!sucursalId || !especialidadId) {
+          profesionalSelect.disabled = true;
+          profesionalSelect.innerHTML = '<option value="" selected disabled>Primero seleccioná sucursal y especialidad</option>';
+          return;
+        }
+        
+        try {
+          // Cargar profesionales filtrados
+          const response = await fetch(`/profesional/buscar?sucursalId=${sucursalId}&especialidadId=${especialidadId}`, {
+            credentials: 'include'
+          });
+          
+          if (!response.ok) {
+            console.error('Error al cargar profesionales:', response.status);
+            return;
+          }
+          
+          const profesionales = await response.json();
+          
+          if (profesionales.length === 0) {
+            profesionalSelect.innerHTML = '<option value="" selected disabled>No hay profesionales disponibles</option>';
+            profesionalSelect.disabled = true;
+          } else {
+            profesionalSelect.disabled = false;
+            profesionales.forEach(profesional => {
+              const option = document.createElement('option');
+              option.value = profesional.id;
+              option.textContent = `${profesional.nombre_completo} - Mat: ${profesional.matricula}`;
+              profesionalSelect.appendChild(option);
+            });
+          }
+        } catch (error) {
+          console.error('Error al cargar profesionales:', error);
+          profesionalSelect.disabled = true;
         }
       }
       
-      // Agregar listeners para verificar filtros
-      document.getElementById('sucursal-filtro').addEventListener('change', verificarFiltros);
-      document.getElementById('especialidad-filtro').addEventListener('change', verificarFiltros);
+      // Agregar listeners para cargar profesionales cuando cambien los filtros
+      document.getElementById('sucursal-filtro').addEventListener('change', function() {
+        cargarProfesionales();
+        // Actualizar el input hidden con la sucursal seleccionada
+        document.getElementById('sucursal-id-hidden').value = this.value;
+      });
+      document.getElementById('especialidad-filtro').addEventListener('change', cargarProfesionales);
       
       // Cargar sucursales y especialidades
       async function cargarFiltros() {

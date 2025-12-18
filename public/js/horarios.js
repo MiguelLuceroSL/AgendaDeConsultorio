@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const inputProfesionalId = document.getElementById("profesional-id");
+  // Intentar con ambos IDs: para pacientes (select) y secretaria (input hidden)
+  const inputProfesionalId = document.getElementById("profesional-select") || document.getElementById("profesional-id");
   const inputFecha = document.getElementById("fecha");
   const selectHorario = document.getElementById("horario");
 
@@ -268,17 +269,17 @@ if (horariosDisponibles === 0) {
   }
 }
 
-  // Cuando seleccionan un profesional (ahora escuchamos cambios en el input oculto)
+  // Cuando seleccionan un profesional (puede ser select para pacientes o input hidden para secretaria)
   let previousProfesionalId = null;
   let isLoadingAgendas = false; // Flag para evitar llamadas múltiples
   let debounceTimeout = null;
-  let observer = null; // Mover la declaración aquí para poder desconectarlo
+  let observer = null;
   
-  // Función debounce para evitar llamadas múltiples
+  // Función para manejar el cambio de profesional
   function handleProfesionalChange() {
     if (isLoadingAgendas || isLoadingHorarios) {
       console.log("Bloqueando cambio de profesional porque hay una carga en progreso");
-      return; // No procesar si hay carga en progreso
+      return;
     }
     
     if (debounceTimeout) {
@@ -299,19 +300,24 @@ if (horariosDisponibles === 0) {
     }, 300);
   }
   
-  // Usar MutationObserver en lugar de setInterval para mejor rendimiento
-  observer = new MutationObserver(() => {
-    handleProfesionalChange();
-  });
-  
   if (inputProfesionalId) {
-    observer.observe(inputProfesionalId, { 
-      attributes: true, 
-      attributeFilter: ['value'] 
-    });
-    
-    // También escuchar el evento input como respaldo
-    inputProfesionalId.addEventListener('input', handleProfesionalChange);
+    // Si es un select (pacientes), usar evento change
+    if (inputProfesionalId.tagName === 'SELECT') {
+      inputProfesionalId.addEventListener('change', handleProfesionalChange);
+    } else {
+      // Si es un input hidden (secretaria con autocompletado), usar MutationObserver
+      observer = new MutationObserver(() => {
+        handleProfesionalChange();
+      });
+      
+      observer.observe(inputProfesionalId, { 
+        attributes: true, 
+        attributeFilter: ['value'] 
+      });
+      
+      // También escuchar el evento input como respaldo
+      inputProfesionalId.addEventListener('input', handleProfesionalChange);
+    }
   }
   
   async function cargarAgendasProfesional(profesionalId) {
