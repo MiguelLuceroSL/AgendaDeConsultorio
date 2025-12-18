@@ -230,7 +230,6 @@ for (const hora of horariosBase) {
         ? "Reservada"
         : null;
 
-  // Para pacientes, no mostramos horarios reservados (solo libres)
   if (esPaciente && estado === "Reservada") {
     continue;
   }
