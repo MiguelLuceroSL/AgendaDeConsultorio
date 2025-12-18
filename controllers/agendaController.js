@@ -211,10 +211,27 @@ export const obtenerAgendasActivasC = async (req, res) => {
 /*a*/
 export const registrarAusenciaC = async (req, res) => {
   try {
-    const { profesional_especialidad_id, fecha_inicio, fecha_fin, tipo } = req.body;
+    const { profesional_especialidad_id, fecha_inicio, fecha_fin, tipo, confirmar } = req.body;
 
-    await registrarAusenciaS({ profesional_especialidad_id, fecha_inicio, fecha_fin, tipo });
+    const resultado = await registrarAusenciaS({ 
+      profesional_especialidad_id, 
+      fecha_inicio, 
+      fecha_fin, 
+      tipo,
+      confirmarRegistro: confirmar === 'true' || confirmar === true
+    });
 
+    // Si tiene turnos y no se confirmó, devolver información para confirmación
+    if (resultado.tieneTurnos && !confirmar) {
+      return res.status(200).json({
+        requiereConfirmacion: true,
+        mensaje: resultado.mensaje,
+        cantidadTurnos: resultado.cantidadTurnos,
+        turnos: resultado.turnos
+      });
+    }
+
+    // Si se registró exitosamente, renderizar la vista de éxito
     const sucursalId = req.user?.sucursal_id;
     const profesionales = await obtenerProfesionalesVistaM(sucursalId);
     const ausencias = await mostarAusenciasM(sucursalId);
@@ -321,7 +338,19 @@ export const listarAgendasActivasC = async (req, res) => {
 export const eliminarAgendaC = async (req, res) => {
   try {
     const { id } = req.params;
-    await eliminarAgendaS(id);
+    const { confirmar } = req.body; // El frontend enviará confirmar: true si el usuario confirmó
+    
+    const resultado = await eliminarAgendaS(id, confirmar);
+    
+    // Si tiene turnos y no se confirmó, devolver información
+    if (resultado.tieneTurnos && !confirmar) {
+      return res.status(200).json({
+        requiereConfirmacion: true,
+        mensaje: resultado.mensaje,
+        cantidadTurnos: resultado.cantidadTurnos
+      });
+    }
+    
     res.json({ message: "Agenda eliminada correctamente" });
   } catch (error) {
     console.error("Error al eliminar agenda:", error);

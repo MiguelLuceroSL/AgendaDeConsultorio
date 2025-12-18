@@ -8,21 +8,43 @@ document.addEventListener('DOMContentLoaded', () => {
     boton.addEventListener('click', async (e) => {
       const agendaId = e.target.getAttribute('data-agenda-id');
       
-      const confirmar = confirm('¿Está seguro de que desea eliminar esta agenda? Esta acción no se puede deshacer.');
-      
-      if (!confirmar) return;
-
       try {
+        // Primera llamada: verificar si tiene turnos
         const response = await fetch(`/agendas/${agendaId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json'
-          }
+          },
+          body: JSON.stringify({ confirmar: false })
         });
 
         const data = await response.json();
 
-        if (response.ok) {
+        if (data.requiereConfirmacion) {
+          // Si tiene turnos, mostrar confirmación personalizada
+          const confirmar = confirm(`${data.mensaje}\n\n¿Desea continuar con la eliminación?`);
+          
+          if (!confirmar) return;
+
+          // Segunda llamada: eliminar con confirmación
+          const responseConfirmado = await fetch(`/agendas/${agendaId}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ confirmar: true })
+          });
+
+          const dataConfirmado = await responseConfirmado.json();
+
+          if (responseConfirmado.ok) {
+            alert(dataConfirmado.message || 'Agenda eliminada correctamente. Los turnos han sido marcados como "Por reasignar".');
+            window.location.reload();
+          } else {
+            alert(dataConfirmado.error || 'No se pudo eliminar la agenda');
+          }
+        } else if (response.ok) {
+          // Si no tiene turnos, eliminar directamente
           alert(data.message || 'Agenda eliminada correctamente');
           window.location.reload();
         } else {

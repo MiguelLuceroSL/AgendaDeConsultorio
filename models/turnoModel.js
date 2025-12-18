@@ -153,6 +153,7 @@ export const traerTurnoPorIdM = async (id, callback) => {
         e.nombre AS especialidad,
         t.detalle_turno,
         s.nombre AS sucursal,
+        t.sucursal_id,
         t.fecha, 
         t.hora, 
         t.estado,

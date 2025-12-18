@@ -137,9 +137,9 @@ export const obtenerAgendasActivasAgrupadasS = async (sucursalId = null) => {
   }
 };
 
-export const eliminarAgendaS = async (agendaId) => {
+export const eliminarAgendaS = async (agendaId, confirmarEliminacion = false) => {
   try {
-    return await eliminarAgendaM(agendaId);
+    return await eliminarAgendaM(agendaId, confirmarEliminacion);
   } catch (error) {
     console.error("Error en eliminarAgendaS:", error);
     throw error;

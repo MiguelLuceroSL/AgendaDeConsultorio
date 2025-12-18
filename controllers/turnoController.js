@@ -359,8 +359,8 @@ export const obtenerTurnoParaReasignarC = async (req, res) => {
     turno.fechaFormateada = fecha.toLocaleDateString('es-AR');
     
     // Obtener profesionales con la misma especialidad que TENGAN AGENDAS ACTIVAS
-    // Usamos sucursalId para filtrar por sucursal
-    const sucursalId = req.user?.sucursal_id;
+    // Usamos sucursalId para filtrar por sucursal (si no hay sucursal_id en turno, usar la del user)
+    const sucursalId = turno.sucursal_id || req.user?.sucursal_id;
     const profesionales = await obtenerProfesionalesVistaS(sucursalId);
     
     // Filtrar solo profesionales con la misma especialidad del turno y que estén activos
@@ -368,8 +368,13 @@ export const obtenerTurnoParaReasignarC = async (req, res) => {
       p.especialidad === turno.especialidad && p.estado === 1
     );
     
-    console.log('Turno a reasignar:', { especialidad: turno.especialidad, fecha: turno.fecha });
-    console.log('Profesionales disponibles con agendas:', profesionalesFiltrados);
+    console.log('Turno a reasignar:', { 
+      id: turno.id,
+      especialidad: turno.especialidad, 
+      fecha: turno.fecha,
+      sucursal_id: sucursalId
+    });
+    console.log('Profesionales disponibles con agendas:', profesionalesFiltrados.length > 0 ? profesionalesFiltrados : 'Ninguno');
     
     res.render('secretaria/secretariaReasignarTurno', { 
       turno, 

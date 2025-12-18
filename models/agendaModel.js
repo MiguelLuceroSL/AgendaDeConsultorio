@@ -255,20 +255,59 @@ export const obtenerAgendasOcupadasM= async(profesional_especialidad_id, dia_ini
   }
 }
 
-export const registrarAusenciaM = async ({ profesional_especialidad_id, fecha_inicio, fecha_fin, tipo}) => {
-  const connection = await connectDB();
+export const registrarAusenciaM = async ({ profesional_especialidad_id, fecha_inicio, fecha_fin, tipo, confirmarRegistro = false }) => {
+  try {
+    const connection = await connectDB();
 
-  const sql = `
-    INSERT INTO ausencias (profesional_especialidad_id, fecha_inicio, fecha_fin, tipo)
-    VALUES (?, ?, ?, ?)
-  `;
+    // Verificar si hay turnos activos en el rango de fechas
+    const [turnos] = await connection.execute(
+      `SELECT t.id, t.fecha, t.hora, p.nombre_completo AS paciente_nombre
+       FROM turnos t
+       JOIN paciente p ON t.paciente_id = p.id
+       WHERE t.profesional_especialidad_id = ?
+         AND t.fecha BETWEEN ? AND ?
+         AND t.estado NOT IN ('Cancelado', 'Atendido', 'Por reasignar')`,
+      [profesional_especialidad_id, fecha_inicio, fecha_fin]
+    );
 
-  await connection.execute(sql, [
-    profesional_especialidad_id,
-    fecha_inicio,
-    fecha_fin,
-    tipo
-  ]);
+    if (turnos.length > 0) {
+      if (!confirmarRegistro) {
+        // Retornar información sobre los turnos para que el frontend pueda preguntar
+        return {
+          tieneTurnos: true,
+          cantidadTurnos: turnos.length,
+          turnos: turnos,
+          mensaje: `Este profesional tiene ${turnos.length} turno(s) activo(s) en el rango de fechas seleccionado. Si registra la ausencia, estos turnos quedarán marcados como "Por reasignar".`
+        };
+      }
+
+      // Si se confirma el registro, marcar los turnos como "Por reasignar"
+      const turnoIds = turnos.map(t => t.id);
+      const placeholders = turnoIds.map(() => '?').join(',');
+      await connection.execute(
+        `UPDATE turnos SET estado = 'Por reasignar' WHERE id IN (${placeholders})`,
+        turnoIds
+      );
+    }
+
+    // Registrar la ausencia
+    const sql = `
+      INSERT INTO ausencias (profesional_especialidad_id, fecha_inicio, fecha_fin, tipo)
+      VALUES (?, ?, ?, ?)
+    `;
+
+    const [result] = await connection.execute(sql, [
+      profesional_especialidad_id,
+      fecha_inicio,
+      fecha_fin,
+      tipo
+    ]);
+
+    return { success: true, result, turnosAfectados: turnos.length };
+  } catch (error) {
+    console.error("Error en registrarAusenciaM:", error);
+    throw error;
+  }
 };
 
 export const verificarAusenciaM = async (profesional_especialidad_id, fecha) => {
@@ -405,13 +444,13 @@ export const obtenerAgendasActivasAgrupadasM = async (sucursalId = null) => {
   }
 };
 
-export const eliminarAgendaM = async (agendaId) => {
+export const eliminarAgendaM = async (agendaId, confirmarEliminacion = false) => {
   try {
     const connection = await connectDB();
     
     // Verificar si la agenda tiene turnos asociados
     const [turnos] = await connection.execute(
-      `SELECT COUNT(*) as total 
+      `SELECT t.id
        FROM turnos t
        JOIN profesional_especialidad pe ON t.profesional_especialidad_id = pe.id
        JOIN agenda a ON a.profesional_especialidad_id = pe.id
@@ -419,8 +458,23 @@ export const eliminarAgendaM = async (agendaId) => {
       [agendaId]
     );
     
-    if (turnos[0].total > 0) {
-      throw new Error('No se puede eliminar la agenda porque tiene turnos activos asociados');
+    if (turnos.length > 0) {
+      if (!confirmarEliminacion) {
+        // Retornar información sobre los turnos para que el frontend pueda preguntar
+        return {
+          tieneTurnos: true,
+          cantidadTurnos: turnos.length,
+          mensaje: `Esta agenda tiene ${turnos.length} turno(s) activo(s). Si la elimina, estos turnos quedarán marcados como "Por reasignar".`
+        };
+      }
+      
+      // Si se confirma la eliminación, marcar los turnos como "Por reasignar"
+      const turnoIds = turnos.map(t => t.id);
+      const placeholders = turnoIds.map(() => '?').join(',');
+      await connection.execute(
+        `UPDATE turnos SET estado = 'Por reasignar' WHERE id IN (${placeholders})`,
+        turnoIds
+      );
     }
     
     // Primero eliminar los días asociados
@@ -435,7 +489,7 @@ export const eliminarAgendaM = async (agendaId) => {
       [agendaId]
     );
     
-    return result;
+    return { success: true, result };
   } catch (error) {
     console.error("Error en eliminarAgendaM:", error);
     throw error;

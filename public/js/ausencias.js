@@ -2,17 +2,88 @@ document.addEventListener("DOMContentLoaded", () => {
   const profesionalIdInput = document.getElementById("profesional-id");
   const fechaInicioInput = document.getElementById("fecha_inicio");
   const fechaFinInput = document.getElementById("fecha_fin");
+  const form = document.getElementById("form");
 
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault(); // Siempre prevenir el submit por defecto
+    
+    const fechaInicio = fechaInicioInput.value.trim();
+    const fechaFin = fechaFinInput.value.trim();
 
-  form.addEventListener("submit", (e) => {
-  const fechaInicio = fechaInicioInput.value.trim();
-  const fechaFin = fechaFinInput.value.trim();
+    if (!fechaInicio || !fechaFin) {
+      alert("Debes completar tanto la fecha de inicio como la fecha de fin.");
+      return;
+    }
 
-  if (!fechaInicio || !fechaFin) {
-    e.preventDefault();
-    alert("Debes completar tanto la fecha de inicio como la fecha de fin.");
-  }
-});
+    const profesional_especialidad_id = profesionalIdInput.value;
+    const tipo = document.querySelector('select[name="tipo"]').value;
+
+    try {
+      // Primera llamada: verificar si hay turnos
+      const formData = new FormData(form);
+      const response = await fetch('/agendas/ausencias/registrar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          profesional_especialidad_id,
+          fecha_inicio: fechaInicio,
+          fecha_fin: fechaFin,
+          tipo,
+          confirmar: false
+        })
+      });
+
+      const contentType = response.headers.get("content-type");
+      
+      // Si la respuesta es HTML, significa que se registró exitosamente sin turnos
+      if (contentType && contentType.includes("text/html")) {
+        // Recargar la página para mostrar la vista de éxito
+        window.location.reload();
+        return;
+      }
+
+      const data = await response.json();
+
+      if (data.requiereConfirmacion) {
+        
+        const mensaje = `${data.mensaje}\n\n¿Desea continuar con el registro de la ausencia?`;
+        
+        const confirmar = confirm(mensaje);
+        
+        if (!confirmar) return;
+
+        // Segunda llamada: registrar con confirmación
+        const responseConfirmado = await fetch('/agendas/ausencias/registrar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            profesional_especialidad_id,
+            fecha_inicio: fechaInicio,
+            fecha_fin: fechaFin,
+            tipo,
+            confirmar: true
+          })
+        });
+
+        if (responseConfirmado.ok) {
+          alert('Ausencia registrada correctamente. Los turnos han sido marcados como "Por reasignar".');
+          window.location.reload();
+        } else {
+          const errorData = await responseConfirmado.json();
+          alert(errorData.error || 'Error al registrar la ausencia');
+        }
+      } else {
+        alert('Error al registrar la ausencia');
+      }
+    } catch (error) {
+      console.error('Error al registrar ausencia:', error);
+      alert('Error al registrar la ausencia');
+    }
+  });
 
   let agendas = [];
 
